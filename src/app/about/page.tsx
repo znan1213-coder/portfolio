@@ -30,11 +30,52 @@ function seg(x1: number, y1: number, x2: number, y2: number, wobble: number, n: 
   let d = ''
   for (let i = 0; i < n; i++) {
     const mid = (i + 0.5) / n, t1 = (i + 1) / n
-    const off = (Math.random() - 0.5) * wobble * 2
+    const off = Math.sin(i * 7.3 + x1 * 0.17 + y1 * 0.13) * wobble
     d += ` Q ${(x1 + dx * mid + nx * off).toFixed(1)} ${(y1 + dy * mid + ny * off).toFixed(1)}`
        + ` ${(x1 + dx * t1).toFixed(1)} ${(y1 + dy * t1).toFixed(1)}`
   }
   return d
+}
+
+function buildPillPath(W: number, H: number): string {
+  const r = Math.floor(H / 2), wb = 1.2
+  const sh = Math.max(2, Math.floor((W - 2 * r) / 40))
+  return `M ${r} 0`
+    + seg(r, 0, W - r, 0, wb, sh) + ` A ${r} ${r} 0 0 1 ${W} ${r}`
+    + ` A ${r} ${r} 0 0 1 ${W - r} ${H}`
+    + seg(W - r, H, r, H, wb, sh) + ` A ${r} ${r} 0 0 1 0 ${H - r}`
+    + ` A ${r} ${r} 0 0 1 ${r} 0 Z`
+}
+
+function WobblyPillBorder({ color = '#1A1A1A', strokeWidth = 1.3 }: { color?: string; strokeWidth?: number }) {
+  const ref = useRef<SVGSVGElement>(null)
+  const [path, setPath] = useState('')
+  const prev = useRef({ w: 0, h: 0 })
+
+  useEffect(() => {
+    if (!ref.current) return
+    const update = () => {
+      const { width: w, height: h } = ref.current!.getBoundingClientRect()
+      const [rw, rh] = [Math.round(w), Math.round(h)]
+      if (rw === prev.current.w && rh === prev.current.h) return
+      prev.current = { w: rw, h: rh }
+      if (rw && rh) setPath(buildPillPath(rw, rh))
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(ref.current)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <svg ref={ref} aria-hidden="true" style={{
+      position: 'absolute', inset: 0, width: '100%', height: '100%',
+      pointerEvents: 'none', overflow: 'visible',
+    }}>
+      {path && <path d={path} fill="none" stroke={color} strokeWidth={strokeWidth}
+        strokeLinecap="round" strokeLinejoin="round" />}
+    </svg>
+  )
 }
 
 function buildPath(W: number, H: number): string {
@@ -214,113 +255,150 @@ export default function About() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .exp-entry { flex-direction: column !important; gap: 0.2rem !important; }
+          .exp-entry .exp-date { min-width: unset !important; }
+          .yarn-photos { flex-wrap: wrap !important; }
+          .yarn-photos > div { flex: 1 1 45% !important; }
+          .yarn-section { padding: 3rem 1.25rem !important; }
+        }
+      `}</style>
       <Nav activePage="about" />
 
-      {/* About — two column */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '7rem 2rem 5rem' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr clamp(200px, 28%, 320px)',
-          gap: '5rem',
-          alignItems: 'stretch',
-        }}>
-          {/* Left */}
-          <div>
-            <h1 style={{
-              fontFamily: 'var(--serif)',
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: 400,
-              lineHeight: 1.05,
-              color: 'var(--ink)',
-              marginBottom: '2.5rem',
-              letterSpacing: '-0.01em',
-            }}>
-              About Me
-            </h1>
+      {/* About hero */}
+      <section className="about-hero-section mx-auto px-8 max-w-[680px] md:max-w-[1100px]" style={{ paddingTop: '7rem', paddingBottom: '5rem' }}>
+
+        {/* Two-column on desktop, single column on mobile */}
+        <div className="md:flex md:items-start md:gap-16">
+
+          {/* Left column: heading + bio + buttons */}
+          <div className="flex-1 min-w-0">
+
+            {/* Heading row */}
+            <div className="flex items-center justify-between gap-6 mb-8">
+              <h1 style={{
+                fontFamily: 'var(--serif)',
+                fontSize: 'clamp(2rem, 5vw, 3.25rem)',
+                fontWeight: 400,
+                lineHeight: 1.05,
+                color: 'var(--ink)',
+                letterSpacing: '-0.01em',
+                margin: 0,
+              }}>
+                About Me
+              </h1>
+              {/* Mobile only: small 72px photo */}
+              <div className="md:hidden" style={{ position: 'relative', width: 72, height: 72, flexShrink: 0 }}>
+                <WobblyCircle />
+                <img
+                  src="/my face.JPG"
+                  alt="Zhu Nan"
+                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', borderRadius: '50%' }}
+                />
+              </div>
+            </div>
+
+            {/* Bio */}
             <p style={{
-              fontFamily: 'var(--sans)',
-              fontSize: '1rem',
-              fontWeight: 300,
-              color: '#222',
-              lineHeight: 1.8,
-              marginBottom: '1.5rem',
+              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 300,
+              color: '#222', lineHeight: 1.8, marginBottom: '1.25rem',
             }}>
               I&apos;m Zhu, a product designer in the Bay Area. I&apos;m currently designing on Capital One&apos;s Enterprise Finance team, where I focus on making complex workflows clearer and easier for our financial analysts to use every day.
             </p>
             <p style={{
-              fontFamily: 'var(--sans)',
-              fontSize: '1rem',
-              fontWeight: 300,
-              color: '#222',
-              lineHeight: 1.8,
+              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 300,
+              color: '#222', lineHeight: 1.8, marginBottom: '2rem',
             }}>
               I started my career in startups, which taught me to move fast, be scrappy and stay close to users, and only design what truly matters. Working in a large enterprise has expanded that perspective — I&apos;ve learned how to design for scale, collaborate across many teams, and create solutions that last.
             </p>
 
-            {/* Experience — inside left column so it sits naturally below bio */}
-            <div style={{ marginTop: '3rem' }}>
-              <div style={{ marginBottom: '2rem' }}>
-                <h2 style={{
-                  fontFamily: 'var(--serif)', fontSize: '1rem', fontWeight: 400,
-                  fontStyle: 'italic', color: '#555', marginBottom: '0.4rem', letterSpacing: '0.01em',
-                }}>
-                  Experience
-                </h2>
-                <svg width="80" height="6" viewBox="0 0 80 6" aria-hidden="true" style={{ display: 'block' }}>
-                  <path d="M2,4 C12,2 22,5 34,3.5 C46,2 56,5 68,3 C72,2.5 76,4 78,3.5"
-                    fill="none" stroke="#C0AFA4" strokeWidth="1" strokeLinecap="round" />
-                </svg>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-                {[
-                  { years: '2024 – Present', role: 'Principal Designer', company: 'Capital One' },
-                  { years: '2021 – 2024', role: 'Senior Product Designer', company: 'Farmers Business Network' },
-                  { years: '2015 – 2019', role: 'Product Designer', company: 'MegiChina' },
-                  { years: '2013 – 2015', role: 'Visual Designer', company: 'Various Startups' },
-                ].map(entry => (
-                  <div key={entry.company} style={{ display: 'flex', gap: '3rem', alignItems: 'baseline' }}>
-                    <span style={{
-                      fontFamily: 'var(--sans)', fontSize: '0.825rem', color: '#8B4513',
-                      letterSpacing: '0.05em', whiteSpace: 'nowrap', minWidth: 120,
-                    }}>
-                      {entry.years}
-                    </span>
-                    <div>
-                      <span style={{ fontFamily: 'var(--serif)', fontSize: '1.15rem', fontWeight: 400, color: 'var(--ink)' }}>
-                        {entry.role}
-                      </span>
-                      <span style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', marginLeft: '0.6rem' }}>
-                        @ {entry.company}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        {/* Wobbly contact buttons */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem', marginBottom: '3.5rem' }}>
+          {[
+            { label: 'Email', href: 'mailto:zhu@example.com', bg: 'rgba(242,223,160,0.15)', color: '#8B6914', borderColor: '#C9A830', icon: <EmailIcon color="#8B6914" />, wobble: wobbleEmail },
+            { label: 'LinkedIn', href: '#', bg: 'rgba(197,206,160,0.15)', color: '#4A5E35', borderColor: '#7A9A50', icon: <PersonIcon color="#4A5E35" />, wobble: wobbleLinkedIn },
+            { label: 'Resume', href: '#', bg: 'rgba(212,184,199,0.15)', color: '#6B3D5E', borderColor: '#9B6080', icon: <PageIcon color="#6B3D5E" />, wobble: wobbleResume },
+          ].map((btn) => (
+            <a key={btn.label} href={btn.href} style={{
+              position: 'relative',
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.25rem 0.75rem',
+              background: btn.bg,
+              fontFamily: 'var(--sans)', fontSize: '0.875rem',
+              fontWeight: 400, color: btn.color,
+              textDecoration: 'none', letterSpacing: '0.01em',
+              transform: `rotate(${btn.wobble}deg)`,
+              transition: 'transform 0.3s ease-out, opacity 0.15s',
+            }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            >
+              <WobblyPillBorder color={btn.borderColor} strokeWidth={1.2} />
+              {btn.icon}
+              {btn.label}
+            </a>
+          ))}
+        </div>
 
-          {/* Right — portrait at top, tags float down alongside experience */}
-          <div style={{ paddingTop: '0.5rem', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ position: 'relative' }}>
-              <WobblyCircle />
-              <img
-                src="/my face.JPG"
-                alt="Zhu Nan"
-                style={{ width: '100%', height: 'auto', display: 'block', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '50%' }}
-              />
-            </div>
-            <div style={{ flex: 1 }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.9rem', alignItems: 'flex-end' }}>
-              <ContactTag icon={<EmailIcon color="#8B6914" />} label="Email" href="mailto:zhu@example.com" rotate={-2} bg="#F2DFA0" textColor="#8B6914" wobble={wobbleEmail} />
-              <ContactTag icon={<PersonIcon color="#4A5E35" />} label="LinkedIn" href="#" rotate={1.5} bg="#C5CEA0" textColor="#4A5E35" wobble={wobbleLinkedIn} />
-              <ContactTag icon={<PageIcon color="#6B3D5E" />} label="Resume" href="#" rotate={-1} bg="#D4B8C7" textColor="#6B3D5E" wobble={wobbleResume} />
-            </div>
+        {/* Experience */}
+        <div>
+          <div style={{ marginBottom: '2rem' }}>
+            <h2 style={{
+              fontFamily: 'var(--serif)', fontSize: '1rem', fontWeight: 400,
+              fontStyle: 'italic', color: '#555', marginBottom: '0.4rem', letterSpacing: '0.01em',
+            }}>
+              Experience
+            </h2>
+            <svg width="80" height="6" viewBox="0 0 80 6" aria-hidden="true" style={{ display: 'block' }}>
+              <path d="M2,4 C12,2 22,5 34,3.5 C46,2 56,5 68,3 C72,2.5 76,4 78,3.5"
+                fill="none" stroke="#C0AFA4" strokeWidth="1" strokeLinecap="round" />
+            </svg>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            {[
+              { years: '2024 – Present', role: 'Principal Designer', company: 'Capital One' },
+              { years: '2021 – 2024', role: 'Senior Product Designer', company: 'Farmers Business Network' },
+              { years: '2015 – 2019', role: 'Product Designer', company: 'MegiChina' },
+              { years: '2013 – 2015', role: 'Visual Designer', company: 'Various Startups' },
+            ].map(entry => (
+              <div key={entry.company} className="exp-entry" style={{ display: 'flex', gap: '3rem', alignItems: 'baseline' }}>
+                <span className="exp-date" style={{
+                  fontFamily: 'var(--sans)', fontSize: '0.825rem', color: '#8B4513',
+                  letterSpacing: '0.05em', whiteSpace: 'nowrap', minWidth: 120,
+                }}>
+                  {entry.years}
+                </span>
+                <div>
+                  <span style={{ fontFamily: 'var(--serif)', fontSize: '1.15rem', fontWeight: 400, color: 'var(--ink)' }}>
+                    {entry.role}
+                  </span>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', marginLeft: '0.6rem' }}>
+                    @ {entry.company}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+
+          </div>{/* end left column */}
+
+          {/* Desktop only: large 280px photo */}
+          <div className="hidden md:block" style={{ position: 'relative', width: 280, height: 280, flexShrink: 0 }}>
+            <WobblyCircle />
+            <img
+              src="/my face.JPG"
+              alt="Zhu Nan"
+              style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', borderRadius: '50%' }}
+            />
+          </div>
+
+        </div>{/* end two-column flex */}
       </section>
 
       {/* Yarn section */}
-      <section style={{ background: '#FAF6F1', padding: '4rem 2rem' }}>
+      <section className="yarn-section" style={{ background: '#FAF6F1', padding: '4rem 2rem' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <h2 style={{
             fontFamily: 'var(--serif)',
@@ -345,7 +423,7 @@ export default function About() {
             I am a wannabe knitwear designer. If you look into my bag, there&apos;s a good chance you&apos;ll find a work-in-progress knitting project in there.
           </p>
 
-          <div style={{
+          <div className="yarn-photos" style={{
             display: 'flex',
             gap: '1.5rem',
             alignItems: 'flex-end',
