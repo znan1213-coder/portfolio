@@ -1,65 +1,332 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useEffect, useRef, useState } from 'react'
+import Nav from './components/Nav'
+
+// ── Wobbly border ─────────────────────────────────────────────────────────────
+function seg(x1: number, y1: number, x2: number, y2: number, wobble: number, n: number) {
+  const dx = x2 - x1, dy = y2 - y1
+  const len = Math.hypot(dx, dy)
+  if (!len) return ''
+  const nx = -dy / len, ny = dx / len
+  let d = ''
+  for (let i = 0; i < n; i++) {
+    const mid = (i + 0.5) / n, t1 = (i + 1) / n
+    const off = (Math.random() - 0.5) * wobble * 2
+    d += ` Q ${(x1 + dx * mid + nx * off).toFixed(1)} ${(y1 + dy * mid + ny * off).toFixed(1)}`
+       + ` ${(x1 + dx * t1).toFixed(1)} ${(y1 + dy * t1).toFixed(1)}`
+  }
+  return d
+}
+
+function buildPath(W: number, H: number): string {
+  const r = 5, wb = 1.8
+  const sh = Math.max(3, Math.floor(W / 80))
+  const sv = Math.max(2, Math.floor(H / 60))
+  return `M ${r} 0`
+    + seg(r, 0, W - r, 0, wb, sh) + ` A ${r} ${r} 0 0 1 ${W} ${r}`
+    + seg(W, r, W, H - r, wb, sv) + ` A ${r} ${r} 0 0 1 ${W - r} ${H}`
+    + seg(W - r, H, r, H, wb, sh) + ` A ${r} ${r} 0 0 1 0 ${H - r}`
+    + seg(0, H - r, 0, r, wb, sv) + ` A ${r} ${r} 0 0 1 ${r} 0 Z`
+}
+
+function WobblyBorder() {
+  const ref = useRef<SVGSVGElement>(null)
+  const [path, setPath] = useState('')
+  const prev = useRef({ w: 0, h: 0 })
+
+  useEffect(() => {
+    if (!ref.current) return
+    const update = () => {
+      const { width: w, height: h } = ref.current!.getBoundingClientRect()
+      const [rw, rh] = [Math.round(w), Math.round(h)]
+      if (rw === prev.current.w && rh === prev.current.h) return
+      prev.current = { w: rw, h: rh }
+      if (rw && rh) setPath(buildPath(rw, rh))
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(ref.current)
+    return () => ro.disconnect()
+  }, [])
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <svg ref={ref} aria-hidden="true" style={{
+      position: 'absolute', inset: 0, width: '100%', height: '100%',
+      pointerEvents: 'none', overflow: 'visible',
+    }}>
+      {path && <path d={path} fill="none" stroke="#1A1A1A" strokeWidth="1"
+        strokeLinecap="round" strokeLinejoin="round" />}
+    </svg>
+  )
+}
+
+
+// ── Projects ──────────────────────────────────────────────────────────────────
+const projects = [
+  {
+    id: 1,
+    category: 'Fintech · Design System',
+    title: 'Building Capital One\u2019s Design Language',
+    description: 'Creating a unified visual system across 12 product teams and 3 platforms.',
+    bg: '#EAE3DA',
+  },
+  {
+    id: 2,
+    category: 'Mobile · Product Design',
+    title: 'Reimagining Mobile Banking',
+    description: 'End-to-end redesign of Capital One\u2019s flagship mobile experience.',
+    bg: '#DAE0E5',
+  },
+  {
+    id: 3,
+    category: 'AgTech · Data Visualization',
+    title: 'Farm Intelligence Dashboard',
+    description: 'Designing clarity into complex agricultural data systems.',
+    bg: '#DFD9E8',
+  },
+  {
+    id: 4,
+    category: 'Fintech · 0 \u2192 1',
+    title: 'Launching a New Credit Product',
+    description: 'Taking a new credit feature from concept to two million users.',
+    bg: '#E5E0DA',
+  },
+]
+
+function CaseStudyCard({ project }: { project: typeof projects[0] }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div
+      className="group"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: 'relative',
+        cursor: 'pointer',
+        transition: 'transform 0.45s ease, box-shadow 0.45s ease',
+        transform: hovered ? 'translateY(-7px)' : 'translateY(0)',
+        boxShadow: hovered ? '0 16px 48px rgba(0,0,0,0.07)' : '0 0 0 rgba(0,0,0,0)',
+      }}>
+      <WobblyBorder />
+      {/* Placeholder with paper grain */}
+      <div style={{ position: 'relative', background: project.bg, aspectRatio: '3/2', width: '100%', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.18,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }} />
+      </div>
+      <div style={{ padding: '1.5rem' }}>
+        <p style={{
+          fontFamily: 'var(--sans)',
+          fontSize: '0.6rem',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase' as const,
+          color: 'var(--terracotta)',
+          marginBottom: '0.6rem',
+        }}>
+          {project.category}
+        </p>
+        <h3 style={{
+          fontFamily: 'var(--serif)',
+          fontSize: '1.25rem',
+          fontWeight: 500,
+          lineHeight: 1.3,
+          color: 'var(--ink)',
+          marginBottom: '0.5rem',
+        }}>
+          {project.title}
+        </h3>
+        <p style={{
+          fontFamily: 'var(--sans)',
+          fontSize: '0.875rem',
+          color: '#222',
+          lineHeight: 1.65,
+          marginBottom: '1.25rem',
+        }}>
+          {project.description}
+        </p>
+        <span
+          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          style={{
+            display: 'inline-block',
+            padding: '0.35rem 0.9rem',
+            borderRadius: 999,
+            background: 'var(--terracotta)',
+            color: '#fff',
+            fontFamily: 'var(--sans)',
+            fontSize: '0.75rem',
+            fontWeight: 500,
+            letterSpacing: '0.02em',
+          }}>
+          Read more →
+        </span>
+      </div>
     </div>
-  );
+  )
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+export default function Home() {
+  const [catWobble, setCatWobble] = useState(0)
+
+  useEffect(() => {
+    const onScroll = () => setCatWobble(Math.sin(window.scrollY * 0.018) * 4)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#fff' }}>
+
+      <Nav />
+
+      {/* Hero */}
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '7rem 2rem 5rem' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr auto',
+          gap: '2rem',
+          alignItems: 'flex-end',
+        }}>
+          {/* Left */}
+          <div>
+            <h1 style={{
+              fontFamily: 'var(--serif)',
+              fontSize: '4rem',
+              fontWeight: 400,
+              lineHeight: 1.0,
+              letterSpacing: '-0.01em',
+              color: 'var(--ink)',
+              marginBottom: '1.25rem',
+            }}>
+              Zhu Nan
+            </h1>
+
+            <div style={{ marginBottom: '2.75rem' }}>
+              <p style={{
+                fontFamily: 'var(--sans)',
+                fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+                fontWeight: 300,
+                color: '#222',
+                letterSpacing: '0.01em',
+                display: 'inline-block',
+              }}>
+                Principal Product Designer
+              </p>
+            </div>
+
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+              {[
+                'Currently at Capital One, San Francisco',
+                'Experience in Fintech, AgTech',
+                '10 years of experience',
+              ].map(line => (
+                <div key={line} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  {/* Sketchy dash bullet */}
+                  <svg width="14" height="8" viewBox="0 0 14 8" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
+                    <path d="M1,5 C3,3.5 6,5.5 9,4 C11,3 12.5,4.5 13,4"
+                      fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+                  <p style={{
+                    fontFamily: 'var(--sans)',
+                    fontSize: '0.875rem',
+                    fontWeight: 300,
+                    color: '#222',
+                    lineHeight: 1.6,
+                    margin: 0,
+                  }}>
+                    {line}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — cat drawing */}
+          <div style={{ width: 'clamp(160px, 22vw, 300px)', flexShrink: 0, marginLeft: '-5rem' }}>
+            <img
+              src="/two cats new.png"
+              alt="Two cats"
+              style={{
+                width: '100%', height: 'auto', display: 'block',
+                transform: `rotate(${catWobble}deg)`,
+                transformOrigin: 'bottom center',
+                transition: 'transform 0.3s ease-out',
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Work */}
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 2rem 9rem' }}>
+        <div style={{ marginBottom: '3rem', display: 'inline-block' }}>
+          <h2 style={{
+            fontFamily: 'var(--serif)',
+            fontSize: '1rem',
+            fontWeight: 400,
+            fontStyle: 'italic',
+            color: 'var(--muted)',
+            marginBottom: '0.4rem',
+            letterSpacing: '0.01em',
+          }}>
+            Selected work
+          </h2>
+          <svg width="96" height="6" viewBox="0 0 96 6" aria-hidden="true" style={{ display: 'block' }}>
+            <path
+              d="M2,4 C14,2 28,5 42,3.5 C56,2 68,5 82,3 C88,2.5 92,4 94,3.5"
+              fill="none" stroke="#C0AFA4" strokeWidth="1" strokeLinecap="round"
+            />
+          </svg>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 440px), 1fr))',
+          gap: '2rem',
+        }}>
+          {projects.map(p => <CaseStudyCard key={p.id} project={p} />)}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: '1px solid #EBEBEB',
+        maxWidth: 1100,
+        margin: '0 auto',
+        padding: '2rem 2rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap' as const,
+        gap: '1rem',
+      }}>
+        <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+          Zhu Nan
+        </span>
+        <div style={{ display: 'flex', gap: '2rem' }}>
+          {[{ label: 'LinkedIn', href: '#' }, { label: 'Resume', href: '#' }].map(link => (
+            <a key={link.label} href={link.href}
+              style={{
+                fontFamily: 'var(--sans)',
+                fontSize: '0.75rem',
+                color: 'var(--muted)',
+                textDecoration: 'none',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase' as const,
+                transition: 'color 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--terracotta)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </footer>
+
+    </div>
+  )
 }
