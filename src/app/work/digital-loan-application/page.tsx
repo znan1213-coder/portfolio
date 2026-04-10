@@ -312,7 +312,33 @@ function DesignDetailsShowcase() {
     <div>
       <style>{SLIDE_CSS}</style>
 
-      {/* Clickable framework boxes */}
+      {/* Mobile pill tabs — hidden on desktop */}
+      <div className="approach-pills" style={{ display: 'none', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        {DIMENSION_CARDS.map((card, i) => {
+          const active = i === activeTab
+          return (
+            <button key={card.title} onClick={() => handleTabChange(i)}
+              style={{
+                position: 'relative',
+                fontFamily: 'var(--sans)', fontSize: '0.75rem',
+                fontWeight: 500,
+                color: active ? '#fff' : '#1a1a1a',
+                background: active ? '#A0522D' : '#fff',
+                border: 'none', borderRadius: 999, cursor: 'pointer',
+                padding: '0.45rem 1rem',
+                letterSpacing: '0.02em',
+                transition: 'background 0.2s, color 0.2s',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {!active && <WobblyPillBorder />}
+              {card.title}
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Clickable framework boxes — hidden on mobile */}
       <div className="approach-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '3rem' }}>
         {DIMENSION_CARDS.map((card, i) => {
           const active = i === activeTab
@@ -603,10 +629,17 @@ export default function DigitalLoanApplication() {
           .cs-progress { display: block !important; }
           .cs-content { padding: 0 1.25rem !important; }
           .problem-cols { grid-template-columns: 1fr !important; }
-          .approach-cards { grid-template-columns: 1fr !important; }
+          .approach-cards { display: none !important; }
+          .approach-pills { display: flex !important; }
           .design-row { grid-template-columns: 1fr !important; }
           .stat-row { grid-template-columns: 1fr !important; }
           .pillar-cols { grid-template-columns: 1fr !important; }
+          .hero-wrapper { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+          .hero-section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+          .hero-h1 { font-size: 2.25rem !important; }
+          .hero-subtitle { max-width: 100% !important; font-size: 1rem !important; }
+          .hero-tags { flex-wrap: wrap !important; flex-direction: row !important; }
+          .hero-cover { width: 100% !important; }
         }
       `}</style>
 
@@ -624,12 +657,12 @@ export default function DigitalLoanApplication() {
       </div>
 
       {/* ── Full-bleed cream hero ──────────────────────────────────────────── */}
-      <div style={{ background: '#FAF8F4', borderBottom: '1px solid #E4DDD4', paddingTop: 56 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'calc(200px + 3rem)', paddingRight: '3rem' }}>
-          <section id="overview" style={{ paddingTop: '4rem', paddingBottom: '5rem', scrollMarginTop: '90px' }}>
+      <div style={{ background: '#E8EDE8', borderBottom: '1px solid #E4DDD4', paddingTop: 56 }}>
+        <div className="hero-wrapper" style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'calc(200px + 3rem)', paddingRight: '3rem' }}>
+          <section id="overview" className="hero-section" style={{ paddingTop: '4rem', paddingBottom: '5rem', scrollMarginTop: '90px' }}>
             {/* Meta pills */}
-            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-              {['Consumer Facing', 'Mobile', 'Sole Designer'].map(tag => (
+            <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem' }}>
+              {['Consumer Facing', 'Mobile', 'End-to-End'].map(tag => (
                 <span key={tag} style={{
                   fontFamily: 'var(--sans)', fontSize: '0.7rem',
                   letterSpacing: '0.1em', textTransform: 'uppercase',
@@ -641,14 +674,14 @@ export default function DigitalLoanApplication() {
                 </span>
               ))}
             </div>
-            <h1 style={{
+            <h1 className="hero-h1" style={{
               fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
               fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.5rem',
             }}>
               Digital Loan Application
             </h1>
-            <p style={{
+            <p className="hero-subtitle" style={{
               fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '3.5rem',
             }}>
@@ -657,7 +690,8 @@ export default function DigitalLoanApplication() {
             <img
               src="/case studies/digital loan application/Cover.png"
               alt="Digital Loan Application cover"
-              style={{ width: '85%', height: 'auto', display: 'block' }}
+              className="hero-cover"
+              style={{ width: '85%', height: 'auto', display: 'block', borderRadius: '0.75rem' }}
             />
           </section>
         </div>
@@ -749,7 +783,7 @@ export default function DigitalLoanApplication() {
             </p>
 
             {/* Two problem cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3.5rem' }}>
+            <div className="problem-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3.5rem' }}>
               {[
                 {
                   label: 'For Farmers',
@@ -928,50 +962,24 @@ export default function DigitalLoanApplication() {
               What It Changed
             </h2>
 
-            <div style={{ marginBottom: '3.5rem' }}>
-              {/* Row 1 — 3 cards */}
-              <div className="stat-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
-                {[
-                  { stat: '23%', detail: 'of redundant questions eliminated' },
-                  { stat: '25%', detail: 'reduction in human touchpoints' },
-                  { stat: '10,000+', detail: 'Farmers reached at launch' },
-                ].map((s, i) => (
-                  <div key={i} style={{ position: 'relative', padding: '2.5rem 2rem', background: '#FAF6F1' }}>
-                    <WobblyBorder strokeColor="#D4CBC2" />
-                    <p style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
-                      {s.stat}
-                    </p>
-                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0 }}>
-                      {s.detail}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              {/* Row 2 — 2 cards centered */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
-                {[
-                  { stat: '87%', detail: 'Customer satisfaction score (CSAT)' },
-                  { stat: '91%', detail: 'Customer effort score (CES)' },
-                ].map((s, i) => (
-                  <div key={i} style={{ position: 'relative', padding: '2.5rem 2rem', background: '#FAF6F1', gridColumn: i === 0 ? '1' : '2' }}>
-                    <WobblyBorder strokeColor="#D4CBC2" />
-                    <p style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
-                      {s.stat}
-                    </p>
-                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0 }}>
-                      {s.detail}
-                    </p>
-                  </div>
-                ))}
-              </div>
+            <div className="stat-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '3.5rem' }}>
+              {[
+                { stat: '23%', detail: 'of redundant questions eliminated' },
+                { stat: '10,000+', detail: 'Farmers reached at launch' },
+                { stat: '87%', detail: 'Customer satisfaction score (CSAT)' },
+              ].map((s, i) => (
+                <div key={i} style={{ position: 'relative', padding: '2.5rem 2rem', background: '#FAF6F1' }}>
+                  <WobblyBorder strokeColor="#D4CBC2" />
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
+                    {s.stat}
+                  </p>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0 }}>
+                    {s.detail}
+                  </p>
+                </div>
+              ))}
             </div>
 
-            <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
-              color: '#1a1a1a', lineHeight: 1.8, maxWidth: 900,
-            }}>
-              What I took away: when you design for trust first, clarity follows.
-            </p>
           </section>
 
           {/* ── Next case study ────────────────────────────────────────── */}

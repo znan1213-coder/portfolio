@@ -66,10 +66,12 @@ function WobblyBorder() {
 const projects = [
   {
     id: 1,
-    category: 'Fintech · Design System',
-    title: 'Building Capital One\u2019s Design Language',
-    description: 'Creating a unified visual system across 12 product teams and 3 platforms.',
+    category: 'AgTech · End-to-End',
+    title: 'Digital Loan Application',
+    description: 'Redesigning the loan application experience for American farmers — from paper forms to a guided digital flow.',
     bg: '#EAE3DA',
+    image: '/case%20studies/digital%20loan%20application/Cover.png',
+    href: '/work/digital-loan-application',
   },
   {
     id: 2,
@@ -94,27 +96,37 @@ const projects = [
   },
 ]
 
-function CaseStudyCard({ project }: { project: typeof projects[0] }) {
+function CaseStudyCard({ project }: { project: typeof projects[number] }) {
   const [hovered, setHovered] = useState(false)
+  const Tag = project.href ? 'a' : 'div'
   return (
-    <div
+    <Tag
+      {...(project.href ? { href: project.href } : {})}
       className="group"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         position: 'relative',
         cursor: 'pointer',
+        textDecoration: 'none',
         transition: 'transform 0.45s ease, box-shadow 0.45s ease',
         transform: hovered ? 'translateY(-7px)' : 'translateY(0)',
         boxShadow: hovered ? '0 16px 48px rgba(0,0,0,0.07)' : '0 0 0 rgba(0,0,0,0)',
       }}>
       <WobblyBorder />
-      {/* Placeholder with paper grain */}
-      <div style={{ position: 'relative', background: project.bg, aspectRatio: '3/2', width: '100%', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.18,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }} />
+      {/* Thumbnail */}
+      <div style={{ position: 'relative', background: project.image ? '#E8EDE8' : project.bg, width: '100%', overflow: 'hidden' }}>
+        {project.image ? (
+          <div style={{ padding: '5rem' }}>
+            <img src={project.image} alt={project.title}
+              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '0.5rem' }} />
+          </div>
+        ) : (
+          <div style={{
+            position: 'absolute', inset: 0, opacity: 0.18,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          }} />
+        )}
       </div>
       <div style={{ padding: '1.5rem 1.5rem 1rem' }}>
         <p style={{
@@ -162,7 +174,7 @@ function CaseStudyCard({ project }: { project: typeof projects[0] }) {
           Read more →
         </span>
       </div>
-    </div>
+    </Tag>
   )
 }
 
