@@ -94,6 +94,14 @@ const projects = [
     description: 'Taking a new credit feature from concept to two million users.',
     bg: '#E5E0DA',
   },
+  {
+    id: 5,
+    category: 'AgTech · Research',
+    title: 'Research to Roadmap',
+    description: 'Placeholder subtitle — brief project summary to be filled in.',
+    bg: '#DFD9E8',
+    href: '/work/fbn-finance-archetypes',
+  },
 ]
 
 function CaseStudyCard({ project }: { project: typeof projects[number] }) {

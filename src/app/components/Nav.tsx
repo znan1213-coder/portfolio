@@ -62,10 +62,10 @@ function WobblyBorder() {
 
 // ── Case studies ──────────────────────────────────────────────────────────────
 const CASE_STUDIES = [
-  { title: 'Digital Loan Application',           href: '/work/digital-loan-application', live: true  },
-  { title: 'Finance Platform Redesign',           href: '/work/finance-platform',         live: false },
-  { title: "Define FBN's First Finance Archetype", href: '/work/archetype',               live: false },
-  { title: 'Bank Reconciliation',                 href: '/work/bank-reconciliation',      live: false },
+  { title: 'Digital Loan Application',           href: '/work/digital-loan-application',   live: true  },
+  { title: 'Finance Platform Redesign',           href: '/work/finance-platform-redesign',  live: true  },
+  { title: "Define FBN's First Finance Archetype", href: '/work/fbn-finance-archetypes',    live: true  },
+  { title: 'Bank Reconciliation',                 href: '/work/bank-reconciliation',        live: false },
 ]
 
 const DROPDOWN_CSS = `
@@ -162,8 +162,9 @@ function CloseIcon() {
 
 // ── Mobile overlay menu ───────────────────────────────────────────────────────
 const MOBILE_WORK_ITEMS = [
-  { title: 'Digital Loan Application',  href: '/work/digital-loan-application' },
-  { title: 'Finance Platform Redesign', href: '/work/finance-platform-redesign' },
+  { title: 'Digital Loan Application',           href: '/work/digital-loan-application'  },
+  { title: 'Finance Platform Redesign',           href: '/work/finance-platform-redesign' },
+  { title: "Define FBN's First Finance Archetype", href: '/work/fbn-finance-archetypes'  },
 ]
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -235,7 +236,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           {/* Sub-items — height animates open/closed */}
           <div style={{
             overflow: 'hidden',
-            maxHeight: workExpanded ? '120px' : '0',
+            maxHeight: workExpanded ? '180px' : '0',
             opacity: workExpanded ? 1 : 0,
             transition: 'max-height 0.25s ease, opacity 0.2s ease',
             display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.6rem',
