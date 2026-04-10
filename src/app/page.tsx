@@ -116,7 +116,7 @@ function CaseStudyCard({ project }: { project: typeof projects[0] }) {
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }} />
       </div>
-      <div style={{ padding: '1.5rem' }}>
+      <div style={{ padding: '1.5rem 1.5rem 1rem' }}>
         <p style={{
           fontFamily: 'var(--sans)',
           fontSize: '0.6rem',
@@ -142,12 +142,12 @@ function CaseStudyCard({ project }: { project: typeof projects[0] }) {
           fontSize: '0.875rem',
           color: '#222',
           lineHeight: 1.65,
-          marginBottom: '1.25rem',
+          marginBottom: '0.75rem',
         }}>
           {project.description}
         </p>
         <span
-          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
           style={{
             display: 'inline-block',
             padding: '0.35rem 0.9rem',
@@ -178,12 +178,23 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff' }}>
+      <style>{`
+        @media (max-width: 767px) {
+          .hero-section { padding: 5rem 1.5rem 2.5rem !important; }
+          .hero-grid { gap: 1rem !important; }
+          .hero-h1 { font-size: 2.5rem !important; margin-bottom: 0.75rem !important; }
+          .hero-subtitle { margin-bottom: 1.25rem !important; }
+          .hero-subtitle-text { font-size: 0.875rem !important; }
+          .hero-bullet-text { font-size: 0.8rem !important; }
+          .hero-cat { width: 120px !important; margin-left: 0 !important; }
+        }
+      `}</style>
 
       <Nav />
 
       {/* Hero */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '7rem 2rem 5rem' }}>
-        <div style={{
+      <section className="hero-section" style={{ maxWidth: 1100, margin: '0 auto', padding: '7rem 2rem 5rem' }}>
+        <div className="hero-grid" style={{
           display: 'grid',
           gridTemplateColumns: '1fr auto',
           gap: '2rem',
@@ -191,7 +202,7 @@ export default function Home() {
         }}>
           {/* Left */}
           <div>
-            <h1 style={{
+            <h1 className="hero-h1" style={{
               fontFamily: 'var(--serif)',
               fontSize: '4rem',
               fontWeight: 400,
@@ -203,8 +214,8 @@ export default function Home() {
               Zhu Nan
             </h1>
 
-            <div style={{ marginBottom: '2.75rem' }}>
-              <p style={{
+            <div className="hero-subtitle" style={{ marginBottom: '2.75rem' }}>
+              <p className="hero-subtitle-text" style={{
                 fontFamily: 'var(--sans)',
                 fontSize: 'clamp(1rem, 2vw, 1.15rem)',
                 fontWeight: 300,
@@ -229,7 +240,7 @@ export default function Home() {
                     <path d="M1,5 C3,3.5 6,5.5 9,4 C11,3 12.5,4.5 13,4"
                       fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"/>
                   </svg>
-                  <p style={{
+                  <p className="hero-bullet-text" style={{
                     fontFamily: 'var(--sans)',
                     fontSize: '0.875rem',
                     fontWeight: 300,
@@ -245,7 +256,7 @@ export default function Home() {
           </div>
 
           {/* Right — cat drawing */}
-          <div style={{ width: 'clamp(160px, 22vw, 300px)', flexShrink: 0, marginLeft: '-5rem' }}>
+          <div className="hero-cat" style={{ width: 'clamp(160px, 22vw, 300px)', flexShrink: 0, marginLeft: '-5rem' }}>
             <img
               src="/two cats new.png"
               alt="Two cats"
