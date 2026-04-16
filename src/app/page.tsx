@@ -75,32 +75,34 @@ const projects = [
   },
   {
     id: 2,
+    category: 'AgTech · Research',
+    title: "Research to Roadmap: Defining FBN's First Finance Archetypes",
+    description: "How generative research closed a critical knowledge gap and became the foundation for FBN's finance design decisions.",
+    bg: '#E8EDE8',
+    image: '/case studies/fbn finance archetypes/Hero.png',
+    imageFill: true,
+    href: '/work/fbn-finance-archetypes',
+  },
+  {
+    id: 3,
     category: 'Mobile · Product Design',
     title: 'Reimagining Mobile Banking',
     description: 'End-to-end redesign of Capital One\u2019s flagship mobile experience.',
     bg: '#DAE0E5',
   },
   {
-    id: 3,
+    id: 4,
     category: 'AgTech · Data Visualization',
     title: 'Farm Intelligence Dashboard',
     description: 'Designing clarity into complex agricultural data systems.',
     bg: '#DFD9E8',
   },
   {
-    id: 4,
+    id: 5,
     category: 'Fintech · 0 \u2192 1',
     title: 'Launching a New Credit Product',
     description: 'Taking a new credit feature from concept to two million users.',
     bg: '#E5E0DA',
-  },
-  {
-    id: 5,
-    category: 'AgTech · Research',
-    title: 'Research to Roadmap',
-    description: 'Placeholder subtitle — brief project summary to be filled in.',
-    bg: '#DFD9E8',
-    href: '/work/fbn-finance-archetypes',
   },
 ]
 
@@ -123,12 +125,15 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
       }}>
       <WobblyBorder />
       {/* Thumbnail */}
-      <div style={{ position: 'relative', background: project.image ? '#E8EDE8' : project.bg, width: '100%', overflow: 'hidden' }}>
+      <div style={{
+        position: 'relative', width: '100%', height: '280px', overflow: 'hidden',
+        background: (project.image && !project.imageFill) ? '#E8EDE8' : project.imageFill ? 'none' : project.bg,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: project.imageFill ? 0 : '2.5rem', boxSizing: 'border-box',
+      }}>
         {project.image ? (
-          <div style={{ padding: '5rem' }}>
-            <img src={project.image} alt={project.title}
-              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '0.5rem' }} />
-          </div>
+          <img src={project.image} alt={project.title}
+            style={{ width: '100%', height: '100%', objectFit: project.imageFill ? 'cover' : 'contain', display: 'block', borderRadius: '0.5rem' }} />
         ) : (
           <div style={{
             position: 'absolute', inset: 0, opacity: 0.18,

@@ -579,6 +579,12 @@ export default function FinancePlatformRedesign() {
           .design-row { grid-template-columns: 1fr !important; }
           .stat-row { grid-template-columns: 1fr !important; }
           .pillar-cols { grid-template-columns: 1fr !important; }
+          .hero-wrapper { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+          .hero-section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+          .hero-h1 { font-size: 2.25rem !important; }
+          .hero-subtitle { max-width: 100% !important; font-size: 1rem !important; }
+          .hero-tags { flex-wrap: wrap !important; flex-direction: row !important; }
+          .hero-cover { width: 100% !important; }
         }
       `}</style>
 
@@ -596,11 +602,12 @@ export default function FinancePlatformRedesign() {
       </div>
 
       {/* ── Full-bleed cream hero ──────────────────────────────────────────── */}
-      <div style={{ background: '#FAF8F4', borderBottom: '1px solid #E4DDD4', paddingTop: 56 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'calc(200px + 3rem)', paddingRight: '3rem' }}>
-          <section id="overview" style={{ paddingTop: '4rem', paddingBottom: '5rem', scrollMarginTop: '90px' }}>
+      <div style={{ background: '#FAF8F4', borderBottom: '1px solid #E4DDD4', paddingTop: 56, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+        <div className="hero-wrapper" style={{ maxWidth: 1200, width: '100%', margin: '0 auto', paddingLeft: '3rem', paddingRight: '3rem' }}>
+          <section id="overview" className="hero-section text-center" style={{ paddingTop: '3rem', paddingBottom: '3rem', scrollMarginTop: '90px' }}>
+            <div className="max-w-2xl mx-auto">
             {/* Meta pills */}
-            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+            <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem', justifyContent: 'center' }}>
               {['[PLACEHOLDER]', '[PLACEHOLDER]', '[PLACEHOLDER]'].map(tag => (
                 <span key={tag} style={{
                   fontFamily: 'var(--sans)', fontSize: '0.7rem',
@@ -613,23 +620,25 @@ export default function FinancePlatformRedesign() {
                 </span>
               ))}
             </div>
-            <h1 style={{
+            <h1 className="hero-h1" style={{
               fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
               fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.5rem',
             }}>
               Finance Platform Redesign
             </h1>
-            <p style={{
+            <p className="hero-subtitle" style={{
               fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
-              color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '3.5rem',
+              color: '#1a1a1a', lineHeight: 1.7, marginBottom: '3.5rem',
             }}>
               [PLACEHOLDER: subtitle]
             </p>
+            </div>
             <img
               src="/case%20studies/finance%20platform%20redesign/hero.png"
               alt="Finance Platform Redesign hero"
-              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '0.75rem' }}
+              className="hero-cover"
+              style={{ width: '85%', height: 'auto', display: 'block', borderRadius: '0.75rem', margin: '0 auto' }}
             />
           </section>
         </div>

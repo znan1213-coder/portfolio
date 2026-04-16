@@ -640,6 +640,7 @@ export default function DigitalLoanApplication() {
           .hero-subtitle { max-width: 100% !important; font-size: 1rem !important; }
           .hero-tags { flex-wrap: wrap !important; flex-direction: row !important; }
           .hero-cover { width: 100% !important; }
+          .meta-row { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
@@ -657,11 +658,12 @@ export default function DigitalLoanApplication() {
       </div>
 
       {/* ── Full-bleed cream hero ──────────────────────────────────────────── */}
-      <div style={{ background: '#E8EDE8', borderBottom: '1px solid #E4DDD4', paddingTop: 56 }}>
-        <div className="hero-wrapper" style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'calc(200px + 3rem)', paddingRight: '3rem' }}>
-          <section id="overview" className="hero-section" style={{ paddingTop: '4rem', paddingBottom: '5rem', scrollMarginTop: '90px' }}>
+      <div style={{ background: '#E8EDE8', borderBottom: '1px solid #E4DDD4', paddingTop: 56, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+        <div className="hero-wrapper" style={{ maxWidth: 1200, width: '100%', margin: '0 auto', paddingLeft: '3rem', paddingRight: '3rem' }}>
+          <section id="overview" className="hero-section text-center" style={{ paddingTop: '3rem', paddingBottom: '4rem', scrollMarginTop: '90px' }}>
+            <div className="max-w-2xl mx-auto">
             {/* Meta pills */}
-            <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem' }}>
+            <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem', justifyContent: 'center' }}>
               {['Consumer Facing', 'Mobile', 'End-to-End'].map(tag => (
                 <span key={tag} style={{
                   fontFamily: 'var(--sans)', fontSize: '0.7rem',
@@ -683,15 +685,45 @@ export default function DigitalLoanApplication() {
             </h1>
             <p className="hero-subtitle" style={{
               fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
-              color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '3.5rem',
+              color: '#1a1a1a', lineHeight: 1.7, marginBottom: '2rem',
             }}>
               Redesigning the loan application experience for American farmers — from paper forms to a guided digital flow.
             </p>
+
+            {/* Project metadata */}
+            <div className="meta-row mb-20" style={{
+              display: 'grid', gridTemplateColumns: 'repeat(3, auto)', justifyContent: 'center',
+              gap: '0 3rem', marginBottom: 0, textAlign: 'left',
+            }}>
+              {[
+                { label: 'Role', value: 'Product Designer — end-to-end design, design system, user research' },
+                { label: 'Team', value: '1 PM, 1 Designer, 4 Engineers' },
+                { label: 'Timeline', value: 'May 2021 – Dec. 2023' },
+              ].map(item => (
+                <div key={item.label}>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '0.6rem',
+                    letterSpacing: '0.14em', textTransform: 'uppercase',
+                    color: 'var(--terracotta)', fontWeight: 700, marginBottom: '0.3rem',
+                  }}>
+                    {item.label}
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '0.875rem',
+                    fontWeight: 300, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
+                    maxWidth: 260,
+                  }}>
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+            </div>
             <img
               src="/case studies/digital loan application/Cover.png"
               alt="Digital Loan Application cover"
               className="hero-cover"
-              style={{ width: '85%', height: 'auto', display: 'block', borderRadius: '0.75rem' }}
+              style={{ width: '65%', height: 'auto', display: 'block', borderRadius: '0.75rem', margin: '0 auto' }}
             />
           </section>
         </div>

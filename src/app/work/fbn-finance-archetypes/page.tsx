@@ -352,78 +352,87 @@ export default function FBNFinanceArchetypes() {
       </div>
 
       {/* ── Full-bleed hero ───────────────────────────────────────────────── */}
-      <div style={{ background: '#E8EDE8', borderBottom: '1px solid #E4DDD4', paddingTop: 56 }}>
-        <div className="hero-wrapper" style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'calc(200px + 3rem)', paddingRight: '3rem' }}>
-          <section id="overview" className="hero-section" style={{ paddingTop: '4rem', paddingBottom: '5rem', scrollMarginTop: '90px' }}>
+      <div style={{ background: '#F5EFE6', borderBottom: '1px solid #E8E0D4', paddingTop: 56, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
-            {/* Meta pills */}
-            <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem' }}>
-              {['AgTech · Research', 'Generative', 'Mixed Methods'].map(tag => (
-                <span key={tag} style={{
-                  fontFamily: 'var(--sans)', fontSize: '0.7rem',
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--terracotta)', fontWeight: 500,
-                  border: '1px solid #E8C9B4', borderRadius: 999,
-                  padding: '0.3rem 0.85rem',
-                }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <h1 className="hero-h1" style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
-              letterSpacing: '-0.01em', marginBottom: '1.5rem',
-            }}>
-              Research to Roadmap: Defining FBN's First Finance Archetypes
-            </h1>
-
-            <p className="hero-subtitle" style={{
-              fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
-              color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '2rem',
-            }}>
-              How generative research closed a critical knowledge gap and became the foundation for FBN's finance design decisions.
-            </p>
-
-            {/* Project metadata */}
-            <div className="meta-row" style={{
-              display: 'grid', gridTemplateColumns: 'repeat(3, auto)', justifyContent: 'start',
-              gap: '0 3rem', marginBottom: '2rem',
-            }}>
-              {[
-                { label: 'Role', value: 'Product Designer — research collaboration, synthesis facilitation, design' },
-                { label: 'Team', value: '1 UX Researcher, 2 PMs, 2 Designers' },
-                { label: 'Timeline', value: 'Oct 2022 – Feb 2023' },
-              ].map(item => (
-                <div key={item.label}>
-                  <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    letterSpacing: '0.14em', textTransform: 'uppercase',
-                    color: 'var(--terracotta)', fontWeight: 700, marginBottom: '0.3rem',
-                  }}>
-                    {item.label}
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                    fontWeight: 300, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
-                    maxWidth: 260,
-                  }}>
-                    {item.value}
-                  </p>
+        {/* Text block — flex-grows to fill remaining height, centers content vertically */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <div className="hero-wrapper" style={{ maxWidth: 1200, width: '100%', margin: '0 auto', paddingLeft: '3rem', paddingRight: '3rem' }}>
+            <section id="overview" className="hero-section text-center" style={{ paddingTop: '2rem', paddingBottom: '2rem', scrollMarginTop: '90px' }}>
+              <div className="max-w-2xl mx-auto">
+                {/* Meta pills */}
+                <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem', justifyContent: 'center' }}>
+                  {['AgTech · Research', 'Generative', 'Mixed Methods'].map(tag => (
+                    <span key={tag} style={{
+                      fontFamily: 'var(--sans)', fontSize: '0.7rem',
+                      letterSpacing: '0.1em', textTransform: 'uppercase',
+                      color: 'var(--terracotta)', fontWeight: 500,
+                      border: '1px solid #E8C9B4', borderRadius: 999,
+                      padding: '0.3rem 0.85rem',
+                    }}>
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            <div className="hero-cover" style={{ width: '85%', overflow: 'hidden', borderRadius: '0.75rem' }}>
-              <img
-                src="/case studies/fbn finance archetypes/Hero.png"
-                alt="FBN Finance Archetypes cover"
-                style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '240px', objectFit: 'cover', objectPosition: 'top' }}
-              />
-            </div>
-          </section>
+                <h1 className="hero-h1" style={{
+                  fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
+                  letterSpacing: '-0.01em', marginBottom: '1.5rem',
+                }}>
+                  Research to Roadmap: Defining FBN's First Finance Archetypes
+                </h1>
+
+                <p className="hero-subtitle" style={{
+                  fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
+                  color: '#1a1a1a', lineHeight: 1.7, marginBottom: '2rem',
+                }}>
+                  How generative research closed a critical knowledge gap and became the foundation for FBN's finance design decisions.
+                </p>
+
+                {/* Project metadata */}
+                <div className="meta-row" style={{
+                  display: 'grid', gridTemplateColumns: 'repeat(3, auto)', justifyContent: 'center',
+                  gap: '0 3rem', marginBottom: 0, textAlign: 'left',
+                }}>
+                  {[
+                    { label: 'Role', value: 'Product Designer — research collaboration, synthesis facilitation, design' },
+                    { label: 'Team', value: '1 UX Researcher, 2 PMs, 2 Designers' },
+                    { label: 'Timeline', value: 'Oct 2022 – Feb 2023' },
+                  ].map(item => (
+                    <div key={item.label}>
+                      <p style={{
+                        fontFamily: 'var(--sans)', fontSize: '0.6rem',
+                        letterSpacing: '0.14em', textTransform: 'uppercase',
+                        color: 'var(--terracotta)', fontWeight: 700, marginBottom: '0.3rem',
+                      }}>
+                        {item.label}
+                      </p>
+                      <p style={{
+                        fontFamily: 'var(--sans)', fontSize: '0.875rem',
+                        fontWeight: 300, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
+                        maxWidth: 260,
+                      }}>
+                        {item.value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
+
+        {/* Cover image — anchored at the bottom of the hero area */}
+        <div className="hero-wrapper" style={{ maxWidth: 1200, width: '100%', margin: '0 auto', paddingLeft: '3rem', paddingRight: '3rem', paddingBottom: '3rem' }}>
+          <div className="hero-cover" style={{ width: '85%', overflow: 'hidden', borderRadius: '0.75rem', margin: '0 auto' }}>
+            <img
+              src="/case studies/fbn finance archetypes/Hero.png"
+              alt="FBN Finance Archetypes cover"
+              style={{ width: '100%', height: '240px', display: 'block', objectFit: 'cover', objectPosition: 'center 30%' }}
+            />
+          </div>
+        </div>
+
       </div>
 
       {/* Page layout */}
@@ -545,8 +554,8 @@ export default function FBNFinanceArchetypes() {
                   desc: 'Co-facilitated sessions to surface knowledge gaps and align product, design, business, and marketing on research priorities.',
                 },
                 {
-                  label: 'Interview Coordination',
-                  desc: 'Helped prepare the team for fieldwork, aligning on interview policies and debriefing after each session to capture early patterns.',
+                  label: 'Fieldwork & Interviews',
+                  desc: 'Traveled to the Midwest to conduct on-farm interviews directly alongside the UX researcher — sitting with farmers in their homes and fields to hear firsthand how they thought about borrowing and managing their operations.',
                 },
                 {
                   label: 'Synthesis & Naming',
@@ -695,7 +704,7 @@ export default function FBNFinanceArchetypes() {
                 fontFamily: 'var(--serif)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
               }}>
-                Enable Easier Access to Funds
+                1. Enable Easier Access to Funds
               </h3>
 
               <p style={{
@@ -713,16 +722,17 @@ export default function FBNFinanceArchetypes() {
               </p>
 
               {/* Before/after: Setting up Direct Deposit */}
-              <h4 style={{
-                fontFamily: 'var(--sans)', fontSize: '0.7rem',
-                letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'var(--terracotta)', fontWeight: 700, marginBottom: '1.25rem',
+              <h4 className="text-center" style={{
+                fontFamily: 'var(--sans)', fontSize: '0.8rem',
+                letterSpacing: '0.12em', textTransform: 'uppercase',
+                color: 'var(--terracotta)', fontWeight: 800,
+                marginTop: '4rem', marginBottom: '1.5rem',
               }}>
                 Setting up Direct Deposit
               </h4>
 
               {/* Image comparison */}
-              <div className="before-after-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem', alignItems: 'center' }}>
+              <div className="before-after-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem', alignItems: 'start' }}>
 
                 {/* Before — full-width document */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -793,13 +803,14 @@ export default function FBNFinanceArchetypes() {
                   </div>
                 </div>
 
-              </div>
+              </div>{/* end before-after-cols grid */}
 
               {/* Before/after: Requesting Draws */}
-              <h4 style={{
-                fontFamily: 'var(--sans)', fontSize: '0.7rem',
-                letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'var(--terracotta)', fontWeight: 700, marginBottom: '1.25rem',
+              <h4 className="text-center" style={{
+                fontFamily: 'var(--sans)', fontSize: '0.8rem',
+                letterSpacing: '0.12em', textTransform: 'uppercase',
+                color: 'var(--terracotta)', fontWeight: 800,
+                marginTop: '4rem', marginBottom: '1.5rem',
               }}>
                 Requesting Draws
               </h4>
@@ -867,7 +878,7 @@ export default function FBNFinanceArchetypes() {
                   </div>
                 </div>
 
-              </div>
+              </div>{/* end before-after-cols grid */}
 
               <div style={{ textAlign: 'left', padding: '0', marginTop: '2rem' }}>
                 <p style={{
@@ -876,7 +887,7 @@ export default function FBNFinanceArchetypes() {
                   color: 'var(--terracotta)', lineHeight: 1.5,
                   marginBottom: '1rem', maxWidth: 900,
                 }}>
-                  ✦ Reduced fund access time from 5 business days to 2
+                  ✦ Reduced fund access time from 5 business days to 2.
                 </p>
                 <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
                   <path
@@ -893,7 +904,7 @@ export default function FBNFinanceArchetypes() {
                 fontFamily: 'var(--serif)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
               }}>
-                Digital Payment Capability
+                2. Digital Payment Capability
               </h3>
 
               <p style={{
@@ -910,8 +921,7 @@ export default function FBNFinanceArchetypes() {
                 <strong style={{ fontWeight: 500 }}>What we designed —</strong> Using FBN's existing Stripe integration, I designed a digital payment flow that replaced the paper check process entirely — prioritizing simplicity, security, and real-time feedback so farmers could pay with confidence from anywhere.
               </p>
 
-              <div style={{ position: 'relative', width: '30%', overflow: 'hidden' }}>
-                <WobblyBorder strokeColor="#1A1A1A" />
+              <div style={{ width: '30%' }}>
                 <img
                   src="/case studies/fbn finance archetypes/Digital Payment.gif"
                   alt="Digital payment flow"
@@ -926,7 +936,7 @@ export default function FBNFinanceArchetypes() {
                   color: 'var(--terracotta)', lineHeight: 1.5,
                   marginBottom: '1rem', maxWidth: 900,
                 }}>
-                  ✦ Payment processing reduced to 1 business day
+                  ✦ Payment processing reduced to 1 business day.
                 </p>
                 <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
                   <path
@@ -943,19 +953,13 @@ export default function FBNFinanceArchetypes() {
                 fontFamily: 'var(--serif)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
               }}>
-                Highlighting Agricultural Expertise
+                3. Highlighting Agricultural Expertise
               </h3>
 
               {/* Research finding */}
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'baseline', marginBottom: '1.25rem' }}>
-                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style={{ flexShrink: 0, marginTop: 3 }}>
-                  <path d="M1,5 C2.5,4 4,5.5 5,4.8 C6,4.1 7.5,5.2 9,5"
-                    fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
-                </svg>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
-                  <strong style={{ fontWeight: 500 }}>Research finding —</strong> Three of our four archetypes expressed hesitation about working with lenders who didn't understand agriculture — specifically around challenges like weather-related delays affecting repayments. They trusted and preferred lenders who understood their world.
-                </p>
-              </div>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.25rem' }}>
+                <strong style={{ fontWeight: 500 }}>Research finding —</strong> Three of our four archetypes expressed hesitation about working with lenders who didn't understand agriculture — specifically around challenges like weather-related delays affecting repayments. They trusted and preferred lenders who understood their world.
+              </p>
 
               {/* What we designed */}
               <p style={{
@@ -981,7 +985,7 @@ export default function FBNFinanceArchetypes() {
                   color: 'var(--terracotta)', lineHeight: 1.5,
                   marginBottom: '1rem', maxWidth: 900,
                 }}>
-                  ✦ Built early trust in the lending process, reinforcing FBN's positioning as an agriculture-first lender
+                  ✦ Built early trust in the lending process, reinforcing FBN's positioning as an agriculture-first lender.
                 </p>
                 <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
                   <path
