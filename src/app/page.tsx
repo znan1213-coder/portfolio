@@ -69,12 +69,23 @@ const projects = [
     category: 'AgTech · End-to-End',
     title: 'Digital Loan Application',
     description: 'Redesigning the loan application experience for American farmers — from paper forms to a guided digital flow.',
-    bg: '#EAE3DA',
+    bg: '#E8EDE8',
     image: '/case%20studies/digital%20loan%20application/Cover.png',
     href: '/work/digital-loan-application',
   },
   {
     id: 2,
+    category: 'Enterprise · Web Design',
+    title: 'Finance Platform Redesign',
+    description: 'Redesigning an internal enterprise tool to centralize workflows, modernize the UI, and improve usability for Finance and Data users at Capital One.',
+    bg: '#B0C4D4',
+    image: '/case%20studies/finance%20platform%20redesign/hero.png',
+    imageFill: true,
+    imagePadding: '1.5rem',
+    href: '/work/finance-platform-redesign',
+  },
+  {
+    id: 3,
     category: 'AgTech · Research',
     title: "Research to Roadmap: Defining FBN's First Finance Archetypes",
     description: "How generative research closed a critical knowledge gap and became the foundation for FBN's finance design decisions.",
@@ -84,21 +95,21 @@ const projects = [
     href: '/work/fbn-finance-archetypes',
   },
   {
-    id: 3,
+    id: 4,
     category: 'Mobile · Product Design',
     title: 'Reimagining Mobile Banking',
     description: 'End-to-end redesign of Capital One\u2019s flagship mobile experience.',
     bg: '#DAE0E5',
   },
   {
-    id: 4,
+    id: 5,
     category: 'AgTech · Data Visualization',
     title: 'Farm Intelligence Dashboard',
     description: 'Designing clarity into complex agricultural data systems.',
     bg: '#DFD9E8',
   },
   {
-    id: 5,
+    id: 6,
     category: 'Fintech · 0 \u2192 1',
     title: 'Launching a New Credit Product',
     description: 'Taking a new credit feature from concept to two million users.',
@@ -127,13 +138,13 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
       {/* Thumbnail */}
       <div style={{
         position: 'relative', width: '100%', height: '280px', overflow: 'hidden',
-        background: (project.image && !project.imageFill) ? '#E8EDE8' : project.imageFill ? 'none' : project.bg,
+        background: project.image ? (project.bg || '#E8EDE8') : project.bg,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: project.imageFill ? 0 : '2.5rem', boxSizing: 'border-box',
+        padding: project.imagePadding ?? (project.imageFill ? 0 : '2.5rem'), boxSizing: 'border-box',
       }}>
         {project.image ? (
           <img src={project.image} alt={project.title}
-            style={{ width: '100%', height: '100%', objectFit: project.imageFill ? 'cover' : 'contain', display: 'block', borderRadius: '0.5rem' }} />
+            style={{ width: '100%', height: '100%', objectFit: (project.imageFill && !project.imagePadding) ? 'cover' : 'contain', display: 'block', borderRadius: '0.5rem' }} />
         ) : (
           <div style={{
             position: 'absolute', inset: 0, opacity: 0.18,
