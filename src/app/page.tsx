@@ -81,7 +81,10 @@ const projects = [
     bg: '#B0C4D4',
     image: '/case%20studies/finance%20platform%20redesign/hero.png',
     imageFill: true,
-    imagePadding: '1.5rem',
+    imagePadding: '1.5rem 1.5rem 0',
+    imageAlign: 'flex-end',
+    imagePosition: 'bottom',
+    imageTranslateY: '20px',
     href: '/work/finance-platform-redesign',
   },
   {
@@ -96,10 +99,14 @@ const projects = [
   },
   {
     id: 4,
-    category: 'Mobile · Product Design',
-    title: 'Reimagining Mobile Banking',
-    description: 'End-to-end redesign of Capital One\u2019s flagship mobile experience.',
+    category: 'Fintech · Web · Data Visualization',
+    title: 'Bank Reconciliation',
+    description: 'Redesigning the bank reconciliation feature that cut reconcile time by 35%.',
     bg: '#DAE0E5',
+    image: '/case studies/bank reconciliation/cover.png',
+    imageFill: true,
+    href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed',
+    target: '_blank',
   },
   {
     id: 5,
@@ -123,6 +130,7 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
   return (
     <Tag
       {...(project.href ? { href: project.href } : {})}
+      {...(project.target ? { target: project.target, rel: 'noopener noreferrer' } : {})}
       className="group"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -139,12 +147,12 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
       <div style={{
         position: 'relative', width: '100%', height: '280px', overflow: 'hidden',
         background: project.image ? (project.bg || '#E8EDE8') : project.bg,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        display: 'flex', alignItems: project.imageAlign ?? 'center', justifyContent: 'center',
         padding: project.imagePadding ?? (project.imageFill ? 0 : '2.5rem'), boxSizing: 'border-box',
       }}>
         {project.image ? (
           <img src={project.image} alt={project.title}
-            style={{ width: '100%', height: '100%', objectFit: (project.imageFill && !project.imagePadding) ? 'cover' : 'contain', display: 'block', borderRadius: '0.5rem' }} />
+            style={{ width: '100%', height: '100%', objectFit: (project.imageFill && !project.imagePadding) ? 'cover' : 'contain', objectPosition: project.imagePosition ?? 'center', display: 'block', borderRadius: '0.5rem', transform: project.imageTranslateY ? `translateY(${project.imageTranslateY})` : undefined }} />
         ) : (
           <div style={{
             position: 'absolute', inset: 0, opacity: 0.18,
@@ -205,6 +213,7 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [catWobble, setCatWobble] = useState(0)
+  const [catHovered, setCatHovered] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setCatWobble(Math.sin(window.scrollY * 0.018) * 4)
@@ -215,6 +224,11 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', background: '#fff' }}>
       <style>{`
+        @keyframes wiggle {
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(-3deg); }
+          75% { transform: rotate(3deg); }
+        }
         @media (max-width: 767px) {
           .hero-section { padding: 5rem 1.5rem 2.5rem !important; }
           .hero-grid { gap: 1rem !important; }
@@ -296,11 +310,15 @@ export default function Home() {
             <img
               src="/two cats new.png"
               alt="Two cats"
+              onMouseEnter={() => setCatHovered(true)}
+              onMouseLeave={() => setCatHovered(false)}
               style={{
                 width: '100%', height: 'auto', display: 'block',
-                transform: `rotate(${catWobble}deg)`,
+                transform: catHovered ? undefined : `rotate(${catWobble}deg)`,
                 transformOrigin: 'bottom center',
-                transition: 'transform 0.3s ease-out',
+                transition: catHovered ? undefined : 'transform 0.3s ease-out',
+                animation: catHovered ? 'wiggle 0.4s ease-in-out infinite' : undefined,
+                cursor: 'pointer',
               }}
             />
           </div>
