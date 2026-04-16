@@ -108,20 +108,6 @@ const projects = [
     href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed',
     target: '_blank',
   },
-  {
-    id: 5,
-    category: 'AgTech · Data Visualization',
-    title: 'Farm Intelligence Dashboard',
-    description: 'Designing clarity into complex agricultural data systems.',
-    bg: '#DFD9E8',
-  },
-  {
-    id: 6,
-    category: 'Fintech · 0 \u2192 1',
-    title: 'Launching a New Credit Product',
-    description: 'Taking a new credit feature from concept to two million users.',
-    bg: '#E5E0DA',
-  },
 ]
 
 function CaseStudyCard({ project }: { project: typeof projects[number] }) {
