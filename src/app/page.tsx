@@ -68,7 +68,7 @@ const projects = [
     id: 1,
     category: 'AgTech · End-to-End',
     title: 'Digital Loan Application',
-    description: 'Redesigning the loan application experience for American farmers — from paper forms to a guided digital flow.',
+    description: 'From paper forms to a fully self-serve digital loan experience.',
     bg: '#E8EDE8',
     image: '/case%20studies/digital%20loan%20application/Cover.png',
     href: '/work/digital-loan-application',

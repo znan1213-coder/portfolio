@@ -263,21 +263,23 @@ const PILLAR_ICONS = [
 
 function PillarRows() {
   return (
-    <div className="pillar-cols" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2.5rem', marginBottom: '4rem' }}>
+    <div className="pillar-cols" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '4rem' }}>
       {PILLARS.map((p, i) => (
-        <div key={p.name}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
+        <div key={p.name} style={{ position: 'relative', padding: '1.75rem' }}>
+          <WobblyBorder />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
             {PILLAR_ICONS[i]}
             <span style={{
-              fontFamily: 'var(--serif)', fontSize: '1.125rem',
-              fontWeight: 400, color: '#1a1a1a', lineHeight: 1.2,
+              fontFamily: 'var(--sans)', fontSize: '0.7rem',
+              fontWeight: 700, color: 'var(--terracotta)',
+              textTransform: 'uppercase', letterSpacing: '0.14em',
             }}>
               {p.name}
             </span>
           </div>
           <p style={{
-            fontFamily: 'var(--sans)', fontSize: '0.9375rem',
-            fontWeight: 400, color: '#555', lineHeight: 1.7, margin: 0,
+            fontFamily: 'var(--sans)', fontSize: '0.9rem',
+            fontWeight: 300, color: '#555', lineHeight: 1.7, margin: 0,
           }}>
             {p.desc}
           </p>
@@ -294,10 +296,9 @@ const DIMENSION_CARDS = [
 ]
 
 function DesignDetailsShowcase() {
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTab, setActiveTab] = useState(1)
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [animKey, setAnimKey] = useState(0)
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
   const handleTabChange = (i: number) => {
     if (i === activeTab) return
@@ -312,8 +313,8 @@ function DesignDetailsShowcase() {
     <div>
       <style>{SLIDE_CSS}</style>
 
-      {/* Mobile pill tabs — hidden on desktop */}
-      <div className="approach-pills" style={{ display: 'none', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+      {/* Pill tabs */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '3rem' }}>
         {DIMENSION_CARDS.map((card, i) => {
           const active = i === activeTab
           return (
@@ -323,7 +324,7 @@ function DesignDetailsShowcase() {
                 fontFamily: 'var(--sans)', fontSize: '0.75rem',
                 fontWeight: 500,
                 color: active ? '#fff' : '#1a1a1a',
-                background: active ? '#A0522D' : '#fff',
+                background: active ? 'var(--terracotta)' : '#fff',
                 border: 'none', borderRadius: 999, cursor: 'pointer',
                 padding: '0.45rem 1rem',
                 letterSpacing: '0.02em',
@@ -334,43 +335,6 @@ function DesignDetailsShowcase() {
               {!active && <WobblyPillBorder />}
               {card.title}
             </button>
-          )
-        })}
-      </div>
-
-      {/* Clickable framework boxes — hidden on mobile */}
-      <div className="approach-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '3rem' }}>
-        {DIMENSION_CARDS.map((card, i) => {
-          const active = i === activeTab
-          const hovered = hoveredCard === i
-          return (
-            <div
-              key={card.title}
-              onClick={() => handleTabChange(i)}
-              onMouseEnter={() => setHoveredCard(i)}
-              onMouseLeave={() => setHoveredCard(null)}
-              style={{
-                position: 'relative', padding: '1.5rem 1.5rem 1.75rem',
-                cursor: 'pointer',
-                background: active ? '#FDF5F0' : hovered ? '#FDF5F0' : '#fff',
-                transition: 'background 0.15s',
-              }}
-            >
-              <WobblyBorder strokeColor={active ? '#A0522D' : '#1A1A1A'} />
-              <p style={{
-                fontFamily: 'var(--serif)', fontSize: '1.1rem',
-                fontWeight: active ? 600 : 400, color: active ? '#A0522D' : 'var(--ink)', marginBottom: '0.5rem',
-                transition: 'color 0.15s',
-              }}>
-                {card.title}
-              </p>
-              <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                fontWeight: 300, color: '#555', lineHeight: 1.65, margin: 0,
-              }}>
-                {card.desc}
-              </p>
-            </div>
           )
         })}
       </div>
@@ -504,90 +468,60 @@ const SLIDE_CSS = `
 `
 
 function FinalDesignShowcase() {
-  const [activeTab, setActiveTab] = useState(0)
-  const [direction, setDirection] = useState<'up' | 'down'>('up')
-  const [animKey, setAnimKey] = useState(0)
-
-  const handleTabChange = (i: number) => {
-    if (i === activeTab) return
-    setDirection(i > activeTab ? 'up' : 'down')
-    setActiveTab(i)
-    setAnimKey(k => k + 1)
-  }
-
-  const tab = TABS[activeTab]
-  const animName = direction === 'up' ? 'slideLeftIn' : 'slideRightIn'
-
   return (
-    <div>
-      <style>{SLIDE_CSS}</style>
-
-      {/* Pill tabs */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem', overflow: 'hidden' }}>
-        {TABS.map((t, i) => {
-          const active = i === activeTab
-          return (
-            <button key={t.label} onClick={() => handleTabChange(i)}
-              style={{
-                position: 'relative',
-                fontFamily: 'var(--sans)', fontSize: '0.75rem',
-                fontWeight: 500,
-                color: active ? '#fff' : '#1a1a1a',
-                background: active ? 'var(--terracotta)' : '#fff',
-                border: 'none', borderRadius: 999, cursor: 'pointer',
-                padding: '0.45rem 1rem',
-                letterSpacing: '0.02em',
-                transition: 'background 0.2s, color 0.2s',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {!active && <WobblyPillBorder />}
-              {t.label}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Instruction */}
-      <p style={{
-        fontFamily: 'var(--sans)', fontSize: '0.75rem', fontStyle: 'italic',
-        color: '#bbb', marginBottom: '3rem',
-      }}>
-        Click each tab to explore the screens →
-      </p>
-
-      {/* Two-column content — clipped so sliding content doesn't overflow */}
-      <div style={{ overflow: 'hidden', minHeight: 620 }}>
-        <div
-          key={animKey}
-          style={{
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6rem' }}>
+      {TABS.map((tab, i) => {
+        const imageLeft = i % 2 === 0
+        return (
+          <div key={tab.label} className="final-design-row" style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center',
-            animation: `${animName} 320ms ease-in-out both`,
-          }}
-        >
-          {/* Left — phone image */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img src={tab.image} alt={tab.title}
-              style={{ maxHeight: 580, width: 'auto', maxWidth: '100%', display: 'block' }} />
+          }}>
+            {imageLeft ? (
+              <>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <img src={tab.image} alt={tab.title}
+                    style={{ maxHeight: 560, width: 'auto', maxWidth: '100%', display: 'block' }} />
+                </div>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--serif)', fontSize: '1.75rem',
+                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
+                  }}>
+                    {tab.title}
+                  </h3>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '1rem',
+                    fontWeight: 300, color: '#444', lineHeight: 1.8, margin: 0,
+                  }}>
+                    {tab.subtitle}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--serif)', fontSize: '1.75rem',
+                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
+                  }}>
+                    {tab.title}
+                  </h3>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '1rem',
+                    fontWeight: 300, color: '#444', lineHeight: 1.8, margin: 0,
+                  }}>
+                    {tab.subtitle}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <img src={tab.image} alt={tab.title}
+                    style={{ maxHeight: 560, width: 'auto', maxWidth: '100%', display: 'block' }} />
+                </div>
+              </>
+            )}
           </div>
-
-          {/* Right — title + description */}
-          <div>
-            <h3 style={{
-              fontFamily: 'var(--serif)', fontSize: '1.75rem',
-              fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
-            }}>
-              {tab.title}
-            </h3>
-            <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem',
-              fontWeight: 300, color: '#444', lineHeight: 1.8, margin: 0,
-            }}>
-              {tab.subtitle}
-            </p>
-          </div>
-        </div>
-      </div>
+        )
+      })}
     </div>
   )
 }
@@ -629,9 +563,8 @@ export default function DigitalLoanApplication() {
           .cs-progress { display: block !important; }
           .cs-content { padding: 0 1.25rem !important; }
           .problem-cols { grid-template-columns: 1fr !important; }
-          .approach-cards { display: none !important; }
-          .approach-pills { display: flex !important; }
           .design-row { grid-template-columns: 1fr !important; }
+          .final-design-row { grid-template-columns: 1fr !important; }
           .stat-row { grid-template-columns: 1fr !important; }
           .pillar-cols { grid-template-columns: 1fr !important; }
           .hero-wrapper { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
@@ -664,7 +597,7 @@ export default function DigitalLoanApplication() {
             <div className="max-w-2xl mx-auto">
             {/* Meta pills */}
             <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem', justifyContent: 'center' }}>
-              {['Consumer Facing', 'Mobile', 'End-to-End'].map(tag => (
+              {['Consumer Facing', 'Responsive', 'Agtech'].map(tag => (
                 <span key={tag} style={{
                   fontFamily: 'var(--sans)', fontSize: '0.7rem',
                   letterSpacing: '0.1em', textTransform: 'uppercase',
@@ -687,7 +620,7 @@ export default function DigitalLoanApplication() {
               fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
               color: '#1a1a1a', lineHeight: 1.7, marginBottom: '2rem',
             }}>
-              Redesigning the loan application experience for American farmers — from paper forms to a guided digital flow.
+              From paper forms to a fully self-serve digital loan experience.
             </p>
 
             {/* Project metadata */}
@@ -696,7 +629,7 @@ export default function DigitalLoanApplication() {
               gap: '0 3rem', marginBottom: 0, textAlign: 'left',
             }}>
               {[
-                { label: 'Role', value: 'Product Designer — end-to-end design, design system, user research' },
+                { label: 'Role', value: 'End-to-end design, design research, design strategy' },
                 { label: 'Team', value: '1 PM, 1 Designer, 4 Engineers' },
                 { label: 'Timeline', value: 'May 2021 – Dec. 2023' },
               ].map(item => (
@@ -723,7 +656,7 @@ export default function DigitalLoanApplication() {
               src="/case studies/digital loan application/Cover.png"
               alt="Digital Loan Application cover"
               className="hero-cover"
-              style={{ width: '65%', height: 'auto', display: 'block', borderRadius: '0.75rem', margin: '0 auto' }}
+              style={{ width: '65%', height: 'auto', display: 'block', borderRadius: '0.75rem', margin: '2.5rem auto 0' }}
             />
           </section>
         </div>
@@ -879,13 +812,14 @@ export default function DigitalLoanApplication() {
 
             {/* Pull quote */}
             <div style={{ textAlign: 'left', padding: '0' }}>
+              <SectionLabel>Problem Statement</SectionLabel>
               <p style={{
                 fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
                 fontStyle: 'italic', fontWeight: 400,
                 color: 'var(--terracotta)', lineHeight: 1.5,
                 marginBottom: '1rem', maxWidth: 900,
               }}>
-                ⁈ How might we empower farmers to apply independently — while giving FBN the tools to scale?
+                How might we empower farmers to apply independently, while giving FBN the tools to scale?
               </p>
               <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
                 <path
@@ -911,13 +845,13 @@ export default function DigitalLoanApplication() {
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.75rem',
             }}>
-              With a project this foundational, scope creep was a real risk. To stay focused on the MVP, my PM and I led two key activities:
+              With a project this foundational, scope creep was a real risk, and we had a hard deadline: the product needed to ship before the spring planting season, when farmers would be actively seeking financing. To stay focused on the MVP, my PM and I led two key activities:
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.75rem', paddingLeft: '1.25rem' }}>
               {[
-                { label: 'Competitor analysis', desc: 'studied loan platforms across retail and ag to identify what worked and what patterns we could adapt' },
-                { label: 'Stakeholder workshops', desc: "gathered input from across the business to surface priorities and ensure design decisions would serve both farmers and FBN's operational needs" },
+                { label: 'Competitor analysis', desc: 'we studied loan platforms across retail and ag to identify what worked and what patterns we could adapt' },
+                { label: 'Stakeholder workshops', desc: "we also gathered input from across the business to surface priorities and ensure design decisions would serve both farmers and FBN's operational needs" },
               ].map(item => (
                 <div key={item.label} style={{ display: 'flex', gap: '0.75rem', alignItems: 'baseline' }}>
                   <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style={{ flexShrink: 0, marginTop: 3 }}>
@@ -925,7 +859,7 @@ export default function DigitalLoanApplication() {
                       fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
                   </svg>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
-                    <strong style={{ fontWeight: 500 }}>{item.label}</strong> — {item.desc}
+                    <strong style={{ fontWeight: 500 }}>{item.label}:</strong> {item.desc}
                   </p>
                 </div>
               ))}
@@ -935,7 +869,7 @@ export default function DigitalLoanApplication() {
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '3rem',
             }}>
-              From these sessions, I distilled the findings into three design pillars — guiding principles that helped us filter feedback, stay focused, and make faster decisions throughout the project.
+              From these sessions, I distilled the findings into three design pillars, made them guiding principles that helped us filter feedback, stay focused, and make faster decisions throughout the project.
             </p>
 
             {/* Design pillars — row layout */}
@@ -943,11 +877,11 @@ export default function DigitalLoanApplication() {
 
             {/* Design details heading */}
             <h3 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.2, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '2rem', maxWidth: 900,
             }}>
-              Design Details — Key Dimensions of Form UX
+              Key Dimensions of Form UX
             </h3>
 
             <DesignDetailsShowcase />
@@ -976,7 +910,7 @@ export default function DigitalLoanApplication() {
             <h2 style={{
               fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
-              letterSpacing: '-0.01em', marginBottom: '1rem', maxWidth: 900,
+              letterSpacing: '-0.01em', marginBottom: '1rem', maxWidth: 900, marginTop: '2rem',
             }}>
               The Finished Experience
             </h2>
