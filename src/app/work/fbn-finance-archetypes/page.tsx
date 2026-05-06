@@ -155,6 +155,7 @@ function WobblyHRule() {
 }
 
 
+
 // ── Archetype showcase ────────────────────────────────────────────────────────
 const SLIDE_CSS = `
   @keyframes slideLeftIn  { from { transform: translateX(60px);  opacity: 0 } to { transform: translateX(0); opacity: 1 } }
@@ -175,30 +176,25 @@ const ARCHETYPE_JOURNEYS = [
   '/case studies/fbn finance archetypes/achetype category 2 -4.png',
 ]
 
-function ArchetypeShowcase() {
-  const [activeTab, setActiveTab] = useState(0)
-  const [direction, setDirection] = useState<'left' | 'right'>('left')
-  const [animKey, setAnimKey] = useState(0)
-
-  const handleTabChange = (i: number) => {
-    if (i === activeTab) return
-    setDirection(i > activeTab ? 'left' : 'right')
-    setActiveTab(i)
-    setAnimKey(k => k + 1)
-  }
-
-  const animName = direction === 'left' ? 'slideLeftIn' : 'slideRightIn'
+function ArchetypeRow() {
+  const [view, setView] = useState<'Profiles' | 'Behaviors'>('Profiles')
+  const [modalIdx, setModalIdx] = useState<number | null>(null)
 
   return (
     <div>
-      <style>{SLIDE_CSS}</style>
+      <p style={{
+        fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+        color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.5rem',
+      }}>
+        From the research, we identified four farmer archetypes — each representing a distinct relationship with borrowing and financial decision-making.
+      </p>
 
-      {/* Pill tabs */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem', overflow: 'hidden' }}>
-        {['Archetypes', 'Behaviors'].map((label, i) => {
-          const active = i === activeTab
+      {/* Toggle pills */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        {(['Profiles', 'Behaviors'] as const).map(label => {
+          const active = view === label
           return (
-            <button key={label} onClick={() => handleTabChange(i)}
+            <button key={label} onClick={() => setView(label)}
               style={{
                 position: 'relative',
                 fontFamily: 'var(--sans)', fontSize: '0.75rem',
@@ -219,77 +215,79 @@ function ArchetypeShowcase() {
         })}
       </div>
 
-      {/* Instruction */}
-      <p style={{
-        fontFamily: 'var(--sans)', fontSize: '0.75rem', fontStyle: 'italic',
-        color: '#bbb', marginBottom: '3rem',
-      }}>
-        Click each tab to explore →
-      </p>
-
-      {/* Tab content */}
-      <div style={{ overflow: 'hidden' }}>
-        <div key={animKey} style={{ animation: `${animName} 320ms ease-in-out both` }}>
-
-          {/* Tab 0 — Archetypes: 2×2 profile grid */}
-          {activeTab === 0 && (
-            <div className="archetype-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '3rem', padding: '0 2.5rem' }}>
-              {ARCHETYPE_PROFILES.map((p, i) => (
-                <div key={i}>
-                  <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
-                    <WobblyBorder strokeColor="#1A1A1A" />
-                    <img
-                      src={p.src}
-                      alt={p.caption}
-                      style={{ width: '100%', height: 'auto', display: 'block' }}
-                    />
-                  </div>
-                  <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '0.8rem',
-                    fontStyle: 'italic', fontWeight: 300,
-                    color: '#999', lineHeight: 1.5,
-                    marginTop: '0.5rem', marginBottom: 0,
-                  }}>
-                    {p.caption}
-                  </p>
-                </div>
-              ))}
+      {/* Profile grid */}
+      {view === 'Profiles' && (
+        <div className="archetype-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
+          {ARCHETYPE_PROFILES.map((p, i) => (
+            <div key={i} onClick={() => setModalIdx(i)} style={{ position: 'relative', cursor: 'pointer' }}>
+              <WobblyBorder strokeColor="#1A1A1A" />
+              <img src={p.src} alt={p.caption} style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 320, objectFit: 'cover', objectPosition: 'top' }} />
+              <p style={{
+                fontFamily: 'var(--sans)', fontSize: '0.775rem',
+                fontStyle: 'italic', fontWeight: 300,
+                color: '#999', marginTop: '0.5rem', marginBottom: 0,
+              }}>
+                {p.caption}
+              </p>
             </div>
-          )}
-
-          {/* Tab 1 — Behaviors: stacked full-width journey images */}
-          {activeTab === 1 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {ARCHETYPE_JOURNEYS.map((src, i) => (
-                <div key={i} style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
-                  <WobblyBorder strokeColor="#1A1A1A" />
-                  <img
-                    src={src}
-                    alt={`Archetype ${i + 1} behaviors`}
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
+          ))}
         </div>
-      </div>
+      )}
+
+      {/* Behaviors */}
+      {view === 'Behaviors' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+          {ARCHETYPE_JOURNEYS.map((src, i) => (
+            <div key={i} style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+              <WobblyBorder strokeColor="#1A1A1A" />
+              <img src={src} alt={`Archetype ${i + 1} behaviors`} style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 360, objectFit: 'cover', objectPosition: 'top' }} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal */}
+      {modalIdx !== null && (
+        <div
+          onClick={() => setModalIdx(null)}
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <button
+            onClick={() => setModalIdx(null)}
+            style={{
+              position: 'absolute', top: '1.5rem', right: '1.5rem',
+              background: 'none', border: 'none', color: '#fff',
+              fontFamily: 'var(--sans)', fontSize: '1.5rem',
+              cursor: 'pointer', lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
+          <img
+            src={ARCHETYPE_PROFILES[modalIdx].src}
+            alt={ARCHETYPE_PROFILES[modalIdx].caption}
+            onClick={e => e.stopPropagation()}
+            style={{ maxWidth: 800, maxHeight: '90vh', objectFit: 'contain', display: 'block' }}
+          />
+        </div>
+      )}
     </div>
   )
 }
 
 // ── Nav sections ──────────────────────────────────────────────────────────────
 const NAV_SECTIONS = [
-  { id: 'context',    label: 'Context' },
-  { id: 'research',   label: 'Research' },
-  { id: 'archetypes', label: 'Archetypes' },
-  { id: 'design',     label: 'Design & Impact' },
+  { id: 'research', label: 'Research' },
+  { id: 'design',   label: 'Design' },
 ]
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function FBNFinanceArchetypes() {
-  const [activeSection, setActiveSection] = useState('context')
+  const [activeSection, setActiveSection] = useState('research')
   const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
@@ -326,7 +324,7 @@ export default function FBNFinanceArchetypes() {
           .cs-content { padding: 0 1.25rem !important; }
           .before-after-cols { grid-template-columns: 1fr !important; }
           .research-photos { grid-template-columns: 1fr !important; }
-          .archetype-grid { grid-template-columns: 1fr !important; }
+          .archetype-row { grid-template-columns: 1fr !important; }
           .stat-row { grid-template-columns: 1fr !important; }
           .meta-row { grid-template-columns: 1fr !important; }
           .hero-wrapper { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
@@ -497,42 +495,30 @@ export default function FBNFinanceArchetypes() {
         {/* Main content */}
         <main className="cs-content" style={{ padding: '0 3rem 0 3rem', minWidth: 0 }}>
 
-          {/* ── Context ───────────────────────────────────────────────────── */}
-          <section id="context" style={{ paddingTop: '1.85rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
-            <SectionLabel>Context</SectionLabel>
+          {/* ── Research ─────────────────────────────────────────────────── */}
+          <section id="research" style={{ paddingTop: '1.85rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
+            <SectionLabel>Research</SectionLabel>
             <h2 style={{
               fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
-              letterSpacing: '-0.01em', marginBottom: '0.85rem', maxWidth: 900,
+              letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
-              The Knowledge Gap
+              Closing the Knowledge Gap
             </h2>
-            <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem', fontStyle: 'italic',
-              color: '#555', marginBottom: '2.5rem', fontWeight: 300, maxWidth: 900,
-            }}>
-              Core finance features had shipped — but the team building them had never deeply understood who was using them.
-            </p>
 
             <p style={{
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
-              color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '2rem',
+              color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.5rem',
             }}>
               FBN had launched core finance features, but the team lacked a grounded understanding of who our farmers actually were. We didn't know their goals, their frustrations, or how they thought about borrowing — and without that, product and design decisions were being made on assumption.
             </p>
             <p style={{
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
-              color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '0',
+              color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '3rem',
             }}>
               To close that gap, we partnered with a UX researcher to conduct generative research across 17 farmers in key agricultural regions, combining on-farm interviews, remote sessions, and focus groups at the Farmer-2-Farmer conference.
             </p>
-          </section>
 
-          <WobblyHRule />
-
-          {/* ── Research Process ──────────────────────────────────────────── */}
-          <section id="research" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
-            <SectionLabel>Research Process</SectionLabel>
             <h2 style={{
               fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
@@ -555,11 +541,11 @@ export default function FBNFinanceArchetypes() {
                 },
                 {
                   label: 'Fieldwork & Interviews',
-                  desc: 'Traveled to the Midwest to conduct on-farm interviews directly alongside the UX researcher — sitting with farmers in their homes and fields to hear firsthand how they thought about borrowing and managing their operations.',
+                  desc: 'Traveled to the Midwest to conduct on-farm interviews directly alongside the UX researcher, sitting with farmers in their homes and fields to hear firsthand how they thought about borrowing and managing their operations.',
                 },
                 {
                   label: 'Synthesis & Naming',
-                  desc: 'After compiling themes with the researcher, I facilitated a workshop where stakeholders collaboratively named each archetype using dot voting — turning raw data into something the whole team could own.',
+                  desc: 'After compiling themes with the researcher, I facilitated a workshop where stakeholders collaboratively named each archetype using dot voting, turning raw data into something the whole team could resonate and own.',
                 },
               ].map(item => (
                 <div key={item.label} style={{ display: 'flex', gap: '0.75rem', alignItems: 'baseline' }}>
@@ -568,7 +554,7 @@ export default function FBNFinanceArchetypes() {
                       fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
                   </svg>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
-                    <strong style={{ fontWeight: 500 }}>{item.label}</strong> — {item.desc}
+                    <strong style={{ fontWeight: 500 }}>{item.label}:</strong> {item.desc}
                   </p>
                 </div>
               ))}
@@ -625,7 +611,7 @@ export default function FBNFinanceArchetypes() {
             </div>
 
             {/* Why archetypes callout */}
-            <div style={{ position: 'relative', padding: '1.75rem 1.75rem 1.5rem', marginBottom: '0', background: '#FAF8F6' }}>
+            <div style={{ position: 'relative', padding: '1.75rem 1.75rem 1.5rem', marginBottom: '3.5rem', background: '#FAF8F6' }}>
               <WobblyBorder strokeColor="#D4CBC2" />
               <h3 style={{
                 fontFamily: 'var(--serif)', fontSize: '1.25rem',
@@ -641,42 +627,8 @@ export default function FBNFinanceArchetypes() {
                 In the finance space, what farmers <em>do</em> and <em>want</em> matters more than who they are demographically. Archetypes let us focus on shared behaviors and decision-making patterns — a more actionable foundation for design and product.
               </p>
             </div>
-          </section>
 
-          <WobblyHRule />
-
-          {/* ── Meet the Archetypes ───────────────────────────────────────── */}
-          <section id="archetypes" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
-            <SectionLabel>Meet the Archetypes</SectionLabel>
-            <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
-              fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
-              letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
-            }}>
-              Meet the Archetypes
-            </h2>
-
-            <div style={{ marginBottom: '2.5rem' }}>
-              <ArchetypeShowcase />
-            </div>
-
-            {/* Closing line */}
-            <div style={{ textAlign: 'left', padding: '0' }}>
-              <p style={{
-                fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
-                fontStyle: 'italic', fontWeight: 400,
-                color: 'var(--terracotta)', lineHeight: 1.5,
-                marginBottom: '1rem', maxWidth: 900,
-              }}>
-                ✦ These archetypes became the shared language across product, design, and marketing — and the direct input for our design roadmap.
-              </p>
-              <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
-                <path
-                  d="M4,5 C22,3 45,6 70,4.5 C95,3 118,6 142,4 C166,2.5 188,5.5 216,4"
-                  fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"
-                />
-              </svg>
-            </div>
+            <ArchetypeRow />
           </section>
 
           <WobblyHRule />
@@ -689,7 +641,7 @@ export default function FBNFinanceArchetypes() {
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
-              From Research to Roadmap
+              From Research to Design
             </h2>
             <p style={{
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
@@ -700,6 +652,13 @@ export default function FBNFinanceArchetypes() {
 
             {/* ── Design outcome 1: Enable Easier Access to Funds ── */}
             <div style={{ marginBottom: '5rem' }}>
+              <p style={{
+                fontFamily: 'var(--sans)', fontSize: '0.7rem',
+                fontWeight: 700, color: 'var(--terracotta)',
+                textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '0.5rem',
+              }}>
+                Heard across all four archetypes
+              </p>
               <h3 style={{
                 fontFamily: 'var(--serif)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
@@ -732,19 +691,16 @@ export default function FBNFinanceArchetypes() {
               </h4>
 
               {/* Image comparison */}
-              <div className="before-after-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '2.5rem', alignItems: 'start' }}>
+              <div className="before-after-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '2.5rem', alignItems: 'start' }}>
 
-                {/* Before — full-width document */}
+                {/* Before — document */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <span style={{
                     display: 'inline-block',
                     background: '#F0EBE4', color: '#6B5040',
                     fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    fontWeight: 600, letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 999,
-                    marginBottom: '0.75rem',
+                    fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '0.2rem 0.6rem', borderRadius: 999, marginBottom: '0.75rem',
                   }}>
                     Before
                   </span>
@@ -759,7 +715,7 @@ export default function FBNFinanceArchetypes() {
                       </svg>
                     </span>.
                   </p>
-                  <div style={{ position: 'relative', width: '100%' }}>
+                  <div style={{ position: 'relative', width: '100%', maxWidth: 320, margin: '0 auto' }}>
                     <WobblyBorder strokeColor="#CCCCCC" />
                     <img
                       src="/case studies/fbn finance archetypes/direct deposit - before.png"
@@ -769,17 +725,14 @@ export default function FBNFinanceArchetypes() {
                   </div>
                 </div>
 
-                {/* After — centered phone GIF */}
+                {/* After — phone GIF */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <span style={{
                     display: 'inline-block',
                     background: '#C5CEA0', color: '#4A5E35',
                     fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    fontWeight: 600, letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 999,
-                    marginBottom: '0.75rem',
+                    fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '0.2rem 0.6rem', borderRadius: 999, marginBottom: '0.75rem',
                   }}>
                     After
                   </span>
@@ -794,7 +747,7 @@ export default function FBNFinanceArchetypes() {
                       </svg>
                     </span>.
                   </p>
-                  <div style={{ width: 290 }}>
+                  <div style={{ width: 220 }}>
                     <img
                       src="/case studies/fbn finance archetypes/direct deposit - after.gif"
                       alt="Bank account linking flow in the FBN app"
@@ -815,26 +768,23 @@ export default function FBNFinanceArchetypes() {
                 Requesting Draws
               </h4>
 
-              <div className="before-after-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '0.5rem', alignItems: 'start' }}>
+              <div className="before-after-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '0.5rem', alignItems: 'start' }}>
 
-                {/* Before — full-width document */}
+                {/* Before — document */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <span style={{
                     display: 'inline-block',
                     background: '#F0EBE4', color: '#6B5040',
                     fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    fontWeight: 600, letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 999,
-                    marginBottom: '0.75rem',
+                    fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '0.2rem 0.6rem', borderRadius: 999, marginBottom: '0.75rem',
                   }}>
                     Before
                   </span>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
                     Farmer needs to fill out a DocuSign every time they need access to funds, and the loan team needs to manually review it — often processed late during the busy season.
                   </p>
-                  <div style={{ position: 'relative', width: '100%' }}>
+                  <div style={{ position: 'relative', width: '100%', maxWidth: 320, margin: '0 auto' }}>
                     <WobblyBorder strokeColor="#CCCCCC" />
                     <img
                       src="/case studies/fbn finance archetypes/draw - before.png"
@@ -844,17 +794,14 @@ export default function FBNFinanceArchetypes() {
                   </div>
                 </div>
 
-                {/* After — centered phone GIF */}
+                {/* After — phone GIF */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <span style={{
                     display: 'inline-block',
                     background: '#C5CEA0', color: '#4A5E35',
                     fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    fontWeight: 600, letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 999,
-                    marginBottom: '0.75rem',
+                    fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '0.2rem 0.6rem', borderRadius: 999, marginBottom: '0.75rem',
                   }}>
                     After
                   </span>
@@ -869,7 +816,7 @@ export default function FBNFinanceArchetypes() {
                       </svg>
                     </span>.
                   </p>
-                  <div style={{ width: 290 }}>
+                  <div style={{ width: 220 }}>
                     <img
                       src="/case studies/fbn finance archetypes/draw - after.gif"
                       alt="Draw request flow in the FBN app"
@@ -880,26 +827,34 @@ export default function FBNFinanceArchetypes() {
 
               </div>{/* end before-after-cols grid */}
 
-              <div style={{ textAlign: 'left', padding: '0', marginTop: '2rem' }}>
-                <p style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
-                  fontStyle: 'italic', fontWeight: 400,
-                  color: 'var(--terracotta)', lineHeight: 1.5,
-                  marginBottom: '1rem', maxWidth: 900,
-                }}>
-                  ✦ Reduced fund access time from 5 business days to 2.
-                </p>
-                <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
-                  <path
-                    d="M4,5 C22,3 45,6 70,4.5 C95,3 118,6 142,4 C166,2.5 188,5.5 216,4"
-                    fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"
-                  />
-                </svg>
+              <div style={{ marginTop: '2rem' }}>
+                <div style={{ position: 'relative', padding: '1.5rem 2rem', background: '#FAF6F1', display: 'inline-block', minWidth: 260 }}>
+                  <WobblyBorder strokeColor="#D4CBC2" />
+                  <p style={{
+                    fontFamily: 'var(--serif)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                    fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.6rem',
+                  }}>
+                    5 days → 2
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '0.875rem',
+                    fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0,
+                  }}>
+                    Fund access time after digitizing the draw request process.
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* ── Design outcome 2: Digital Payment Capability ── */}
             <div style={{ marginBottom: '5rem' }}>
+              <p style={{
+                fontFamily: 'var(--sans)', fontSize: '0.7rem',
+                fontWeight: 700, color: 'var(--terracotta)',
+                textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '0.5rem',
+              }}>
+                Heard across all four archetypes
+              </p>
               <h3 style={{
                 fontFamily: 'var(--serif)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
@@ -929,26 +884,34 @@ export default function FBNFinanceArchetypes() {
                 />
               </div>
 
-              <div style={{ textAlign: 'left', padding: '0', marginTop: '2rem' }}>
-                <p style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
-                  fontStyle: 'italic', fontWeight: 400,
-                  color: 'var(--terracotta)', lineHeight: 1.5,
-                  marginBottom: '1rem', maxWidth: 900,
-                }}>
-                  ✦ Payment processing reduced to 1 business day.
-                </p>
-                <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
-                  <path
-                    d="M4,5 C22,3 45,6 70,4.5 C95,3 118,6 142,4 C166,2.5 188,5.5 216,4"
-                    fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"
-                  />
-                </svg>
+              <div style={{ marginTop: '2rem' }}>
+                <div style={{ position: 'relative', padding: '1.5rem 2rem', background: '#FAF6F1', display: 'inline-block', minWidth: 260 }}>
+                  <WobblyBorder strokeColor="#D4CBC2" />
+                  <p style={{
+                    fontFamily: 'var(--serif)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                    fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.6rem',
+                  }}>
+                    1 day
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '0.875rem',
+                    fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0,
+                  }}>
+                    Payment processing time after launching digital payments.
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* ── Design outcome 3: Highlighting Agricultural Expertise ── */}
             <div style={{ marginBottom: '0' }}>
+              <p style={{
+                fontFamily: 'var(--sans)', fontSize: '0.7rem',
+                fontWeight: 700, color: 'var(--terracotta)',
+                textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '0.5rem',
+              }}>
+                Heard across three of four archetypes
+              </p>
               <h3 style={{
                 fontFamily: 'var(--serif)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
@@ -978,21 +941,22 @@ export default function FBNFinanceArchetypes() {
                 />
               </div>
 
-              <div style={{ textAlign: 'left', padding: '0', marginTop: '2rem' }}>
-                <p style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
-                  fontStyle: 'italic', fontWeight: 400,
-                  color: 'var(--terracotta)', lineHeight: 1.5,
-                  marginBottom: '1rem', maxWidth: 900,
-                }}>
-                  ✦ Built early trust in the lending process, reinforcing FBN's positioning as an agriculture-first lender.
-                </p>
-                <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
-                  <path
-                    d="M4,5 C22,3 45,6 70,4.5 C95,3 118,6 142,4 C166,2.5 188,5.5 216,4"
-                    fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"
-                  />
-                </svg>
+              <div style={{ marginTop: '2rem' }}>
+                <div style={{ position: 'relative', padding: '1.5rem 2rem', background: '#FAF6F1', display: 'inline-block', minWidth: 260 }}>
+                  <WobblyBorder strokeColor="#D4CBC2" />
+                  <p style={{
+                    fontFamily: 'var(--serif)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                    fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.6rem',
+                  }}>
+                    3 of 4
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: '0.875rem',
+                    fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0,
+                  }}>
+                    Archetypes cited lender trust as a key factor — FBN's ag expertise became a frontline design message.
+                  </p>
+                </div>
               </div>
             </div>
           </section>
