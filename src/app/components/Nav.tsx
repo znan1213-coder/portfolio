@@ -65,7 +65,8 @@ const CASE_STUDIES = [
   { title: 'Digital Loan Application',           href: '/work/digital-loan-application',   live: true  },
   { title: 'Finance Platform Redesign',           href: '/work/finance-platform-redesign',  live: true  },
   { title: "Define FBN's First Finance Archetype", href: '/work/fbn-finance-archetypes',    live: true  },
-  { title: 'Bank Reconciliation',                 href: '/work/bank-reconciliation',        live: false },
+  { title: 'Bank Reconciliation',                 href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed', live: true  },
+  { title: 'Logo Design',                         href: '/work/logo-design',                live: true  },
 ]
 
 const DROPDOWN_CSS = `
@@ -105,7 +106,7 @@ function WorkDropdown({ visible }: { visible: boolean }) {
       {CASE_STUDIES.map((cs) => (
         <div key={cs.title}>
           {cs.live ? (
-            <a href={cs.href} style={{
+            <a href={cs.href} {...(cs.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} style={{
               display: 'block',
               padding: '0.85rem 1.4rem',
               textDecoration: 'none',
@@ -165,6 +166,8 @@ const MOBILE_WORK_ITEMS = [
   { title: 'Digital Loan Application',           href: '/work/digital-loan-application'  },
   { title: 'Finance Platform Redesign',           href: '/work/finance-platform-redesign' },
   { title: "Define FBN's First Finance Archetype", href: '/work/fbn-finance-archetypes'  },
+  { title: 'Bank Reconciliation',                 href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed' },
+  { title: 'Logo Design',                         href: '/work/logo-design'               },
 ]
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {

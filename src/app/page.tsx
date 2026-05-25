@@ -108,6 +108,19 @@ const projects = [
     href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed',
     target: '_blank',
   },
+  {
+    id: 5,
+    category: 'Branding · Identity',
+    title: 'Logo Design',
+    description: 'A collection of logo and brand mark work across personal projects and freelance clients.',
+    bg: '#F5EFE6',
+    customContent: (
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ fontSize: '6rem', color: '#A0522D', lineHeight: 1 }}>✦</span>
+      </div>
+    ),
+    href: '/work/logo-design',
+  },
 ]
 
 function CaseStudyCard({ project }: { project: typeof projects[number] }) {
@@ -132,17 +145,17 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
       {/* Thumbnail */}
       <div style={{
         position: 'relative', width: '100%', height: '280px', overflow: 'hidden',
-        background: project.image ? (project.bg || '#E8EDE8') : project.bg,
+        background: project.bg || '#E8EDE8',
         display: 'flex', alignItems: project.imageAlign ?? 'center', justifyContent: 'center',
-        padding: project.imagePadding ?? (project.imageFill ? 0 : '2.5rem'), boxSizing: 'border-box',
+        padding: 'customContent' in project && project.customContent ? 0 : (project.imagePadding ?? (project.imageFill ? 0 : '2.5rem')), boxSizing: 'border-box',
       }}>
-        {project.image ? (
+        {'customContent' in project && project.customContent ? project.customContent : project.image ? (
           <img src={project.image} alt={project.title}
             style={{ width: '100%', height: '100%', objectFit: (project.imageFill && !project.imagePadding) ? 'cover' : 'contain', objectPosition: project.imagePosition ?? 'center', display: 'block', borderRadius: '0.5rem', transform: project.imageTranslateY ? `translateY(${project.imageTranslateY})` : undefined }} />
         ) : (
           <div style={{
             position: 'absolute', inset: 0, opacity: 0.18,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
           }} />
         )}
       </div>
