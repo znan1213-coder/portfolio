@@ -190,6 +190,8 @@ function ContactTag({ icon, label, href, rotate, bg, textColor, wobble = 0 }: {
   return (
     <a
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -318,9 +320,9 @@ export default function About() {
           {[
             { label: 'Email', href: 'mailto:zhu@example.com', bg: 'rgba(242,223,160,0.15)', color: '#8B6914', borderColor: '#C9A830', icon: <EmailIcon color="#8B6914" />, wobble: wobbleEmail },
             { label: 'LinkedIn', href: '#', bg: 'rgba(197,206,160,0.15)', color: '#4A5E35', borderColor: '#7A9A50', icon: <PersonIcon color="#4A5E35" />, wobble: wobbleLinkedIn },
-            { label: 'Resume', href: '#', bg: 'rgba(212,184,199,0.15)', color: '#6B3D5E', borderColor: '#9B6080', icon: <PageIcon color="#6B3D5E" />, wobble: wobbleResume },
+            { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html', bg: 'rgba(212,184,199,0.15)', color: '#6B3D5E', borderColor: '#9B6080', icon: <PageIcon color="#6B3D5E" />, wobble: wobbleResume },
           ].map((btn) => (
-            <a key={btn.label} href={btn.href} style={{
+            <a key={btn.label} href={btn.href} {...(btn.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {})} style={{
               position: 'relative',
               display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
               padding: '0.25rem 0.75rem',
@@ -467,8 +469,8 @@ export default function About() {
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>
-          {[{ label: 'LinkedIn', href: '#' }, { label: 'Resume', href: '#' }].map(link => (
-            <a key={link.label} href={link.href}
+          {[{ label: 'LinkedIn', href: '#' }, { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html' }].map(link => (
+            <a key={link.label} href={link.href} {...(link.href.startsWith('/Zhu') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               style={{
                 fontFamily: 'var(--sans)',
                 fontSize: '0.75rem',
