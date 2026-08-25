@@ -3,10 +3,13 @@
 :root {
   --serif: var(--font-marcellus), serif;
   --sans: var(--font-dm-sans), system-ui, sans-serif;
-  --terracotta: #B05A2B;
-  --ink: #1A1A1A;
-  --muted: #444444;
-  --background: #ffffff;
+  --playfair: var(--font-playfair), Georgia, serif;
+  --mono: var(--font-space-mono), 'Courier New', monospace;
+  --accent: #F0C94A;
+  --ink: #000000;
+  --muted: #999894;
+  --border: #BBBAB7;
+  --background: #FFFFFF;
 }
 
 body {

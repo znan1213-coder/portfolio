@@ -60,6 +60,42 @@ function WobblyBorder() {
   )
 }
 
+// ── Wobbly divider (hand-drawn line under the nav, content-width) ──────────────
+function WobblyDivider() {
+  const ref = useRef<SVGSVGElement>(null)
+  const [vw, setVw] = useState(0)
+  const [path, setPath] = useState('')
+  const prev = useRef(0)
+
+  useEffect(() => {
+    if (!ref.current) return
+    const update = () => {
+      const { width: w } = ref.current!.getBoundingClientRect()
+      const rw = Math.round(w)
+      if (rw === prev.current) return
+      prev.current = rw
+      if (rw) {
+        const wb = 1.4
+        const n = Math.max(4, Math.floor(rw / 70))
+        setPath('M 0 3' + seg(0, 3, rw, 3, wb, n))
+        setVw(rw)
+      }
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(ref.current)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <svg ref={ref} width="100%" height="6" viewBox={`0 0 ${vw || 1} 6`} preserveAspectRatio="none"
+      aria-hidden="true" style={{ display: 'block' }}>
+      {path && <path d={path} fill="none" stroke="var(--border)" strokeWidth="1"
+        strokeLinecap="round" strokeLinejoin="round" />}
+    </svg>
+  )
+}
+
 // ── Case studies ──────────────────────────────────────────────────────────────
 const CASE_STUDIES = [
   { title: 'Digital Loan Application',           href: '/work/digital-loan-application',   live: true  },
@@ -93,7 +129,7 @@ function WorkDropdown({ visible }: { visible: boolean }) {
       position: 'absolute',
       top: 'calc(100% + 10px)',
       right: 0,
-      background: '#fff',
+      background: 'var(--background)',
       boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
       borderRadius: 6,
       padding: '0.4rem 0',
@@ -112,7 +148,7 @@ function WorkDropdown({ visible }: { visible: boolean }) {
               textDecoration: 'none',
               transition: 'background 0.12s',
             }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#FAF9F7')}
+              onMouseEnter={e => (e.currentTarget.style.background = '#D5D4CF')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               <span style={{
@@ -189,7 +225,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 200,
-      background: '#fff',
+      background: 'var(--background)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       animation: 'overlayIn 200ms ease both',
@@ -232,7 +268,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                 transform: workExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
               }}>
               <path d="M1,1.5 C3,1 5,2.5 6,2 C7,1.5 9,1 11,1.5"
-                stroke="var(--terracotta)" strokeWidth="1.4" strokeLinecap="round"/>
+                stroke="var(--accent)" strokeWidth="1.4" strokeLinecap="round"/>
             </svg>
           </button>
 
@@ -266,7 +302,13 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 }
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
-export default function Nav({ activePage }: { activePage?: 'home' | 'about' | 'work' }) {
+export default function Nav({ activePage, variant = 'bar' }: {
+  activePage?: 'home' | 'about' | 'work'
+  /** 'bar' = fixed white bar with divider (default, used on inner pages).
+   *  'embedded' = sits inline in normal flow with no background/divider — for
+   *  dropping the nav directly onto a colored section like the homepage hero. */
+  variant?: 'bar' | 'embedded'
+}) {
   const [rotation, setRotation] = useState(0)
   const [workOpen, setWorkOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -281,42 +323,49 @@ export default function Nav({ activePage }: { activePage?: 'home' | 'about' | 'w
   const openWork  = () => { if (closeTimer.current) clearTimeout(closeTimer.current); setWorkOpen(true) }
   const closeWork = () => { closeTimer.current = setTimeout(() => setWorkOpen(false), 120) }
 
+  const isEmbedded = variant === 'embedded'
+  // On the gold hero background, the usual muted gray reads too low-contrast — use a solid near-black instead.
+  const baseLinkColor = isEmbedded ? '#1A1200' : 'var(--muted)'
+
   const linkColor = (href: string) => {
     if (activePage === 'about' && href === '/about') return 'var(--ink)'
-    return 'var(--muted)'
+    return baseLinkColor
   }
   const leaveColor = (href: string) => {
     if (activePage === 'about' && href === '/about') return 'var(--ink)'
-    return 'var(--muted)'
+    return baseLinkColor
   }
 
   return (
     <>
       <style>{DROPDOWN_CSS}</style>
       <nav style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid #EBEBEB',
+        position: isEmbedded ? 'relative' : 'fixed',
+        top: isEmbedded ? undefined : 0,
+        left: isEmbedded ? undefined : 0,
+        right: isEmbedded ? undefined : 0,
+        zIndex: isEmbedded ? undefined : 100,
+        background: isEmbedded ? 'transparent' : 'var(--background)',
       }}>
         <div style={{
-          maxWidth: 1100, margin: '0 auto', padding: '0 2rem',
-          height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          maxWidth: 1100, margin: '0 auto', padding: '0.75rem 2rem 0.85rem',
+          display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          {/* Logo */}
+          {/* Logo — far left */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
             <img src="/yarn black.png" alt="Logo"
               style={{ height: 46, width: 'auto', transform: `rotate(${rotation}deg)`, transition: 'transform 0.05s linear' }} />
-            <span style={{ fontFamily: 'var(--serif)', fontSize: '1rem', color: 'var(--ink)', letterSpacing: '0.01em' }}>
+            <span style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', color: 'var(--ink)', letterSpacing: '0.01em' }}>
               Zhu Nan
             </span>
           </a>
 
-          {/* Desktop links — hidden on mobile */}
+          {/* Desktop links — far right, hidden on mobile */}
           <div className="nav-desktop-links" style={{ gap: '2.5rem', alignItems: 'center' }}>
             <a href="/"
-              style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: 'var(--muted)', textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s' }}
+              style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: baseLinkColor, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
+              onMouseLeave={e => (e.currentTarget.style.color = baseLinkColor)}
             >
               Home
             </a>
@@ -328,9 +377,9 @@ export default function Nav({ activePage }: { activePage?: 'home' | 'about' | 'w
               onMouseLeave={closeWork}
             >
               <a href="/#work"
-                style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: 'var(--muted)', textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s', display: 'block' }}
+                style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: baseLinkColor, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s', display: 'block' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
+                onMouseLeave={e => (e.currentTarget.style.color = baseLinkColor)}
               >
                 Work
               </a>
@@ -359,6 +408,13 @@ export default function Nav({ activePage }: { activePage?: 'home' | 'about' | 'w
             <HamburgerIcon />
           </button>
         </div>
+
+        {/* Divider — hand-drawn wobbly line, constrained to content width */}
+        {!isEmbedded && (
+          <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 2rem' }}>
+            <WobblyDivider />
+          </div>
+        )}
       </nav>
 
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />

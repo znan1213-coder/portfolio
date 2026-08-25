@@ -256,7 +256,7 @@ export default function About() {
   const wobbleResume   = Math.sin(scrollY * 0.015 + 2.5) * 3
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       <style>{`
         @media (max-width: 768px) {
           .exp-entry { flex-direction: column !important; gap: 0.2rem !important; }
@@ -354,7 +354,7 @@ export default function About() {
             </h2>
             <svg width="80" height="6" viewBox="0 0 80 6" aria-hidden="true" style={{ display: 'block' }}>
               <path d="M2,4 C12,2 22,5 34,3.5 C46,2 56,5 68,3 C72,2.5 76,4 78,3.5"
-                fill="none" stroke="#C0AFA4" strokeWidth="1" strokeLinecap="round" />
+                fill="none" stroke="var(--border)" strokeWidth="1" strokeLinecap="round" />
             </svg>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -366,7 +366,7 @@ export default function About() {
             ].map(entry => (
               <div key={entry.company} className="exp-entry" style={{ display: 'flex', gap: '3rem', alignItems: 'baseline' }}>
                 <span className="exp-date" style={{
-                  fontFamily: 'var(--sans)', fontSize: '0.825rem', color: '#8B4513',
+                  fontFamily: 'var(--sans)', fontSize: '0.825rem', color: 'var(--muted)',
                   letterSpacing: '0.05em', whiteSpace: 'nowrap', minWidth: 120,
                 }}>
                   {entry.years}
@@ -400,7 +400,7 @@ export default function About() {
       </section>
 
       {/* Yarn section */}
-      <section className="yarn-section" style={{ background: '#FAF6F1', padding: '4rem 2rem' }}>
+      <section className="yarn-section" style={{ background: '#D8D7D3', padding: '4rem 2rem' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <h2 style={{
             fontFamily: 'var(--serif)',
@@ -455,7 +455,7 @@ export default function About() {
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid #EBEBEB',
+        borderTop: '1px solid var(--border)',
         maxWidth: 1100,
         margin: '0 auto',
         padding: '2rem',
@@ -480,7 +480,7 @@ export default function About() {
                 textTransform: 'uppercase' as const,
                 transition: 'color 0.15s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--terracotta)')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
             >
               {link.label}

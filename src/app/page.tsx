@@ -3,64 +3,70 @@
 import { useEffect, useRef, useState } from 'react'
 import Nav from './components/Nav'
 
-// ── Wobbly border ─────────────────────────────────────────────────────────────
-function seg(x1: number, y1: number, x2: number, y2: number, wobble: number, n: number) {
-  const dx = x2 - x1, dy = y2 - y1
-  const len = Math.hypot(dx, dy)
-  if (!len) return ''
-  const nx = -dy / len, ny = dx / len
-  let d = ''
-  for (let i = 0; i < n; i++) {
-    const mid = (i + 0.5) / n, t1 = (i + 1) / n
-    const off = (Math.random() - 0.5) * wobble * 2
-    d += ` Q ${(x1 + dx * mid + nx * off).toFixed(1)} ${(y1 + dy * mid + ny * off).toFixed(1)}`
-       + ` ${(x1 + dx * t1).toFixed(1)} ${(y1 + dy * t1).toFixed(1)}`
-  }
-  return d
-}
-
-function buildPath(W: number, H: number): string {
-  const r = 5, wb = 1.8
-  const sh = Math.max(3, Math.floor(W / 80))
-  const sv = Math.max(2, Math.floor(H / 60))
-  return `M ${r} 0`
-    + seg(r, 0, W - r, 0, wb, sh) + ` A ${r} ${r} 0 0 1 ${W} ${r}`
-    + seg(W, r, W, H - r, wb, sv) + ` A ${r} ${r} 0 0 1 ${W - r} ${H}`
-    + seg(W - r, H, r, H, wb, sh) + ` A ${r} ${r} 0 0 1 0 ${H - r}`
-    + seg(0, H - r, 0, r, wb, sv) + ` A ${r} ${r} 0 0 1 ${r} 0 Z`
-}
-
-function WobblyBorder() {
-  const ref = useRef<SVGSVGElement>(null)
-  const [path, setPath] = useState('')
-  const prev = useRef({ w: 0, h: 0 })
-
-  useEffect(() => {
-    if (!ref.current) return
-    const update = () => {
-      const { width: w, height: h } = ref.current!.getBoundingClientRect()
-      const [rw, rh] = [Math.round(w), Math.round(h)]
-      if (rw === prev.current.w && rh === prev.current.h) return
-      prev.current = { w: rw, h: rh }
-      if (rw && rh) setPath(buildPath(rw, rh))
-    }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(ref.current)
-    return () => ro.disconnect()
-  }, [])
-
+// ── Hero tag chip — flat rectangle, slight rotation, washi-tape corner accent ───
+function TagChip({
+  label, bg, textColor, fontFamily, fontWeight, rotate, tapeColor, tapeRotate,
+}: {
+  label: string
+  bg: string
+  textColor: string
+  fontFamily: string
+  fontWeight: number
+  rotate: number
+  tapeColor: string
+  tapeRotate: number
+}) {
   return (
-    <svg ref={ref} aria-hidden="true" style={{
-      position: 'absolute', inset: 0, width: '100%', height: '100%',
-      pointerEvents: 'none', overflow: 'visible',
-    }}>
-      {path && <path d={path} fill="none" stroke="#1A1A1A" strokeWidth="1"
-        strokeLinecap="round" strokeLinejoin="round" />}
-    </svg>
+    <div style={{ position: 'relative', display: 'inline-block', transform: `rotate(${rotate}deg)` }}>
+      {/* Washi tape accent — overlaps the top-left corner at an opposing angle */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', top: -8, left: 10, width: 38, height: 14,
+        background: tapeColor, opacity: 0.88,
+        transform: `rotate(${tapeRotate}deg)`,
+        boxShadow: '0 2px 4px rgba(0,0,0,0.18)',
+        zIndex: 2,
+      }} />
+      <div style={{
+        position: 'relative', zIndex: 1,
+        background: bg, color: textColor,
+        padding: '0.55rem 1.1rem',
+        fontFamily, fontWeight,
+        fontSize: '0.8rem', letterSpacing: '0.02em',
+        boxShadow: '0 4px 10px rgba(0,0,0,0.18)',
+        whiteSpace: 'nowrap' as const,
+      }}>
+        {label}
+      </div>
+    </div>
   )
 }
 
+// ── Hero bottom wave — hand-drawn transition into the white content below ───────
+function HeroWave() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 1440 100"
+      preserveAspectRatio="none"
+      style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 'clamp(50px, 8vw, 100px)', display: 'block' }}
+    >
+      {/* Diagonal brush-stroke sweep — deep gold on the left, tapering shallow toward the right,
+          with small irregular wobbles layered on top of the overall tilt (not a centered dip) */}
+      <path
+        d="M0,90
+           C90,80 140,72 180,75
+           C230,79 300,88 340,82
+           C420,72 480,58 560,55
+           C640,52 700,64 760,60
+           C860,54 930,40 980,35
+           C1060,28 1120,22 1180,20
+           C1260,16 1340,10 1440,8
+           L1440,100 L0,100 Z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  )
+}
 
 // ── Projects ──────────────────────────────────────────────────────────────────
 const projects = [
@@ -71,6 +77,7 @@ const projects = [
     description: 'From paper forms to a fully self-serve digital loan experience.',
     bg: '#E8EDE8',
     image: '/case%20studies/digital%20loan%20application/Cover.png',
+    imagePos: 'top center',
     href: '/work/digital-loan-application',
   },
   {
@@ -80,11 +87,7 @@ const projects = [
     description: 'Redesigning an internal enterprise tool to centralize workflows, modernize the UI, and improve usability for Finance and Data users at Capital One.',
     bg: '#B0C4D4',
     image: '/case%20studies/finance%20platform%20redesign/hero.png',
-    imageFill: true,
-    imagePadding: '1.5rem 1.5rem 0',
-    imageAlign: 'flex-end',
-    imagePosition: 'bottom',
-    imageTranslateY: '20px',
+    imagePos: 'top center',
     href: '/work/finance-platform-redesign',
   },
   {
@@ -94,7 +97,7 @@ const projects = [
     description: "How generative research closed a critical knowledge gap and became the foundation for FBN's finance design decisions.",
     bg: '#E8EDE8',
     image: '/case studies/fbn finance archetypes/Hero.png',
-    imageFill: true,
+    imagePos: 'top center',
     href: '/work/fbn-finance-archetypes',
   },
   {
@@ -104,7 +107,7 @@ const projects = [
     description: 'Redesigning the bank reconciliation feature that cut reconcile time by 35%.',
     bg: '#DAE0E5',
     image: '/case studies/bank reconciliation/cover.png',
-    imageFill: true,
+    imagePos: 'center',
     href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed',
     target: '_blank',
   },
@@ -116,94 +119,143 @@ const projects = [
     bg: '#F5EFE6',
     customContent: (
       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ fontSize: '6rem', color: '#A0522D', lineHeight: 1 }}>✦</span>
+        <span style={{ fontSize: '6rem', color: 'var(--accent)', lineHeight: 1 }}>✦</span>
       </div>
     ),
     href: '/work/logo-design',
   },
 ]
 
-function CaseStudyCard({ project }: { project: typeof projects[number] }) {
+// ── Tile — one per row, ivory card with a washi-tape corner accent ──────────────
+const TAPE_COLORS = ['#B5522A', '#0B1E3F', '#4B5A24'] // terracotta, navy, olive — cycles per card
+const TAPE_ROTATIONS = [-4, 3] // alternates per card
+
+function ProjectTile({
+  project,
+  index,
+}: {
+  project: typeof projects[number]
+  index: number
+}) {
   const [hovered, setHovered] = useState(false)
-  const Tag = project.href ? 'a' : 'div'
+  const p = project as any
+  const Tag: any = p.href ? 'a' : 'div'
+  const tapeColor = TAPE_COLORS[index % TAPE_COLORS.length]
+  const tapeRotate = TAPE_ROTATIONS[index % TAPE_ROTATIONS.length]
+
   return (
     <Tag
-      {...(project.href ? { href: project.href } : {})}
-      {...(project.target ? { target: project.target, rel: 'noopener noreferrer' } : {})}
-      className="group"
+      href={p.href}
+      target={p.target}
+      rel={p.target ? 'noopener noreferrer' : undefined}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        position: 'relative',
-        cursor: 'pointer',
+        display: 'flex',
+        flexWrap: 'wrap' as const,
+        alignItems: 'flex-start',
+        gap: '2rem',
         textDecoration: 'none',
-        transition: 'transform 0.45s ease, box-shadow 0.45s ease',
-        transform: hovered ? 'translateY(-7px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 16px 48px rgba(0,0,0,0.07)' : '0 0 0 rgba(0,0,0,0)',
-      }}>
-      <WobblyBorder />
-      {/* Thumbnail */}
-      <div style={{
-        position: 'relative', width: '100%', height: '280px', overflow: 'hidden',
-        background: project.bg || '#E8EDE8',
-        display: 'flex', alignItems: project.imageAlign ?? 'center', justifyContent: 'center',
-        padding: 'customContent' in project && project.customContent ? 0 : (project.imagePadding ?? (project.imageFill ? 0 : '2.5rem')), boxSizing: 'border-box',
-      }}>
-        {'customContent' in project && project.customContent ? project.customContent : project.image ? (
-          <img src={project.image} alt={project.title}
-            style={{ width: '100%', height: '100%', objectFit: (project.imageFill && !project.imagePadding) ? 'cover' : 'contain', objectPosition: project.imagePosition ?? 'center', display: 'block', borderRadius: '0.5rem', transform: project.imageTranslateY ? `translateY(${project.imageTranslateY})` : undefined }} />
-        ) : (
+        cursor: 'pointer',
+      }}
+    >
+      {/* Image card — left column. The tape sits on this OUTER wrapper (no overflow:hidden
+          here), while the border/radius/overflow-clip lives on the INNER box around just the
+          image — otherwise the card's own clipping cuts off the tape poking past its edge. */}
+      <div style={{ position: 'relative', flex: '1 1 640px', maxWidth: 820 }}>
+        <div aria-hidden="true" style={{
+          position: 'absolute', top: -13, left: 22, width: 76, height: 26,
+          background: tapeColor, opacity: 0.9,
+          transform: `rotate(${tapeRotate}deg)`,
+          boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+          zIndex: 2,
+        }} />
+        <div style={{
+          position: 'relative',
+          background: '#F7F3E3',
+          border: '1px solid #000000',
+          borderRadius: 4,
+          overflow: 'hidden',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+          boxShadow: hovered ? '0 10px 22px rgba(0,0,0,0.12)' : '0 2px 6px rgba(0,0,0,0.05)',
+        }}>
           <div style={{
-            position: 'absolute', inset: 0, opacity: 0.18,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }} />
-        )}
+            width: '100%',
+            height: 'clamp(420px, 62vh, 660px)',
+            background: p.bg || '#E8EDE8',
+            overflow: 'hidden',
+            position: 'relative',
+          }}>
+            {'customContent' in project && project.customContent
+              ? project.customContent
+              : p.image
+                ? (
+                  <img
+                    src={p.image}
+                    alt={project.title}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: p.imagePos ?? 'center',
+                      display: 'block',
+                    }}
+                  />
+                )
+                : null
+            }
+          </div>
+        </div>
       </div>
-      <div style={{ padding: '1.5rem 1.5rem 1rem' }}>
+
+      {/* Text — right column, outside the card */}
+      <div style={{ flex: '1 1 320px', paddingTop: '0.5rem' }}>
         <p style={{
           fontFamily: 'var(--sans)',
-          fontSize: '0.6rem',
+          fontSize: '0.65rem',
           letterSpacing: '0.14em',
           textTransform: 'uppercase' as const,
-          color: 'var(--terracotta)',
-          marginBottom: '0.6rem',
+          color: 'var(--muted)',
+          marginBottom: '0.5rem',
         }}>
           {project.category}
         </p>
-        <h3 style={{
-          fontFamily: 'var(--serif)',
-          fontSize: '1.25rem',
-          fontWeight: 500,
-          lineHeight: 1.3,
-          color: 'var(--ink)',
-          marginBottom: '0.5rem',
-        }}>
-          {project.title}
-        </h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+          <h3 style={{
+            fontFamily: 'var(--playfair)',
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            fontStyle: 'normal',
+            lineHeight: 1.25,
+            color: 'var(--ink)',
+            margin: 0,
+            flex: 1,
+          }}>
+            {project.title}
+          </h3>
+          <span style={{
+            fontFamily: 'var(--sans)',
+            fontSize: '1.1rem',
+            color: hovered ? '#B5522A' : 'var(--border)',
+            transition: 'color 0.2s ease',
+            flexShrink: 0,
+            marginTop: '0.2rem',
+            lineHeight: 1,
+          }}>
+            →
+          </span>
+        </div>
         <p style={{
           fontFamily: 'var(--sans)',
-          fontSize: '0.875rem',
-          color: '#222',
+          fontSize: '0.9rem',
+          color: '#555',
           lineHeight: 1.65,
-          marginBottom: '0.75rem',
+          marginTop: '0.6rem',
+          marginBottom: 0,
         }}>
           {project.description}
         </p>
-        <span
-          className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
-          style={{
-            display: 'inline-block',
-            padding: '0.35rem 0.9rem',
-            borderRadius: 999,
-            background: 'var(--terracotta)',
-            color: '#fff',
-            fontFamily: 'var(--sans)',
-            fontSize: '0.75rem',
-            fontWeight: 500,
-            letterSpacing: '0.02em',
-          }}>
-          Read more →
-        </span>
       </div>
     </Tag>
   )
@@ -211,156 +263,121 @@ function CaseStudyCard({ project }: { project: typeof projects[number] }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const [catWobble, setCatWobble] = useState(0)
-  const [catHovered, setCatHovered] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setCatWobble(Math.sin(window.scrollY * 0.018) * 4)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   return (
-    <div style={{ minHeight: '100vh', background: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       <style>{`
-        @keyframes wiggle {
-          0%, 100% { transform: rotate(0deg); }
-          25% { transform: rotate(-3deg); }
-          75% { transform: rotate(3deg); }
+        .hero-cat {
+          /* Base position solved from the HeroWave bezier at this x (~79.6% of the section
+             width, curve tangent ~-3.2deg), then nudged further down from that point per
+             request to sit closer into the wave rather than floating above it. */
+          position: absolute; left: 79.6%; z-index: 3;
+          width: clamp(96px, 13vw, 150px);
+          bottom: calc(clamp(50px, 8vw, 100px) * 0.29);
+          transform: translateX(-50%) rotate(-3.2deg);
+          pointer-events: none;
         }
-        @media (max-width: 767px) {
-          .hero-section { padding: 5rem 1.5rem 2.5rem !important; }
-          .hero-grid { gap: 1rem !important; }
-          .hero-h1 { font-size: 2.5rem !important; margin-bottom: 0.75rem !important; }
-          .hero-subtitle { margin-bottom: 1.25rem !important; }
-          .hero-subtitle-text { font-size: 0.875rem !important; }
-          .hero-bullet-text { font-size: 0.8rem !important; }
-          .hero-cat { width: 120px !important; margin-left: 0 !important; }
+        @media (max-width: 760px) {
+          .hero-cat { display: none; }
         }
       `}</style>
 
-      <Nav />
+      {/* Hero — full-bleed gold section */}
+      <section style={{ position: 'relative', background: 'var(--accent)', overflow: 'hidden' }}>
 
-      {/* Hero */}
-      <section className="hero-section" style={{ maxWidth: 1100, margin: '0 auto', padding: '7rem 2rem 5rem' }}>
-        <div className="hero-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr auto',
-          gap: '2rem',
-          alignItems: 'flex-end',
-        }}>
-          {/* Left */}
-          <div>
-            <h1 className="hero-h1" style={{
+        {/* Subtle grain — takes the flat gold off "perfectly digital", same noise SVG technique
+            used for the yarn photo texture on the about page, just much lower opacity here */}
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0, opacity: 0.05, mixBlendMode: 'overlay', pointerEvents: 'none',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }} />
+
+        <Nav variant="embedded" />
+
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '6rem 2rem 16.5rem', position: 'relative' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '4rem', maxWidth: 720 }}>
+
+            <h1 style={{
               fontFamily: 'var(--serif)',
-              fontSize: '4rem',
+              fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: 1.0,
+              fontSize: 'clamp(1.65rem, 3.5vw, 2.75rem)',
+              lineHeight: 1.18,
               letterSpacing: '-0.01em',
-              color: 'var(--ink)',
-              marginBottom: '1.25rem',
+              margin: 0,
             }}>
-              Zhu Nan
+              {/* Marcellus only ships in one static weight (400, same as "Selected Work"), so the
+                  lighter second line reads lighter via reduced-contrast color instead of font-weight */}
+              <span style={{ color: '#000000' }}>Currently designing finance products at Capital One.</span>{' '}
+              <span style={{ color: 'rgba(0,0,0,0.62)' }}>Previously at Farmers Business Network and Megi, across fintech and agtech.</span>
             </h1>
 
-            <div className="hero-subtitle" style={{ marginBottom: '2.75rem' }}>
-              <p className="hero-subtitle-text" style={{
-                fontFamily: 'var(--sans)',
-                fontSize: 'clamp(1rem, 2vw, 1.15rem)',
-                fontWeight: 300,
-                color: '#222',
-                letterSpacing: '0.01em',
-                display: 'inline-block',
-              }}>
-                Principal Product Designer
-              </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', gap: '0.9rem 0.85rem' }}>
+              <TagChip
+                label="Principal Product Designer, Capital One"
+                bg="#B5522A" textColor="#FFFFFF"
+                fontFamily="var(--mono)" fontWeight={400}
+                rotate={-2} tapeColor="var(--muted)" tapeRotate={7}
+              />
+              <TagChip
+                label="10 yrs · fintech + agtech"
+                bg="#4B5A24" textColor="#FFFFFF"
+                fontFamily="var(--mono)" fontWeight={400}
+                rotate={2} tapeColor="var(--muted)" tapeRotate={6}
+              />
+              <TagChip
+                label="Bay Area"
+                bg="#0B1E3F" textColor="#FFFFFF"
+                fontFamily="var(--mono)" fontWeight={400}
+                rotate={-2} tapeColor="#7A2361" tapeRotate={-7}
+              />
             </div>
 
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-              {[
-                'Currently at Capital One, San Francisco',
-                'Experience in Fintech, AgTech',
-                '10 years of experience',
-              ].map(line => (
-                <div key={line} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  {/* Sketchy dash bullet */}
-                  <svg width="14" height="8" viewBox="0 0 14 8" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
-                    <path d="M1,5 C3,3.5 6,5.5 9,4 C11,3 12.5,4.5 13,4"
-                      fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"/>
-                  </svg>
-                  <p className="hero-bullet-text" style={{
-                    fontFamily: 'var(--sans)',
-                    fontSize: '0.875rem',
-                    fontWeight: 300,
-                    color: '#222',
-                    lineHeight: 1.6,
-                    margin: 0,
-                  }}>
-                    {line}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
+        </div>
 
-          {/* Right — cat drawing */}
-          <div className="hero-cat" style={{ width: 'clamp(160px, 22vw, 300px)', flexShrink: 0, marginLeft: '-5rem' }}>
-            <img
-              src="/two cats new.png"
-              alt="Two cats"
-              onMouseEnter={() => setCatHovered(true)}
-              onMouseLeave={() => setCatHovered(false)}
-              style={{
-                width: '100%', height: 'auto', display: 'block',
-                transform: catHovered ? undefined : `rotate(${catWobble}deg)`,
-                transformOrigin: 'bottom center',
-                transition: catHovered ? undefined : 'transform 0.3s ease-out',
-                animation: catHovered ? 'wiggle 0.4s ease-in-out infinite' : undefined,
-                cursor: 'pointer',
-              }}
-            />
-          </div>
+        <HeroWave />
+
+        {/* Cat illustration (reused from the mobile nav overlay) — draped over the wave edge,
+            paws hanging over the curve, layered above both the gold bg and the wave shape */}
+        <div className="hero-cat">
+          <img src="/menu.png" alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
       </section>
 
-      {/* Work */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 2rem 9rem' }}>
-        <div style={{ marginBottom: '3rem', display: 'inline-block' }}>
+      {/* Case study grid */}
+      <section id="work" style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2rem 8rem' }}>
+        <div style={{ marginBottom: '2rem' }}>
           <h2 style={{
             fontFamily: 'var(--serif)',
-            fontSize: '1rem',
+            fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
             fontWeight: 400,
-            fontStyle: 'italic',
-            color: 'var(--muted)',
-            marginBottom: '0.4rem',
-            letterSpacing: '0.01em',
+            color: 'var(--ink)',
+            marginBottom: '0.6rem',
+            lineHeight: 1.15,
+            letterSpacing: '-0.01em',
           }}>
-            Selected work
+            Selected Work
           </h2>
-          <svg width="96" height="6" viewBox="0 0 96 6" aria-hidden="true" style={{ display: 'block' }}>
+          <svg width="140" height="6" viewBox="0 0 140 6" aria-hidden="true" style={{ display: 'block' }}>
             <path
-              d="M2,4 C14,2 28,5 42,3.5 C56,2 68,5 82,3 C88,2.5 92,4 94,3.5"
-              fill="none" stroke="#C0AFA4" strokeWidth="1" strokeLinecap="round"
+              d="M2,4 C20,2 42,5 64,3.5 C86,2 108,5 128,3 C133,2.5 137,4 138,3.5"
+              fill="none" stroke="var(--border)" strokeWidth="1" strokeLinecap="round"
             />
           </svg>
         </div>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 440px), 1fr))',
-          gap: '2rem',
-        }}>
-          {projects.map(p => <CaseStudyCard key={p.id} project={p} />)}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '7rem' }}>
+          {projects.map((project, i) => (
+            <ProjectTile key={project.id} project={project} index={i} />
+          ))}
         </div>
       </section>
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid #EBEBEB',
+        borderTop: '1px solid var(--border)',
         maxWidth: 1100,
         margin: '0 auto',
-        padding: '2rem 2rem',
+        padding: '2rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -382,7 +399,7 @@ export default function Home() {
                 textTransform: 'uppercase' as const,
                 transition: 'color 0.15s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--terracotta)')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
             >
               {link.label}
@@ -390,7 +407,6 @@ export default function Home() {
           ))}
         </div>
       </footer>
-
     </div>
   )
 }
