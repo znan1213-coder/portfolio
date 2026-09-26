@@ -333,9 +333,9 @@ export default function Home() {
               lineHeight: 1.5,
               color: 'var(--ink)',
               margin: '1.5rem 0 0',
-              maxWidth: 480,
+              maxWidth: 640,
             }}>
-              Simplicity is my superpower. I turn complex ideas into experiences users love and partners trust.
+              I turn complex ideas into simple, trusted experiences.
             </p>
 
             <p className="hero-meta" style={{
@@ -344,9 +344,9 @@ export default function Home() {
               fontFamily: 'var(--heading)', fontSize: '1rem', fontWeight: 300, color: 'var(--ink)',
               margin: '2rem 0 0',
             }}>
-              <span>Currently at Capital One, San Francisco</span>
+              <span>Principal Designer at Capital One</span>
               <span aria-hidden="true" className="hero-sep">·</span>
-              <span>Experience in Fintech, AgTech</span>
+              <span>Fintech &amp; AgTech</span>
             </p>
 
           </div>

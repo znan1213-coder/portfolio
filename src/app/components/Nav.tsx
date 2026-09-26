@@ -1,72 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-
-// ── Wobbly border (reused for dropdown) ───────────────────────────────────────
-function seg(x1: number, y1: number, x2: number, y2: number, wobble: number, n: number) {
-  const dx = x2 - x1, dy = y2 - y1
-  const len = Math.hypot(dx, dy)
-  if (!len) return ''
-  const nx = -dy / len, ny = dx / len
-  let d = ''
-  for (let i = 0; i < n; i++) {
-    const mid = (i + 0.5) / n, t1 = (i + 1) / n
-    const off = (Math.random() - 0.5) * wobble * 2
-    d += ` Q ${(x1 + dx * mid + nx * off).toFixed(1)} ${(y1 + dy * mid + ny * off).toFixed(1)}`
-       + ` ${(x1 + dx * t1).toFixed(1)} ${(y1 + dy * t1).toFixed(1)}`
-  }
-  return d
-}
-
-function buildPath(W: number, H: number): string {
-  const r = 5, wb = 1.8
-  const sh = Math.max(3, Math.floor(W / 80))
-  const sv = Math.max(2, Math.floor(H / 60))
-  return `M ${r} 0`
-    + seg(r, 0, W - r, 0, wb, sh) + ` A ${r} ${r} 0 0 1 ${W} ${r}`
-    + seg(W, r, W, H - r, wb, sv) + ` A ${r} ${r} 0 0 1 ${W - r} ${H}`
-    + seg(W - r, H, r, H, wb, sh) + ` A ${r} ${r} 0 0 1 0 ${H - r}`
-    + seg(0, H - r, 0, r, wb, sv) + ` A ${r} ${r} 0 0 1 ${r} 0 Z`
-}
-
-function WobblyBorder() {
-  const ref = useRef<SVGSVGElement>(null)
-  const [path, setPath] = useState('')
-  const prev = useRef({ w: 0, h: 0 })
-
-  useEffect(() => {
-    if (!ref.current) return
-    const update = () => {
-      const { width: w, height: h } = ref.current!.getBoundingClientRect()
-      const [rw, rh] = [Math.round(w), Math.round(h)]
-      if (rw === prev.current.w && rh === prev.current.h) return
-      prev.current = { w: rw, h: rh }
-      if (rw && rh) setPath(buildPath(rw, rh))
-    }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(ref.current)
-    return () => ro.disconnect()
-  }, [])
-
-  return (
-    <svg ref={ref} aria-hidden="true" style={{
-      position: 'absolute', inset: 0, width: '100%', height: '100%',
-      pointerEvents: 'none', overflow: 'visible',
-    }}>
-      {path && <path d={path} fill="none" stroke="#1A1A1A" strokeWidth="1"
-        strokeLinecap="round" strokeLinejoin="round" />}
-    </svg>
-  )
-}
+import { usePathname } from 'next/navigation'
 
 // ── Case studies ──────────────────────────────────────────────────────────────
 const CASE_STUDIES = [
-  { title: 'Digital Loan Application',           href: '/work/digital-loan-application',   live: true  },
-  { title: 'Finance Platform Redesign',           href: '/work/finance-platform-redesign',  live: true  },
-  { title: "Define FBN's First Finance Archetype", href: '/work/fbn-finance-archetypes',    live: true  },
-  { title: 'Bank Reconciliation',                 href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed', live: true  },
-  { title: 'Logo Design',                         href: '/work/logo-design',                live: true  },
+  { title: 'Digital Loan Application',  meta: 'FBN',         href: '/work/digital-loan-application' },
+  { title: 'Finance Platform Redesign', meta: 'Capital One', href: '/work/finance-platform-redesign', locked: true },
+  { title: 'FBN Finance Archetypes',    meta: 'FBN',         href: '/work/fbn-finance-archetypes' },
+  { title: 'Bank Reconciliation',       meta: 'Prototype',   href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed' },
+  { title: 'Logo Design',               meta: 'Branding',    href: '/work/logo-design' },
 ]
 
 const DROPDOWN_CSS = `
@@ -89,6 +32,19 @@ const DROPDOWN_CSS = `
   @media (prefers-reduced-motion: reduce) {
     .nav-logo-letter.is-hopping { animation: none; }
   }
+  /* Work dropdown — same card language as the "On this page" menu */
+  .work-menu { position: absolute; top: calc(100% + 14px); left: -18px; z-index: 200; min-width: 260px;
+    background: #FFFFFF; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 0.6rem; animation: dropdownIn 180ms ease-out both; }
+  .work-menu::before { content: ''; position: absolute; left: 0; right: 0; top: -16px; height: 16px; } /* hover bridge */
+  .work-menu-title { font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.45); margin: 0.3rem 0.65rem 0.4rem; }
+  .work-menu a { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem 0.65rem; border-radius: 8px; text-decoration: none; transition: background 0.15s ease; }
+  .work-menu a:hover { background: #F6F5F1; }
+  .work-menu-name { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; font-family: var(--heading); font-size: 0.95rem; font-weight: 500; color: var(--ink); transition: color 0.15s ease; }
+  .work-menu a:hover .work-menu-name, .work-menu a[aria-current="page"] .work-menu-name { color: #FD1E20; }
+  .work-menu-dot { width: 6px; height: 6px; border-radius: 50%; background: #FD1E20; opacity: 0; flex-shrink: 0; }
+  .work-menu a[aria-current="page"] .work-menu-dot { opacity: 1; }
+  .work-menu-meta { display: flex; align-items: center; gap: 0.35rem; font-family: var(--sans); font-size: 0.8rem; color: rgba(0,0,0,0.45); white-space: nowrap; }
   .nav-desktop-links { display: none; }
   .nav-hamburger { display: flex; }
   .nav-grid { column-gap: 1rem; }
@@ -98,63 +54,29 @@ const DROPDOWN_CSS = `
     .nav-desktop-links { display: flex; }
     .nav-hamburger { display: none; }
     /* Desktop: Work and About sit snug on either side of the centered logo */
-    .nav-grid { column-gap: 3rem; }
+    .nav-grid { column-gap: 5.5rem; }
     .nav-left { justify-self: end; }
     .nav-right { justify-self: start; }
   }
 `
 
 function WorkDropdown({ visible }: { visible: boolean }) {
+  const pathname = usePathname()
   if (!visible) return null
   return (
-    <div style={{
-      position: 'absolute',
-      top: 'calc(100% + 10px)',
-      left: 0,
-      background: 'var(--background)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
-      borderRadius: 6,
-      padding: '0.4rem 0',
-      minWidth: 300,
-      zIndex: 200,
-      animation: 'dropdownIn 200ms ease-in-out both',
-    }}>
-      <style>{DROPDOWN_CSS}</style>
-      <WobblyBorder />
-      {CASE_STUDIES.map((cs) => (
-        <div key={cs.title}>
-          {cs.live ? (
-            <a href={cs.href} {...(cs.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} style={{
-              display: 'block',
-              padding: '0.85rem 1.4rem',
-              textDecoration: 'none',
-              transition: 'background 0.12s',
-            }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#D5D4CF')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-            >
-              <span style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9rem',
-                fontWeight: 400, color: 'var(--ink)',
-              }}>
-                {cs.title}
-              </span>
-            </a>
-          ) : (
-            <div style={{
-              padding: '0.85rem 1.4rem',
-              cursor: 'default',
-            }}>
-              <span style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9rem',
-                fontWeight: 400, color: '#bbb',
-              }}>
-                {cs.title}
-              </span>
-            </div>
-          )}
-        </div>
-      ))}
+    <div className="work-menu" role="menu">
+      <p className="work-menu-title">Selected work</p>
+      {CASE_STUDIES.map(cs => {
+        const external = cs.href.startsWith('http')
+        const current = pathname === cs.href
+        return (
+          <a key={cs.title} href={cs.href} role="menuitem"
+            aria-current={current ? 'page' : undefined}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            <span className="work-menu-name"><span className="work-menu-dot" aria-hidden="true" />{cs.title}</span>
+          </a>
+        )
+      })}
     </div>
   )
 }
@@ -275,6 +197,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         </div>
 
         <a href="/about" onClick={onClose} style={linkStyle}>About</a>
+        <a href="/Zhu_Nan_Resume_2025.html" target="_blank" rel="noopener noreferrer" onClick={onClose} style={linkStyle}>Resume</a>
 
       </nav>
 
@@ -317,6 +240,9 @@ export default function Nav({ activePage, variant = 'bar', heroBg }: {
   const isEmbedded = variant === 'embedded'
   const NAV_RED = '#FD1E20'
   const NAV_RED_HOVER = '#C8141A'
+  const navLinkStyle: React.CSSProperties = { fontFamily: 'var(--heading)', fontSize: '0.95rem', fontWeight: 500, color: NAV_RED, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s', display: 'block' }
+  const hoverOn = (e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = NAV_RED_HOVER)
+  const hoverOff = (e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = NAV_RED)
 
   return (
     <>
@@ -337,8 +263,9 @@ export default function Nav({ activePage, variant = 'bar', heroBg }: {
         }}>
           {/* Left — Work with dropdown (desktop only) */}
           <div className="nav-left">
+          <div className="nav-desktop-links" style={{ alignItems: 'center', gap: '2rem' }}>
+            <a href="/" style={navLinkStyle} onMouseEnter={hoverOn} onMouseLeave={hoverOff}>Home</a>
             <div
-              className="nav-desktop-links"
               style={{ position: 'relative' }}
               onMouseEnter={openWork}
               onMouseLeave={closeWork}
@@ -352,6 +279,7 @@ export default function Nav({ activePage, variant = 'bar', heroBg }: {
               </a>
               <WorkDropdown visible={workOpen} />
             </div>
+          </div>
           </div>
 
           {/* Center — logo, links home */}
@@ -388,14 +316,10 @@ export default function Nav({ activePage, variant = 'bar', heroBg }: {
 
           {/* Right — About (desktop) / hamburger (mobile) */}
           <div className="nav-right" style={{ display: 'flex', alignItems: 'center' }}>
-            <a href="/about"
-              className="nav-desktop-links"
-              style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontWeight: 500, color: NAV_RED, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = NAV_RED_HOVER)}
-              onMouseLeave={e => (e.currentTarget.style.color = NAV_RED)}
-            >
-              About
-            </a>
+            <div className="nav-desktop-links" style={{ alignItems: 'center', gap: '2rem' }}>
+              <a href="/about" style={navLinkStyle} onMouseEnter={hoverOn} onMouseLeave={hoverOff}>About</a>
+              <a href="/Zhu_Nan_Resume_2025.html" target="_blank" rel="noopener noreferrer" style={navLinkStyle} onMouseEnter={hoverOn} onMouseLeave={hoverOff}>Resume</a>
+            </div>
 
             <button
               className="nav-hamburger"
