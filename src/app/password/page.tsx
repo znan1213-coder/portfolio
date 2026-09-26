@@ -53,7 +53,7 @@ export default function PasswordPage() {
           Enter the password to take a look around.
         </p>
 
-        <form action={action} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <form action={action} onSubmit={() => (document.activeElement as HTMLElement | null)?.blur()} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <input
             name="password"
             type="password"

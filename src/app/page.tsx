@@ -217,6 +217,14 @@ function ProjectTile({
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
+  // Always land at the very top (nav + hero). On phones, arriving from the password page
+  // could keep the scroll offset from the keyboard/focused field and start just below the nav.
+  useEffect(() => {
+    if (window.location.hash) return
+    window.scrollTo(0, 0)
+    const t = setTimeout(() => window.scrollTo(0, 0), 60)
+    return () => clearTimeout(t)
+  }, [])
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       <style>{`

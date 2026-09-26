@@ -30,7 +30,7 @@ export default function UnlockFinancePlatform() {
             Please reach out to me for the password.
           </p>
 
-          <form action={action} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <form action={action} onSubmit={() => (document.activeElement as HTMLElement | null)?.blur()} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <input
               name="password"
               type="password"
