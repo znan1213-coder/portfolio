@@ -988,8 +988,8 @@ export default function DigitalLoanApplication() {
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>
-          {[{ label: 'LinkedIn', href: '#' }, { label: 'Resume', href: '#' }].map(link => (
-            <a key={link.label} href={link.href} style={{
+          {[{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/zhunan/' }, { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html' }].map(link => (
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" style={{
               fontFamily: 'var(--sans)', fontSize: '0.75rem', color: 'var(--muted)',
               textDecoration: 'none', letterSpacing: '0.06em', textTransform: 'uppercase',
               transition: 'color 0.15s',

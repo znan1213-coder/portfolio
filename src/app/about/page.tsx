@@ -1,488 +1,277 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import Nav from '../components/Nav'
+import { DoodleDefs, Star, Sparkle, Squiggle, Burst, Dot } from '../components/Doodles'
 
-// ── Wobbly circle border ──────────────────────────────────────────────────────
-function WobblyCircle() {
-  return (
-    <svg viewBox="0 0 300 300" aria-hidden="true" style={{
-      position: 'absolute', inset: '-4px', width: 'calc(100% + 8px)', height: 'calc(100% + 8px)',
-      pointerEvents: 'none', overflow: 'visible', zIndex: 1,
-    }}>
-      <path
-        d="M 150 4 C 204 1, 262 50, 288 106 C 314 162, 294 228, 250 262 C 204 298, 138 306, 86 278 C 32 250, 2 194, 4 142 C 6 84, 54 14, 112 4 C 126 2, 138 3, 150 4 Z"
-        fill="none"
-        stroke="#1A1A1A"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
+// ── Contact links — red text links; doodles pop in around each one on hover ──
+const CONTACTS: { label: string; href: string; external?: boolean; copy?: string; doodles: { el: React.ReactNode; pos: React.CSSProperties; rotate: number; delay: number }[] }[] = [
+  {
+    label: 'Email', href: 'mailto:zhunan08@gmail.com', copy: 'zhunan08@gmail.com',
+    doodles: [
+      { el: <Sparkle size={11} />, pos: { top: -14, left: -14 }, rotate: -10, delay: 0 },
+      { el: <Dot />,               pos: { bottom: -6, right: -12 }, rotate: 0, delay: 80 },
+    ],
+  },
+  {
+    label: 'LinkedIn', href: 'https://www.linkedin.com/in/zhunan/', external: true,
+    doodles: [
+      { el: <Burst size={14} />,   pos: { top: -16, right: -16 }, rotate: 20, delay: 0 },
+      { el: <Squiggle width={18} />, pos: { bottom: -12, left: -6 }, rotate: -8, delay: 90 },
+    ],
+  },
+  {
+    label: 'Resume', href: '/Zhu_Nan_Resume_2025.html', external: true,
+    doodles: [
+      { el: <Star size={11} />,    pos: { top: -14, right: -14 }, rotate: 14, delay: 0 },
+      { el: <Sparkle size={9} />,  pos: { bottom: -8, left: -14 }, rotate: 8, delay: 70 },
+    ],
+  },
+]
 
-// ── Wobbly rect border ────────────────────────────────────────────────────────
-function seg(x1: number, y1: number, x2: number, y2: number, wobble: number, n: number) {
-  const dx = x2 - x1, dy = y2 - y1
-  const len = Math.hypot(dx, dy)
-  if (!len) return ''
-  const nx = -dy / len, ny = dx / len
-  let d = ''
-  for (let i = 0; i < n; i++) {
-    const mid = (i + 0.5) / n, t1 = (i + 1) / n
-    const off = Math.sin(i * 7.3 + x1 * 0.17 + y1 * 0.13) * wobble
-    d += ` Q ${(x1 + dx * mid + nx * off).toFixed(1)} ${(y1 + dy * mid + ny * off).toFixed(1)}`
-       + ` ${(x1 + dx * t1).toFixed(1)} ${(y1 + dy * t1).toFixed(1)}`
+// Email button — reads "Email"; hovering (or tapping) reveals a small card with the
+// address and a copy action. Clicking the button itself also copies.
+function CopyEmail({ email, children }: { email: string; children: React.ReactNode }) {
+  const [copied, setCopied] = useState(false)
+  const [open, setOpen] = useState(false)
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(email)
+    } catch {
+      // Fallback for browsers that block the clipboard API
+      const t = document.createElement('textarea'); t.value = email; document.body.appendChild(t); t.select()
+      document.execCommand('copy'); t.remove()
+    }
+    setCopied(true)
+    setOpen(true)
+    setTimeout(() => setCopied(false), 1600)
   }
-  return d
-}
-
-function buildPillPath(W: number, H: number): string {
-  const r = Math.floor(H / 2), wb = 1.2
-  const sh = Math.max(2, Math.floor((W - 2 * r) / 40))
-  return `M ${r} 0`
-    + seg(r, 0, W - r, 0, wb, sh) + ` A ${r} ${r} 0 0 1 ${W} ${r}`
-    + ` A ${r} ${r} 0 0 1 ${W - r} ${H}`
-    + seg(W - r, H, r, H, wb, sh) + ` A ${r} ${r} 0 0 1 0 ${H - r}`
-    + ` A ${r} ${r} 0 0 1 ${r} 0 Z`
-}
-
-function WobblyPillBorder({ color = '#1A1A1A', strokeWidth = 1.3 }: { color?: string; strokeWidth?: number }) {
-  const ref = useRef<SVGSVGElement>(null)
-  const [path, setPath] = useState('')
-  const prev = useRef({ w: 0, h: 0 })
-
-  useEffect(() => {
-    if (!ref.current) return
-    const update = () => {
-      const { width: w, height: h } = ref.current!.getBoundingClientRect()
-      const [rw, rh] = [Math.round(w), Math.round(h)]
-      if (rw === prev.current.w && rh === prev.current.h) return
-      prev.current = { w: rw, h: rh }
-      if (rw && rh) setPath(buildPillPath(rw, rh))
-    }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(ref.current)
-    return () => ro.disconnect()
-  }, [])
-
   return (
-    <svg ref={ref} aria-hidden="true" style={{
-      position: 'absolute', inset: 0, width: '100%', height: '100%',
-      pointerEvents: 'none', overflow: 'visible',
-    }}>
-      {path && <path d={path} fill="none" stroke={color} strokeWidth={strokeWidth}
-        strokeLinecap="round" strokeLinejoin="round" />}
-    </svg>
-  )
-}
-
-function buildPath(W: number, H: number): string {
-  const r = 5, wb = 1.8
-  const sh = Math.max(3, Math.floor(W / 80))
-  const sv = Math.max(2, Math.floor(H / 60))
-  return `M ${r} 0`
-    + seg(r, 0, W - r, 0, wb, sh) + ` A ${r} ${r} 0 0 1 ${W} ${r}`
-    + seg(W, r, W, H - r, wb, sv) + ` A ${r} ${r} 0 0 1 ${W - r} ${H}`
-    + seg(W - r, H, r, H, wb, sh) + ` A ${r} ${r} 0 0 1 0 ${H - r}`
-    + seg(0, H - r, 0, r, wb, sv) + ` A ${r} ${r} 0 0 1 ${r} 0 Z`
-}
-
-function WobblyBorder({ color = '#1A1A1A' }: { color?: string }) {
-  const ref = useRef<SVGSVGElement>(null)
-  const [path, setPath] = useState('')
-  const prev = useRef({ w: 0, h: 0 })
-
-  useEffect(() => {
-    if (!ref.current) return
-    const update = () => {
-      const { width: w, height: h } = ref.current!.getBoundingClientRect()
-      const [rw, rh] = [Math.round(w), Math.round(h)]
-      if (rw === prev.current.w && rh === prev.current.h) return
-      prev.current = { w: rw, h: rh }
-      if (rw && rh) setPath(buildPath(rw, rh))
-    }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(ref.current)
-    return () => ro.disconnect()
-  }, [])
-
-  return (
-    <svg ref={ref} aria-hidden="true" style={{
-      position: 'absolute', inset: 0, width: '100%', height: '100%',
-      pointerEvents: 'none', overflow: 'visible',
-    }}>
-      {path && <path d={path} fill="none" stroke={color} strokeWidth="1"
-        strokeLinecap="round" strokeLinejoin="round" />}
-    </svg>
-  )
-}
-
-// ── Hand-drawn circle portrait ────────────────────────────────────────────────
-function SketchPortrait() {
-  return (
-    <div style={{ position: 'relative', width: '100%', aspectRatio: '1/1' }}>
-      <svg viewBox="0 0 300 300" width="100%" height="100%" aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
-        {/* Slightly wobbly circle border */}
-        <path
-          d="M 150 28 C 196 24, 242 58, 264 102 C 288 150, 278 208, 242 244 C 206 280, 148 292, 100 272 C 50 250, 18 198, 22 148 C 26 94, 66 46, 112 32 C 124 28, 138 27, 150 28 Z"
-          fill="#F0EBE4"
-          stroke="#1A1A1A"
-          strokeWidth="1.1"
-          strokeLinecap="round"
-        />
-        <text x="150" y="142" textAnchor="middle"
-          style={{ fontFamily: 'var(--sans)', fontSize: 11, fill: '#C0AFA4' }}>
-          photo
-        </text>
-        <text x="150" y="160" textAnchor="middle"
-          style={{ fontFamily: 'var(--sans)', fontSize: 11, fill: '#C0AFA4' }}>
-          coming soon
-        </text>
-      </svg>
-    </div>
-  )
-}
-
-// ── Yarn photo placeholder ────────────────────────────────────────────────────
-function YarnPhoto({ bg, rotate = 0, label }: { bg: string; rotate?: number; label: string }) {
-  return (
-    <div style={{
-      position: 'relative',
-      transform: `rotate(${rotate}deg)`,
-      flex: '1 1 0',
-      minWidth: 0,
-    }}>
-      <WobblyBorder />
-      <div style={{
-        background: bg,
-        aspectRatio: '4/5',
-        width: '100%',
-        overflow: 'hidden',
-        position: 'relative',
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.15,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }} />
-        <span style={{
-          position: 'absolute', bottom: '1rem', left: 0, right: 0,
-          textAlign: 'center',
-          fontFamily: 'var(--sans)',
-          fontSize: '0.7rem',
-          color: '#A89688',
-          letterSpacing: '0.06em',
-        }}>
-          {label}
-        </span>
-      </div>
-    </div>
-  )
-}
-
-// ── Contact tag ───────────────────────────────────────────────────────────────
-function ContactTag({ icon, label, href, rotate, bg, textColor, wobble = 0 }: {
-  icon: React.ReactNode; label: string; href: string; rotate: number; bg: string; textColor: string; wobble?: number
-}) {
-  const [hovered, setHovered] = useState(false)
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.85rem',
-        padding: '0.85rem 1.4rem',
-        background: bg,
-        textDecoration: 'none',
-        transform: hovered ? 'rotate(0deg) translateY(-3px)' : `rotate(${rotate + wobble}deg)`,
-        transformOrigin: 'right center',
-        boxShadow: hovered ? '0 8px 24px rgba(0,0,0,0.07)' : 'none',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-      }}
-    >
-      <WobblyBorder />
-      {icon}
-      <span style={{
-        fontFamily: 'var(--sans)', fontSize: '0.875rem',
-        fontWeight: 400, color: textColor, letterSpacing: '0.01em',
-      }}>
-        {label}
+    <span className={`email-wrap ${open ? 'is-open' : ''}`} onMouseLeave={() => setOpen(false)}>
+      <button type="button" onClick={copy} className="contact-link contact-btn copy-btn" aria-describedby="email-pop">
+        Email
+        {children}
+      </button>
+      <span id="email-pop" role="tooltip" className="email-pop">
+        <span style={{ fontFamily: 'var(--sans)', fontSize: '0.95rem', color: 'var(--ink)' }}>{email}</span>
+        <button type="button" onClick={copy} className="email-pop-copy" aria-label={`Copy ${email}`}>
+          <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {copied
+              ? <path d="M4,12.5 L9.5,18 L20,6" />
+              : <><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16,8 L16,5 C16,4.4 15.6,4 15,4 L5,4 C4.4,4 4,4.4 4,5 L4,15 C4,15.6 4.4,16 5,16 L8,16" /></>}
+          </svg>
+          <span aria-live="polite">{copied ? 'Copied!' : 'Copy'}</span>
+        </button>
       </span>
-    </a>
+    </span>
   )
 }
 
-const EmailIcon = ({ color }: { color: string }) => (
-  <svg width="14" height="11" viewBox="0 0 14 11" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <path d="M1 1 L13 1 L13 10 L1 10 Z" stroke={color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M1 1 L7 6.5 L13 1" stroke={color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-const PersonIcon = ({ color }: { color: string }) => (
-  <svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <path d="M6 1 C4 1 2.5 2.5 2.5 4.5 C2.5 6.5 4 8 6 8 C8 8 9.5 6.5 9.5 4.5 C9.5 2.5 8 1 6 1 Z" stroke={color} strokeWidth="1" strokeLinecap="round"/>
-    <path d="M1 13 C1 10.5 3 8.5 6 8.5 C9 8.5 11 10.5 11 13" stroke={color} strokeWidth="1" strokeLinecap="round"/>
-  </svg>
-)
-const PageIcon = ({ color }: { color: string }) => (
-  <svg width="11" height="14" viewBox="0 0 11 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <path d="M1.5 1 L7 1 L10 4 L10 13 L1.5 13 Z" stroke={color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M7 1 L7 4 L10 4" stroke={color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M3.5 6.5 L8 6.5 M3.5 8.5 L8 8.5 M3.5 10.5 L6 10.5" stroke={color} strokeWidth="0.8" strokeLinecap="round"/>
-  </svg>
-)
+const EXPERIENCE: { years: string; role: string; company: string; url?: string }[] = [
+  { years: '2024 – Present', role: 'Principal Designer', company: 'Capital One' },
+  { years: '2021 – 2024', role: 'Senior Product Designer', company: 'Farmers Business Network', url: 'https://www.fbn.com/financing' },
+  { years: '2015 – 2019', role: 'Product Designer', company: 'MegiChina', url: 'https://www.megichina.com/' },
+  { years: '2013 – 2015', role: 'Visual Designer', company: 'Various Startups' },
+]
 
-// ── Nav ───────────────────────────────────────────────────────────────────────
-// ── Page ──────────────────────────────────────────────────────────────────────
+const YARN_PHOTOS = ['/about 1.jpg', '/about 3.jpg', '/about 2.JPG']
+
+// Doodles around the portrait print — same shared red ink as the homepage cats
+const PORTRAIT_DOODLES = [
+  { el: <Star size={20} />,     top: '-5%', left: '-9%',  rotate: -14 },
+  { el: <Sparkle size={15} />,  top: '-8%', left: '88%',  rotate: 10 },
+  { el: <Squiggle width={30} />, top: '98%', left: '72%', rotate: 12 },
+  { el: <Burst size={16} />,    top: '84%', left: '-10%', rotate: -30 },
+]
+
+// Organic Hand heading style (caps); its own weight/spacing override the global h1/h2 rule
+const HAND_HEADING: React.CSSProperties = {
+  fontFamily: 'var(--font-organic-hand), var(--heading)',
+  textTransform: 'uppercase',
+  fontWeight: 400,
+  color: 'var(--ink)',
+  lineHeight: 1.15,
+  margin: 0,
+}
+
+const PRINT: React.CSSProperties = {
+  background: '#FFFFFF',
+  padding: '12px 12px 14px',
+  boxShadow: '0 6px 18px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06)',
+}
+
 export default function About() {
-  const [scrollY, setScrollY] = useState(0)
-
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  const wobbleEmail    = Math.sin(scrollY * 0.012) * 3
-  const wobbleLinkedIn = Math.sin(scrollY * 0.009 + 1.2) * 3
-  const wobbleResume   = Math.sin(scrollY * 0.015 + 2.5) * 3
-
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       <style>{`
-        @media (max-width: 768px) {
-          .exp-entry { flex-direction: column !important; gap: 0.2rem !important; }
-          .exp-entry .exp-date { min-width: unset !important; }
-          .yarn-photos { flex-wrap: wrap !important; }
-          .yarn-photos > div { flex: 1 1 45% !important; }
-          .yarn-section { padding: 3rem 1.25rem !important; }
+        h1.hand-heading, h2.hand-heading { font-weight: 400 !important; letter-spacing: 0.02em !important; }
+
+        .about-hero { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 5.5rem); align-items: start; }
+        .about-side { justify-self: end; width: 100%; max-width: 290px; }
+        .about-portrait { position: relative; width: 100%; }
+        .about-portrait .hero-doodle { position: absolute; line-height: 0; }
+        @media (max-width: 760px) {
+          .about-hero { grid-template-columns: 1fr; gap: 2.5rem; }
+          /* Phone: photo first, then bio, then contact links */
+          .about-side { display: contents; }
+          .about-portrait { order: -1; max-width: 220px; }
+          .about-contact { margin-top: 0 !important; }
         }
+
+        .contact-link { position: relative; display: inline-block; font-family: var(--heading); font-size: 1.05rem; font-weight: 500; color: #FD1E20; text-decoration: none; transition: color 0.2s ease; }
+        .contact-link:hover { color: #C8141A; }
+        .contact-doodle { position: absolute; line-height: 0; pointer-events: none; opacity: 0; transform: scale(0.3) rotate(var(--r)); transition: opacity 0.2s ease, transform 0.35s cubic-bezier(.3,.7,.4,1.6); }
+        .contact-link:hover .contact-doodle { opacity: 1; transform: scale(1) rotate(var(--r)); }
+        .contact-doodle path { stroke: #C8141A; }
+        .contact-doodle > span { background: #C8141A !important; }
+        @keyframes contactWiggle { 0%, 100% { transform: rotate(0deg); } 30% { transform: rotate(-2.5deg) translateY(-1px); } 65% { transform: rotate(1.5deg); } }
+        .contact-link:hover { animation: contactWiggle 420ms ease-in-out; }
+        @media (prefers-reduced-motion: reduce) {
+          .contact-link:hover { animation: none; }
+          .contact-doodle { transition: none; }
+        }
+
+        /* Hero contact links — "sticker": thin black outline + solid red offset shadow that presses in on hover */
+        .contact-btn { padding: 0.45rem 0.95rem; font-size: 1rem; background: #FFFFFF; border: 1.6px solid #1A1A1A; border-radius: 10px; box-shadow: 4px 4px 0 #FD1E20; transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.2s ease; }
+        .copy-btn { cursor: pointer; font-family: var(--heading); font-weight: 500; line-height: normal; }
+        /* Email hover card — sits above the button; a transparent bridge keeps it open while moving onto it */
+        .email-wrap { position: relative; display: inline-block; }
+        .email-pop { position: absolute; bottom: calc(100% + 12px); left: 0; z-index: 20; display: flex; align-items: center; gap: 0.75rem; white-space: nowrap;
+          background: #FFFFFF; border: 1.6px solid #1A1A1A; border-radius: 10px; box-shadow: 4px 4px 0 #FD1E20; padding: 0.5rem 0.6rem 0.5rem 0.9rem;
+          opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+        .email-pop::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 14px; }
+        .email-wrap:hover .email-pop, .email-wrap:focus-within .email-pop, .email-wrap.is-open .email-pop { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .email-pop-copy { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; border: 0; border-radius: 7px; background: #FD1E20; color: #FFFFFF;
+          font-family: var(--heading); font-size: 0.85rem; font-weight: 500; padding: 0.3rem 0.6rem; transition: background 0.15s ease; }
+        .email-pop-copy:hover { background: #C8141A; }
+        .contact-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #C8141A; animation: none; }
+        @media (prefers-reduced-motion: reduce) { .contact-btn:hover { transform: none; } }
+
+        .exp-company-link { color: var(--ink); text-decoration: underline; text-decoration-color: rgba(253,30,32,0.55); text-decoration-thickness: 1.5px; text-underline-offset: 4px; transition: color 0.15s ease, text-decoration-color 0.15s ease; }
+        .exp-company-link:hover { color: #C8141A; text-decoration-color: #C8141A; }
+
+        .exp-row { display: grid; grid-template-columns: 160px 1fr; gap: 1.5rem; align-items: baseline; padding: 1.1rem 0; border-top: 1px solid rgba(0,0,0,0.08); }
+        .exp-row:last-child { border-bottom: 1px solid rgba(0,0,0,0.08); }
+        @media (max-width: 760px) { .exp-row { grid-template-columns: 1fr; gap: 0.25rem; } }
+
+        .yarn-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2rem); }
+        @media (max-width: 760px) { .yarn-photos { grid-template-columns: 1fr 1fr; } .yarn-photos > :last-child { grid-column: 1 / span 2; } }
       `}</style>
+      <DoodleDefs />
       <Nav activePage="about" />
 
-      {/* About hero */}
-      <section className="about-hero-section mx-auto px-8 max-w-[680px] md:max-w-[1100px]" style={{ paddingTop: '7rem', paddingBottom: '5rem' }}>
-
-        {/* Two-column on desktop, single column on mobile */}
-        <div className="md:flex md:items-start md:gap-16">
-
-          {/* Left column: heading + bio + buttons */}
-          <div className="flex-1 min-w-0">
-
-            {/* Heading row */}
-            <div className="flex items-center justify-between gap-6 mb-8">
-              <h1 style={{
-                fontFamily: 'var(--heading)',
-                fontSize: 'clamp(2rem, 5vw, 3.25rem)',
-                fontWeight: 400,
-                lineHeight: 1.05,
-                color: 'var(--ink)',
-                letterSpacing: '-0.01em',
-                margin: 0,
-              }}>
-                About Me
-              </h1>
-              {/* Mobile only: small 72px photo */}
-              <div className="md:hidden" style={{ position: 'relative', width: 72, height: 72, flexShrink: 0 }}>
-                <WobblyCircle />
-                <img
-                  src="/my face.JPG"
-                  alt="Zhu Nan"
-                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', borderRadius: '50%' }}
-                />
-              </div>
-            </div>
-
-            {/* Bio */}
-            <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 400,
-              color: '#222', lineHeight: 1.8, marginBottom: '1.25rem',
-            }}>
+      {/* ── Intro ── */}
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '7.5rem 2rem 3rem', overflowX: 'clip' }}>
+        <div className="about-hero">
+          <div>
+            <h1 className="hand-heading" style={{ ...HAND_HEADING, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', margin: '0.75rem 0 2rem' }}>
+              About me
+            </h1>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.75, margin: '0 0 1.25rem' }}>
               I&apos;m Zhu, a product designer in the Bay Area. I&apos;m currently designing on Capital One&apos;s Enterprise Finance team, where I focus on making complex workflows clearer and easier for our financial analysts to use every day.
             </p>
-            <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 400,
-              color: '#222', lineHeight: 1.8, marginBottom: '2rem',
-            }}>
-              I started my career in startups, which taught me to move fast, be scrappy and stay close to users, and only design what truly matters. Working in a large enterprise has expanded that perspective — I&apos;ve learned how to design for scale, collaborate across many teams, and create solutions that last.
+            <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.75, margin: 0 }}>
+              I started my career in startups, which taught me to move fast, be scrappy and stay close to users, and only design what truly matters. Working in a large enterprise has expanded that perspective, I&apos;ve learned how to design for scale, collaborate across many teams, and create solutions that last.
             </p>
+          </div>
 
-        {/* Wobbly contact buttons */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem', marginBottom: '3.5rem' }}>
-          {[
-            { label: 'Email', href: 'mailto:zhu@example.com', bg: 'rgba(242,223,160,0.15)', color: '#8B6914', borderColor: '#C9A830', icon: <EmailIcon color="#8B6914" />, wobble: wobbleEmail },
-            { label: 'LinkedIn', href: '#', bg: 'rgba(197,206,160,0.15)', color: '#4A5E35', borderColor: '#7A9A50', icon: <PersonIcon color="#4A5E35" />, wobble: wobbleLinkedIn },
-            { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html', bg: 'rgba(212,184,199,0.15)', color: '#6B3D5E', borderColor: '#9B6080', icon: <PageIcon color="#6B3D5E" />, wobble: wobbleResume },
-          ].map((btn) => (
-            <a key={btn.label} href={btn.href} {...(btn.label === 'Resume' ? { target: '_blank', rel: 'noopener noreferrer' } : {})} style={{
-              position: 'relative',
-              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-              padding: '0.25rem 0.75rem',
-              background: btn.bg,
-              fontFamily: 'var(--sans)', fontSize: '0.875rem',
-              fontWeight: 400, color: btn.color,
-              textDecoration: 'none', letterSpacing: '0.01em',
-              transform: `rotate(${btn.wobble}deg)`,
-              transition: 'transform 0.3s ease-out, opacity 0.15s',
-            }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-            >
-              <WobblyPillBorder color={btn.borderColor} strokeWidth={1.2} />
-              {btn.icon}
-              {btn.label}
-            </a>
+          {/* Right column — portrait print, then contact links */}
+          <div className="about-side">
+            <div className="about-portrait">
+              <div style={PRINT}>
+                <img src="/my face.JPG" alt="Zhu Nan" style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', objectPosition: '55% 48%', display: 'block' }} />
+              </div>
+              {PORTRAIT_DOODLES.map((d, i) => (
+                <span key={i} className="hero-doodle" style={{ top: d.top, left: d.left, transform: `rotate(${d.rotate}deg)` }}>{d.el}</span>
+              ))}
+            </div>
+
+            <div className="about-contact" style={{ marginTop: '1.75rem' }}>
+              <p style={{ fontFamily: 'var(--font-organic-hand), var(--heading)', fontSize: '1.35rem', letterSpacing: '0.02em', color: 'var(--ink)', margin: '0 0 1rem' }}>
+                Get in touch :)
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.9rem 0.8rem' }}>
+                {CONTACTS.map(c => {
+                  const doodles = c.doodles.map((d, i) => (
+                    <span key={i} className="contact-doodle" style={{ ...d.pos, ['--r' as any]: `${d.rotate}deg`, transitionDelay: `${d.delay}ms` }}>{d.el}</span>
+                  ))
+                  return c.copy ? (
+                    <CopyEmail key={c.label} email={c.copy}>{doodles}</CopyEmail>
+                  ) : (
+                    <a key={c.label} href={c.href} className="contact-link contact-btn"
+                      {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                      {c.label}
+                      {doodles}
+                    </a>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Experience ── */}
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '2rem 2rem 7rem' }}>
+        <h2 className="hand-heading" style={{ ...HAND_HEADING, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', marginBottom: '1.75rem' }}>
+          Experience
+        </h2>
+        <div>
+          {EXPERIENCE.map(e => (
+            <div key={e.company} className="exp-row">
+              <span style={{ fontFamily: 'var(--sans)', fontSize: '1.05rem', color: 'rgba(0,0,0,0.55)', whiteSpace: 'nowrap' }}>
+                {e.years}
+              </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '0.25rem 0.75rem' }}>
+                <span style={{ fontFamily: 'var(--heading)', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--ink)' }}>
+                  {e.role}
+                </span>
+                {e.url ? (
+                  <a href={e.url} target="_blank" rel="noopener noreferrer" className="exp-company-link"
+                    style={{ fontFamily: 'var(--sans)', fontSize: '1.05rem' }}>
+                    {e.company}
+                  </a>
+                ) : (
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: '1.05rem', color: 'var(--ink)' }}>
+                    {e.company}
+                  </span>
+                )}
+              </div>
+            </div>
           ))}
         </div>
-
-        {/* Experience */}
-        <div>
-          <div style={{ marginBottom: '2rem' }}>
-            <h2 style={{
-              fontFamily: 'var(--heading)', fontSize: '1rem', fontWeight: 400,
-              fontStyle: 'italic', color: '#555', marginBottom: '0.4rem', letterSpacing: '0.01em',
-            }}>
-              Experience
-            </h2>
-            <svg width="80" height="6" viewBox="0 0 80 6" aria-hidden="true" style={{ display: 'block' }}>
-              <path d="M2,4 C12,2 22,5 34,3.5 C46,2 56,5 68,3 C72,2.5 76,4 78,3.5"
-                fill="none" stroke="var(--border)" strokeWidth="1" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-            {[
-              { years: '2024 – Present', role: 'Principal Designer', company: 'Capital One' },
-              { years: '2021 – 2024', role: 'Senior Product Designer', company: 'Farmers Business Network' },
-              { years: '2015 – 2019', role: 'Product Designer', company: 'MegiChina' },
-              { years: '2013 – 2015', role: 'Visual Designer', company: 'Various Startups' },
-            ].map(entry => (
-              <div key={entry.company} className="exp-entry" style={{ display: 'flex', gap: '3rem', alignItems: 'baseline' }}>
-                <span className="exp-date" style={{
-                  fontFamily: 'var(--sans)', fontSize: '0.825rem', color: 'var(--muted)',
-                  letterSpacing: '0.05em', whiteSpace: 'nowrap', minWidth: 120,
-                }}>
-                  {entry.years}
-                </span>
-                <div>
-                  <span style={{ fontFamily: 'var(--heading)', fontSize: '1.15rem', fontWeight: 400, color: 'var(--ink)' }}>
-                    {entry.role}
-                  </span>
-                  <span style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 400, color: '#444', marginLeft: '0.6rem' }}>
-                    @ {entry.company}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-          </div>{/* end left column */}
-
-          {/* Desktop only: large 280px photo */}
-          <div className="hidden md:block" style={{ position: 'relative', width: 280, height: 280, flexShrink: 0 }}>
-            <WobblyCircle />
-            <img
-              src="/my face.JPG"
-              alt="Zhu Nan"
-              style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', borderRadius: '50%' }}
-            />
-          </div>
-
-        </div>{/* end two-column flex */}
       </section>
 
-      {/* Yarn section */}
-      <section className="yarn-section" style={{ background: '#D8D7D3', padding: '4rem 2rem' }}>
+      {/* ── Yarn ── */}
+      <section style={{ background: '#FAF4DF', padding: 'clamp(4rem, 8vw, 6.5rem) 2rem' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{
-            fontFamily: 'var(--heading)',
-            fontSize: 'clamp(2rem, 4vw, 3.25rem)',
-            fontWeight: 400,
-            color: 'var(--ink)',
-            marginBottom: '1.25rem',
-            lineHeight: 1.15,
-            letterSpacing: '-0.01em',
-          }}>
+          <h2 className="hand-heading" style={{ ...HAND_HEADING, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', marginBottom: '1.25rem' }}>
             I work so I can buy nice yarns
           </h2>
-          <p style={{
-            fontFamily: 'var(--sans)',
-            fontSize: '0.95rem',
-            fontWeight: 400,
-            color: '#222',
-            lineHeight: 1.8,
-            maxWidth: 560,
-            marginBottom: '3.5rem',
-          }}>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.75, maxWidth: 580, margin: '0 0 3.5rem' }}>
             I am a wannabe knitwear designer. If you look into my bag, there&apos;s a good chance you&apos;ll find a work-in-progress knitting project in there.
           </p>
-
-          <div className="yarn-photos" style={{
-            display: 'flex',
-            gap: '1.5rem',
-            alignItems: 'flex-end',
-          }}>
-            {[
-              { src: '/about 1.jpg', rotate: -1.5 },
-              { src: '/about 3.jpg', rotate: 0.8 },
-              { src: '/about 2.JPG', rotate: -0.5 },
-            ].map((photo) => (
-              <div key={photo.src} style={{
-                position: 'relative',
-                transform: `rotate(${photo.rotate}deg)`,
-                flex: '1 1 0',
-                minWidth: 0,
-              }}>
-                <WobblyBorder />
-                <img
-                  src={photo.src}
-                  alt=""
-                  style={{ width: '100%', height: 'auto', display: 'block', aspectRatio: '4/5', objectFit: 'cover' }}
-                />
+          <div className="yarn-photos">
+            {YARN_PHOTOS.map(src => (
+              <div key={src} style={PRINT}>
+                <img src={src} alt="" style={{ width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', display: 'block' }} />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer style={{
-        borderTop: '1px solid var(--border)',
-        maxWidth: 1100,
-        margin: '0 auto',
-        padding: '2rem',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap' as const,
-        gap: '1rem',
+        maxWidth: 1100, margin: '0 auto', padding: '2rem',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--font-organic-hand), var(--heading)', textTransform: 'uppercase', fontSize: '1.4rem', letterSpacing: '0.02em', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>
-          {[{ label: 'LinkedIn', href: '#' }, { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html' }].map(link => (
-            <a key={link.label} href={link.href} {...(link.href.startsWith('/Zhu') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              style={{
-                fontFamily: 'var(--sans)',
-                fontSize: '0.75rem',
-                color: 'var(--muted)',
-                textDecoration: 'none',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase' as const,
-                transition: 'color 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
-            >
+          {[{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/zhunan/' }, { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html' }].map(link => (
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="contact-link" style={{ fontSize: '0.95rem' }}>
               {link.label}
             </a>
           ))}
