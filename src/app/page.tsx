@@ -149,9 +149,7 @@ function ProjectTile({
           overflow: 'hidden',
           position: 'relative',
         }}>
-          {'customContent' in project && project.customContent
-            ? project.customContent
-            : p.image
+          {p.image
               ? (
                 <img
                   src={p.image}
