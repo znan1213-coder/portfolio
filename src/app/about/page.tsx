@@ -74,7 +74,7 @@ const EXPERIENCE: { years: string; role: string; company: string; url?: string }
   { years: '2013 – 2015', role: 'Visual Designer', company: 'Various Startups' },
 ]
 
-const YARN_PHOTOS = ['/about 1.jpg', '/about 3.jpg', '/about 2.JPG']
+const YARN_PHOTOS = ['/about 1.jpg', '/about 5.JPG', '/about 3.jpg', '/about 6.JPG', '/about 2.JPG', '/about 7.JPG']
 
 // Doodles around the portrait print — same shared red ink as the homepage cats
 const PORTRAIT_DOODLES = [
@@ -155,7 +155,7 @@ export default function About() {
         @media (max-width: 760px) { .exp-row { grid-template-columns: 1fr; gap: 0.25rem; } }
 
         .yarn-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2rem); }
-        @media (max-width: 760px) { .yarn-photos { grid-template-columns: 1fr 1fr; } .yarn-photos > :last-child { grid-column: 1 / span 2; } }
+        @media (max-width: 760px) { .yarn-photos { grid-template-columns: 1fr 1fr; } }
       `}</style>
       <DoodleDefs />
       <Nav activePage="about" />
@@ -242,14 +242,14 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── Yarn ── */}
+      {/* ── Making things by hand ── */}
       <section style={{ background: '#FAF4DF', padding: 'clamp(4rem, 8vw, 6.5rem) 2rem' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <h2 className="hand-heading" style={{ ...HAND_HEADING, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', marginBottom: '1.25rem' }}>
-            I work so I can buy nice yarns
+            Making things by hand
           </h2>
-          <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.75, maxWidth: 580, margin: '0 0 3.5rem' }}>
-            I am a wannabe knitwear designer. If you look into my bag, there&apos;s a good chance you&apos;ll find a work-in-progress knitting project in there.
+          <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.75, margin: '0 0 3.5rem' }}>
+            Digital design is fun, but sometimes it can be overwhelming. Outside of work, I like to make things with my hands, knitting and sewing, to unwind and forget about stakeholder alignment and feature prioritization for a while.
           </p>
           <div className="yarn-photos">
             {YARN_PHOTOS.map(src => (
