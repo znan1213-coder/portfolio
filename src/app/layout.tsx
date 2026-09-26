@@ -33,9 +33,6 @@ const organicHand = localFont({
 export const metadata: Metadata = {
   title: 'Zhu Nan — Product Designer',
   description: 'Principal Product Designer with 10 years of experience in Fintech and AgTech.',
-  icons: {
-    icon: '/yarn-favicon.png',
-  },
 }
 
 export const viewport = {
