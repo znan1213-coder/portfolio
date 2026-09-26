@@ -657,7 +657,7 @@ export default function DigitalLoanApplication() {
             padding: '1.5rem 0', marginTop: 64,
           }}>
             {[
-              { label: 'Role', value: 'Design research, strategy,\nend-to-end UI & UX' },
+              { label: 'My role', value: 'Design research, strategy,\nend-to-end UI & UX' },
               { label: 'Team', value: '1 PM, 1 Designer,\n4 Engineers' },
               { label: 'Timeline', value: 'V1: May – Oct 2021\nV2: Nov – Dec 2023' },
             ].map(item => (
