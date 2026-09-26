@@ -151,6 +151,7 @@ export default function FinancePlatformRedesign() {
         main.cs-content > section#context { padding-top: 64px !important; }
         main.cs-content > section > p:first-child { margin-bottom: 8px !important; }
         main.cs-content > section > h2 { margin-top: 0 !important; margin-bottom: 24px !important; }
+        main.cs-content.cs-content > section > :is(p, div, figure, h3):last-child { margin-bottom: 0 !important; }
         main.cs-content > section > p:not(:first-child) { margin-top: 0 !important; margin-bottom: 24px !important; }
         main.cs-content > section > h3 { margin-top: 48px !important; margin-bottom: 16px !important; }
         main.cs-content > section > div { margin-bottom: 24px; }
