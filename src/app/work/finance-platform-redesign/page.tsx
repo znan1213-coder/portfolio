@@ -65,13 +65,13 @@ function WobblyBorder({ strokeColor = '#1A1A1A' }: { strokeColor?: string }) {
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p style={{
-      fontFamily: 'var(--sans)',
-      fontSize: '0.8125rem',
-      letterSpacing: '0.22em',
+      fontFamily: 'var(--font-organic-hand), var(--sans)',
+      fontSize: '1.05rem',
+      letterSpacing: '0.08em',
       textTransform: 'uppercase',
       color: 'var(--terracotta)',
       marginBottom: '1.25rem',
-      fontWeight: 500,
+      fontWeight: 400,
     }}>
       {children}
     </p>
@@ -199,7 +199,7 @@ function FinalDesignTabs() {
                 <div role="img" aria-label="Dashboard before" style={{ position: 'relative', width: '100%', maxWidth: 800, height: 500, background: '#e8e8e8', marginBottom: '1rem' }}>
                   <WobblyBorder strokeColor="#CCCCCC" />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                   The original dashboard rendered every run as an undifferentiated list, with no way to filter or prioritize. Users maintained a separate Excel sheet to track what actually mattered to them.
                 </p>
               </div>
@@ -207,7 +207,7 @@ function FinalDesignTabs() {
                 <div role="img" aria-label="Dashboard after" style={{ position: 'relative', width: '100%', maxWidth: 800, height: 500, background: '#e8e8e8', marginBottom: '1rem' }}>
                   <WobblyBorder strokeColor="#CCCCCC" />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                   The redesigned dashboard surfaces the runs and data statuses users actually care about, eliminating the need for the Excel workaround and giving analysts a meaningful starting point each session.
                 </p>
               </div>
@@ -220,7 +220,7 @@ function FinalDesignTabs() {
                 <div role="img" aria-label="Navigation concept exploration" style={{ position: 'relative', width: '100%', maxWidth: 800, height: 500, background: '#e8e8e8', marginBottom: '1rem' }}>
                   <WobblyBorder strokeColor="#CCCCCC" />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                   Early concepts explored how to represent the hierarchical relationships between data layers — the core challenge was making dependencies legible without adding steps.
                 </p>
               </div>
@@ -228,7 +228,7 @@ function FinalDesignTabs() {
                 <div role="img" aria-label="Navigation final design" style={{ position: 'relative', width: '100%', maxWidth: 800, height: 500, background: '#e8e8e8', marginBottom: '1rem' }}>
                   <WobblyBorder strokeColor="#CCCCCC" />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                   The final navigation gives analysts a clear sense of where they are within the data hierarchy and how layers relate, reducing the clicking and reorientation that characterized the old experience.
                 </p>
               </div>
@@ -241,7 +241,7 @@ function FinalDesignTabs() {
                 <div role="img" aria-label="Layout before" style={{ position: 'relative', width: '100%', maxWidth: 800, height: 500, background: '#e8e8e8', marginBottom: '1rem' }}>
                   <WobblyBorder strokeColor="#CCCCCC" />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                   The original layout didn&rsquo;t account for the large-monitor, data-dense environment analysts work in — leaving significant screen real estate unused.
                 </p>
               </div>
@@ -249,7 +249,7 @@ function FinalDesignTabs() {
                 <div role="img" aria-label="Layout after" style={{ position: 'relative', width: '100%', maxWidth: 800, height: 500, background: '#e8e8e8', marginBottom: '1rem' }}>
                   <WobblyBorder strokeColor="#CCCCCC" />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                   The new layout is designed for the actual context of use — responsive to larger screens and structured to surface more data without adding cognitive load.
                 </p>
               </div>
@@ -357,7 +357,7 @@ export default function FinancePlatformRedesign() {
                 </div>
 
                 <h1 className="hero-h1" style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                   fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
                   letterSpacing: '-0.01em', marginBottom: '1.5rem',
                 }}>
@@ -365,7 +365,7 @@ export default function FinancePlatformRedesign() {
                 </h1>
 
                 <p className="hero-subtitle" style={{
-                  fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
+                  fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 400,
                   color: '#1a1a1a', lineHeight: 1.7, marginBottom: '2rem',
                 }}>
                   Turning a visual refresh request into a research-driven redesign, and shipping results that transformed how Capital One finance analysts work.
@@ -391,7 +391,7 @@ export default function FinancePlatformRedesign() {
                       </p>
                       <p style={{
                         fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                        fontWeight: 300, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
+                        fontWeight: 400, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
                         maxWidth: 260,
                       }}>
                         {item.value}
@@ -483,7 +483,7 @@ export default function FinancePlatformRedesign() {
           <section id="context" style={{ paddingTop: '1.85rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Context</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '0.85rem', maxWidth: 900,
             }}>
@@ -491,21 +491,21 @@ export default function FinancePlatformRedesign() {
             </h2>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '2.5rem',
             }}>
               Finance Platform is an internal tool used by Capital One finance and data analysts to transform and manage data across early critical steps in a larger multi-step pipeline, work that ultimately feeds into forecasting, reporting, and financial planning at scale.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '2.5rem',
             }}>
               The tool had been in use for years. It worked fine. But the bar for internal tools at large organizations is often just &ldquo;good enough to get through the day,&rdquo; and Finance Platform had accumulated years of usability debt that users had quietly worked around.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.5rem',
             }}>
               When a backend overhaul created a rare window for a design intervention, I made sure we used it well.
@@ -518,7 +518,7 @@ export default function FinancePlatformRedesign() {
           <section id="opportunity" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Opportunity</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
@@ -526,42 +526,42 @@ export default function FinancePlatformRedesign() {
             </h2>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               It started as a visual refresh.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               The ask that came to design was straightforward: the platform was getting a backend overhaul, and the team wanted to clean up the UI to match. Make it look better, use the most updated design system.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               I asked for one week before we started designing anything.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               Within that week, I ran an audit of the existing experience and conducted 2 contextual inquiry sessions with real users, watching them work through their actual tasks in their actual environment. I also recorded clips of those sessions and brought them to stakeholders.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               Seeing users navigate the platform in real time, including the clicking, the workarounds, the friction, speaks better than a synthesis deck. After stakeholders saw it themselves, the conversation shifted from &ldquo;how it looks&rdquo; to &ldquo;how it works.&rdquo;
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.5rem',
             }}>
               Eventually we aligned on the actual timeline requirements, scoped the work, and got buy-in for a proper redesign instead of a facelift.
@@ -574,7 +574,7 @@ export default function FinancePlatformRedesign() {
           <section id="research-planning" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Research &amp; Planning</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
@@ -582,14 +582,14 @@ export default function FinancePlatformRedesign() {
             </h2>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               With buy-in secured, I built a design plan around the technical timeline and engineering constraints. Given the complexity of the platform and the pace of the backend work, I made sure to be deliberate about sequencing — what to research, what to design, and when.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.5rem',
             }}>
               A tool this layered and high-stakes required coverage across all three user types before I could be confident in what we were solving for. So I expanded the research to include a broader set of contextual inquiries covering:
@@ -603,7 +603,7 @@ export default function FinancePlatformRedesign() {
               ].map((item, i) => (
                 <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'baseline' }}>
                   <Bullet />
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.7, margin: 0 }}>
                     {item}
                   </p>
                 </div>
@@ -617,7 +617,7 @@ export default function FinancePlatformRedesign() {
           <section id="what-we-found" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>What We Found</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '2rem', maxWidth: 900,
             }}>
@@ -627,14 +627,14 @@ export default function FinancePlatformRedesign() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', maxWidth: 900 }}>
               <div>
                 <h3 style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                  fontFamily: 'var(--heading)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
                   fontWeight: 400, lineHeight: 1.2, color: 'var(--ink)',
                   letterSpacing: '-0.01em', marginBottom: '1rem',
                 }}>
                   A dashboard that wasn&rsquo;t doing its job
                 </h3>
                 <p style={{
-                  fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+                  fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
                   color: '#1a1a1a', lineHeight: 1.75, margin: 0,
                 }}>
                   The dashboard, ideally the place where users get oriented and see what needs their attention, was rendered as a massive undifferentiated list of runs for all users. It wasn&rsquo;t surfacing what mattered most based on user role. In fact, they created a separate Excel spreadsheet to track the specific data they actually cared about. A user-maintained workaround is one of the clearest signals that a feature has failed.
@@ -643,14 +643,14 @@ export default function FinancePlatformRedesign() {
 
               <div>
                 <h3 style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                  fontFamily: 'var(--heading)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
                   fontWeight: 400, lineHeight: 1.2, color: 'var(--ink)',
                   letterSpacing: '-0.01em', marginBottom: '1rem',
                 }}>
                   Navigation through dependent data layers
                 </h3>
                 <p style={{
-                  fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+                  fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
                   color: '#1a1a1a', lineHeight: 1.75, margin: 0,
                 }}>
                   Finance Platform manages multiple layers of hierarchical data where each layer depends on the one above it. But the interface gave users no efficient way to move between those layers or use them as reference when needed. Finding, comparing, and managing related data meant clicking through multiple levels with no shortcuts and no sense of location. Users were losing time just orienting themselves.
@@ -659,14 +659,14 @@ export default function FinancePlatformRedesign() {
 
               <div>
                 <h3 style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                  fontFamily: 'var(--heading)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
                   fontWeight: 400, lineHeight: 1.2, color: 'var(--ink)',
                   letterSpacing: '-0.01em', marginBottom: '1rem',
                 }}>
                   A layout that didn&rsquo;t match the environment
                 </h3>
                 <p style={{
-                  fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+                  fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
                   color: '#1a1a1a', lineHeight: 1.75, margin: 0,
                 }}>
                   Finance analysts work on large monitors with data-dense workflows. The existing layout wasn&rsquo;t designed for that context — it wasted screen real estate and forced users to work harder to see what they needed.
@@ -681,7 +681,7 @@ export default function FinancePlatformRedesign() {
           <section id="approach" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Approach</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
@@ -689,21 +689,21 @@ export default function FinancePlatformRedesign() {
             </h2>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               This project had a different rhythm than a typical corporate engagement. The team operated more like a startup — frequent working sessions, fast decisions, and fewer formal sign-offs. As the solo designer, I had significant ownership over the direction while staying in close collaboration with engineering and product to move quickly.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               The design focused on three things: rebuilding the dashboard around the data statuses users actually needed to track, restructuring navigation to match how the data actually relates, and redesigning the layout to take advantage of the monitor environment analysts work in.
             </p>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.5rem',
             }}>
               Testing was built into every major milestone. At each significant concept stage, I brought work back to users to pressure-test the direction before investing further — catching misalignments early when they were cheapest to fix. Then again at hi-fi, I ran usability testing to validate that the interactions held up under real task conditions. For a tool this complex, with users this experienced, that feedback loop was essential.
@@ -716,7 +716,7 @@ export default function FinancePlatformRedesign() {
           <section id="final-design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Final Design</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '2.5rem', maxWidth: 900,
             }}>
@@ -731,7 +731,7 @@ export default function FinancePlatformRedesign() {
           <section id="outcome" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Outcome</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
@@ -739,7 +739,7 @@ export default function FinancePlatformRedesign() {
             </h2>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '3.5rem',
             }}>
               The bi-annual product survey results came in mid-migration — not ideal timing, with active bug-bashing and a learning curve for users adjusting to the new backend.
@@ -754,10 +754,10 @@ export default function FinancePlatformRedesign() {
               ].map((s, i) => (
                 <div key={i} style={{ position: 'relative', padding: '2.5rem 2rem', background: '#FAF6F1' }}>
                   <WobblyBorder strokeColor="#D4CBC2" />
-                  <p style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
+                  <p style={{ fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
                     {s.stat}
                   </p>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 400, color: '#444', lineHeight: 1.6, margin: 0 }}>
                     {s.detail}
                   </p>
                 </div>
@@ -765,7 +765,7 @@ export default function FinancePlatformRedesign() {
             </div>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900,
             }}>
               These scores arrived while the product was still mid-rollout. The redesign didn&rsquo;t just improve the experience — it made a case for what design can do for internal tools that have long been treated as a lower priority.
@@ -789,7 +789,7 @@ export default function FinancePlatformRedesign() {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--terracotta)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
             >
-              <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>Prev</span>
+              <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>Prev</span>
               ← Digital Loan Application
             </a>
           </div>
@@ -805,7 +805,7 @@ export default function FinancePlatformRedesign() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>

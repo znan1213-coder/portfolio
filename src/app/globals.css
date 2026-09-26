@@ -1,9 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --serif: var(--font-marcellus), serif;
-  --sans: var(--font-dm-sans), system-ui, sans-serif;
-  --playfair: var(--font-playfair), Georgia, serif;
+  --heading: var(--font-hanken-grotesk), system-ui, sans-serif;
+  --sans: var(--font-source-sans), system-ui, sans-serif;
   --mono: var(--font-space-mono), 'Courier New', monospace;
   --accent: #F0C94A;
   --ink: #000000;
@@ -17,4 +16,10 @@ body {
   color: var(--ink);
   background: var(--background);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Hanken Grotesk headings: medium weight, tightened tracking (overrides inline fontWeight/letterSpacing) */
+h1, h2 {
+  font-weight: 500 !important;
+  letter-spacing: -0.03em !important;
 }

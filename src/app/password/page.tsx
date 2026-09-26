@@ -17,7 +17,7 @@ export default function PasswordPage() {
     }}>
       <div style={{ width: '100%', maxWidth: 380, textAlign: 'center' }}>
         <h1 style={{
-          fontFamily: 'var(--serif)',
+          fontFamily: 'var(--heading)',
           fontSize: '2rem',
           fontWeight: 400,
           color: '#1A1A1A',
@@ -29,7 +29,7 @@ export default function PasswordPage() {
         <p style={{
           fontFamily: 'var(--sans)',
           fontSize: '0.9375rem',
-          fontWeight: 300,
+          fontWeight: 400,
           color: '#666',
           marginBottom: '2.5rem',
         }}>
@@ -45,7 +45,7 @@ export default function PasswordPage() {
             style={{
               fontFamily: 'var(--sans)',
               fontSize: '1rem',
-              fontWeight: 300,
+              fontWeight: 400,
               color: '#1A1A1A',
               background: '#fff',
               border: '1px solid #DEDAD5',

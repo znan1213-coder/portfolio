@@ -52,7 +52,7 @@ export default function LogoDesign() {
               </div>
 
               <h1 className="hero-h1" style={{
-                fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                 fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
                 letterSpacing: '-0.01em', marginBottom: '1.5rem',
               }}>
@@ -60,7 +60,7 @@ export default function LogoDesign() {
               </h1>
 
               <p className="hero-subtitle" style={{
-                fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 400,
                 color: '#1a1a1a', lineHeight: 1.7,
               }}>
                 A collection of logo and brand mark work across personal projects and freelance clients.
@@ -79,7 +79,7 @@ export default function LogoDesign() {
         {/* ── Intro ─────────────────────────────────────────────────────────── */}
         <section style={{ paddingTop: '4rem', paddingBottom: '4rem', textAlign: 'center' }}>
           <p style={{
-            fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+            fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
             color: '#1a1a1a', lineHeight: 1.75,
             maxWidth: 640, margin: '0 auto',
           }}>
@@ -163,7 +163,7 @@ export default function LogoDesign() {
             onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
           >
             <span style={{
-              fontFamily: 'var(--serif)', fontSize: '0.95rem',
+              fontFamily: 'var(--heading)', fontSize: '0.95rem',
               fontStyle: 'italic', color: '#999', marginRight: '0.25rem',
             }}>Prev</span>
             ← Bank Reconciliation
@@ -180,7 +180,7 @@ export default function LogoDesign() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>

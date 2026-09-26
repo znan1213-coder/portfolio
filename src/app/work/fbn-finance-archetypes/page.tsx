@@ -132,13 +132,13 @@ function PlaceholderImage({ aspect = '16/9', bg = '#EAE3DA', label = 'screenshot
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p style={{
-      fontFamily: 'var(--sans)',
-      fontSize: '0.8125rem',
-      letterSpacing: '0.22em',
+      fontFamily: 'var(--font-organic-hand), var(--sans)',
+      fontSize: '1.05rem',
+      letterSpacing: '0.08em',
       textTransform: 'uppercase',
       color: 'var(--terracotta)',
       marginBottom: '1.25rem',
-      fontWeight: 500,
+      fontWeight: 400,
     }}>
       {children}
     </p>
@@ -183,7 +183,7 @@ function ArchetypeRow() {
   return (
     <div>
       <p style={{
-        fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+        fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
         color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.5rem',
       }}>
         From the research, we identified four farmer archetypes — each representing a distinct relationship with borrowing and financial decision-making.
@@ -224,7 +224,7 @@ function ArchetypeRow() {
               <img src={p.src} alt={p.caption} style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 320, objectFit: 'cover', objectPosition: 'top' }} />
               <p style={{
                 fontFamily: 'var(--sans)', fontSize: '0.775rem',
-                fontStyle: 'italic', fontWeight: 300,
+                fontStyle: 'italic', fontWeight: 400,
                 color: '#999', marginTop: '0.5rem', marginBottom: 0,
               }}>
                 {p.caption}
@@ -373,7 +373,7 @@ export default function FBNFinanceArchetypes() {
                 </div>
 
                 <h1 className="hero-h1" style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                   fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
                   letterSpacing: '-0.01em', marginBottom: '1.5rem',
                 }}>
@@ -381,7 +381,7 @@ export default function FBNFinanceArchetypes() {
                 </h1>
 
                 <p className="hero-subtitle" style={{
-                  fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
+                  fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 400,
                   color: '#1a1a1a', lineHeight: 1.7, marginBottom: '2rem',
                 }}>
                   How generative research closed a critical knowledge gap and became the foundation for FBN's finance design decisions.
@@ -407,7 +407,7 @@ export default function FBNFinanceArchetypes() {
                       </p>
                       <p style={{
                         fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                        fontWeight: 300, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
+                        fontWeight: 400, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
                         maxWidth: 260,
                       }}>
                         {item.value}
@@ -499,7 +499,7 @@ export default function FBNFinanceArchetypes() {
           <section id="research" style={{ paddingTop: '1.85rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Research</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
@@ -507,27 +507,27 @@ export default function FBNFinanceArchetypes() {
             </h2>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '1.5rem',
             }}>
               FBN had launched core finance features, but the team lacked a grounded understanding of who our farmers actually were. We didn't know their goals, their frustrations, or how they thought about borrowing — and without that, product and design decisions were being made on assumption.
             </p>
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.75, maxWidth: 900, marginBottom: '3rem',
             }}>
               To close that gap, we partnered with a UX researcher to conduct generative research across 17 farmers in key agricultural regions, combining on-farm interviews, remote sessions, and focus groups at the Farmer-2-Farmer conference.
             </p>
 
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
               My Role in the Research
             </h2>
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               I worked alongside the UX researcher throughout, contributing as the design voice in three key moments:
@@ -553,7 +553,7 @@ export default function FBNFinanceArchetypes() {
                     <path d="M1,5 C2.5,4 4,5.5 5,4.8 C6,4.1 7.5,5.2 9,5"
                       fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
                   </svg>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                     <strong style={{ fontWeight: 500 }}>{item.label}:</strong> {item.desc}
                   </p>
                 </div>
@@ -597,7 +597,7 @@ export default function FBNFinanceArchetypes() {
                   <p style={{
                     fontFamily: 'var(--sans)',
                     fontSize: '0.775rem',
-                    fontWeight: 300,
+                    fontWeight: 400,
                     fontStyle: 'italic',
                     color: '#999',
                     lineHeight: 1.5,
@@ -614,14 +614,14 @@ export default function FBNFinanceArchetypes() {
             <div style={{ position: 'relative', padding: '1.75rem 1.75rem 1.5rem', marginBottom: '3.5rem', background: '#FAF8F6' }}>
               <WobblyBorder strokeColor="#D4CBC2" />
               <h3 style={{
-                fontFamily: 'var(--serif)', fontSize: '1.25rem',
+                fontFamily: 'var(--heading)', fontSize: '1.25rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2,
                 marginBottom: '0.75rem',
               }}>
                 Why archetypes, not personas?
               </h3>
               <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
                 color: '#444', lineHeight: 1.7, margin: 0, maxWidth: 820,
               }}>
                 In the finance space, what farmers <em>do</em> and <em>want</em> matters more than who they are demographically. Archetypes let us focus on shared behaviors and decision-making patterns — a more actionable foundation for design and product.
@@ -637,14 +637,14 @@ export default function FBNFinanceArchetypes() {
           <section id="design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Design</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
               From Research to Design
             </h2>
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '4rem',
             }}>
               The archetypes directly shaped three design outcomes — each one addressing a pattern we heard consistently across our farmer conversations.
@@ -660,21 +660,21 @@ export default function FBNFinanceArchetypes() {
                 Heard across all four archetypes
               </p>
               <h3 style={{
-                fontFamily: 'var(--serif)', fontSize: '1.5rem',
+                fontFamily: 'var(--heading)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
               }}>
                 1. Enable Easier Access to Funds
               </h3>
 
               <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
                 color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.25rem',
               }}>
                 <strong style={{ fontWeight: 500 }}>Research finding —</strong> Across all four archetypes, farmers were frustrated by how slow the operating line process was — especially in time-sensitive moments like cattle auctions or co-op discounts. Waiting days to access funds meant missing opportunities.
               </p>
 
               <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
                 color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '2.5rem',
               }}>
                 <strong style={{ fontWeight: 500 }}>What we designed —</strong> We digitized the bank account linkage and fund request process, eliminating DocuSign entirely. Farmers can now link their bank account in under 3 minutes and request draws anytime through the app.
@@ -704,7 +704,7 @@ export default function FBNFinanceArchetypes() {
                   }}>
                     Before
                   </span>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
                     A DocuSign is emailed to the farmer and the loan team needs to manually verify the bank info — takes up to{' '}
                     <span style={{ position: 'relative', display: 'inline-block', fontWeight: 500 }}>
                       5 business days
@@ -736,7 +736,7 @@ export default function FBNFinanceArchetypes() {
                   }}>
                     After
                   </span>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
                     Farmer can link their bank account on the FBN app in under{' '}
                     <span style={{ position: 'relative', display: 'inline-block', fontWeight: 500 }}>
                       3 minutes
@@ -781,7 +781,7 @@ export default function FBNFinanceArchetypes() {
                   }}>
                     Before
                   </span>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
                     Farmer needs to fill out a DocuSign every time they need access to funds, and the loan team needs to manually review it — often processed late during the busy season.
                   </p>
                   <div style={{ position: 'relative', width: '100%', maxWidth: 320, margin: '0 auto' }}>
@@ -805,7 +805,7 @@ export default function FBNFinanceArchetypes() {
                   }}>
                     After
                   </span>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' }}>
                     Farmer can now request draws through the app using a simplified digital form,{' '}
                     <span style={{ position: 'relative', display: 'inline-block', fontWeight: 500 }}>
                       anytime and anywhere
@@ -831,14 +831,14 @@ export default function FBNFinanceArchetypes() {
                 <div style={{ position: 'relative', padding: '1.5rem 2rem', background: '#FAF6F1', display: 'inline-block', minWidth: 260 }}>
                   <WobblyBorder strokeColor="#D4CBC2" />
                   <p style={{
-                    fontFamily: 'var(--serif)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                    fontFamily: 'var(--heading)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
                     fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.6rem',
                   }}>
                     5 days → 2
                   </p>
                   <p style={{
                     fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                    fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0,
+                    fontWeight: 400, color: '#444', lineHeight: 1.6, margin: 0,
                   }}>
                     Fund access time after digitizing the draw request process.
                   </p>
@@ -856,21 +856,21 @@ export default function FBNFinanceArchetypes() {
                 Heard across all four archetypes
               </p>
               <h3 style={{
-                fontFamily: 'var(--serif)', fontSize: '1.5rem',
+                fontFamily: 'var(--heading)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
               }}>
                 2. Digital Payment Capability
               </h3>
 
               <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
                 color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.25rem',
               }}>
                 <strong style={{ fontWeight: 500 }}>Research finding —</strong> Paper check repayment was causing real financial harm. Lost checks went unnoticed for over a week. Inaccurate amounts meant back-and-forth corrections. Farmers were mailing multiple smaller checks just to avoid the anxiety of sending one large one.
               </p>
 
               <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
                 color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '2rem',
               }}>
                 <strong style={{ fontWeight: 500 }}>What we designed —</strong> Using FBN's existing Stripe integration, I designed a digital payment flow that replaced the paper check process entirely — prioritizing simplicity, security, and real-time feedback so farmers could pay with confidence from anywhere.
@@ -888,14 +888,14 @@ export default function FBNFinanceArchetypes() {
                 <div style={{ position: 'relative', padding: '1.5rem 2rem', background: '#FAF6F1', display: 'inline-block', minWidth: 260 }}>
                   <WobblyBorder strokeColor="#D4CBC2" />
                   <p style={{
-                    fontFamily: 'var(--serif)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                    fontFamily: 'var(--heading)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
                     fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.6rem',
                   }}>
                     1 day
                   </p>
                   <p style={{
                     fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                    fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0,
+                    fontWeight: 400, color: '#444', lineHeight: 1.6, margin: 0,
                   }}>
                     Payment processing time after launching digital payments.
                   </p>
@@ -913,20 +913,20 @@ export default function FBNFinanceArchetypes() {
                 Heard across three of four archetypes
               </p>
               <h3 style={{
-                fontFamily: 'var(--serif)', fontSize: '1.5rem',
+                fontFamily: 'var(--heading)', fontSize: '1.5rem',
                 fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
               }}>
                 3. Highlighting Agricultural Expertise
               </h3>
 
               {/* Research finding */}
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.25rem' }}>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.25rem' }}>
                 <strong style={{ fontWeight: 500 }}>Research finding —</strong> Three of our four archetypes expressed hesitation about working with lenders who didn't understand agriculture — specifically around challenges like weather-related delays affecting repayments. They trusted and preferred lenders who understood their world.
               </p>
 
               {/* What we designed */}
               <p style={{
-                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300,
+                fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400,
                 color: '#444', lineHeight: 1.7, maxWidth: 900, marginBottom: '2rem',
               }}>
                 <strong style={{ fontWeight: 500 }}>What we designed —</strong> Working with marketing, we surfaced FBN's agricultural expertise directly on the financing pages and created a dedicated loan team page where farmers could find and connect with their specific loan advisor — building trust from the very first touchpoint.
@@ -945,14 +945,14 @@ export default function FBNFinanceArchetypes() {
                 <div style={{ position: 'relative', padding: '1.5rem 2rem', background: '#FAF6F1', display: 'inline-block', minWidth: 260 }}>
                   <WobblyBorder strokeColor="#D4CBC2" />
                   <p style={{
-                    fontFamily: 'var(--serif)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                    fontFamily: 'var(--heading)', fontSize: 'clamp(2rem, 4vw, 2.75rem)',
                     fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.6rem',
                   }}>
                     3 of 4
                   </p>
                   <p style={{
                     fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                    fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0,
+                    fontWeight: 400, color: '#444', lineHeight: 1.6, margin: 0,
                   }}>
                     Archetypes cited lender trust as a key factor — FBN's ag expertise became a frontline design message.
                   </p>
@@ -979,7 +979,7 @@ export default function FBNFinanceArchetypes() {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--terracotta)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
             >
-              <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>
+              <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>
                 Next
               </span>
               Digital Loan Application →
@@ -997,7 +997,7 @@ export default function FBNFinanceArchetypes() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>

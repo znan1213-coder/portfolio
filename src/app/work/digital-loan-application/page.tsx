@@ -132,13 +132,13 @@ function PlaceholderImage({ aspect = '16/9', bg = '#EAE3DA', label = 'screenshot
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p style={{
-      fontFamily: 'var(--sans)',
-      fontSize: '0.8125rem',
-      letterSpacing: '0.22em',
+      fontFamily: 'var(--font-organic-hand), var(--sans)',
+      fontSize: '1.05rem',
+      letterSpacing: '0.08em',
       textTransform: 'uppercase',
       color: 'var(--terracotta)',
       marginBottom: '1.25rem',
-      fontWeight: 500,
+      fontWeight: 400,
     }}>
       {children}
     </p>
@@ -279,7 +279,7 @@ function PillarRows() {
           </div>
           <p style={{
             fontFamily: 'var(--sans)', fontSize: '0.9rem',
-            fontWeight: 300, color: '#555', lineHeight: 1.7, margin: 0,
+            fontWeight: 400, color: '#555', lineHeight: 1.7, margin: 0,
           }}>
             {p.desc}
           </p>
@@ -349,7 +349,7 @@ function DesignDetailsShowcase() {
               {/* Subsection 1 */}
               <div>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
                     Eliminated 23% of Redundant Questions
                   </h3>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
@@ -364,7 +364,7 @@ function DesignDetailsShowcase() {
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
                   />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
                   To manage complexity, I documented every form field with its conditions, helper text, and API endpoints in a shared spreadsheet — this became the single source of truth for the entire application.
                 </p>
               </div>
@@ -372,7 +372,7 @@ function DesignDetailsShowcase() {
               {/* Subsection 2 */}
               <div>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
                     Building Trust Through Credibility & Transparency
                   </h3>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
@@ -401,7 +401,7 @@ function DesignDetailsShowcase() {
                     </p>
                   </div>
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
                   FBN's credibility and data usage policy are surfaced at the very start of the flow — and identity verification is explained before it's requested.
                 </p>
               </div>
@@ -412,7 +412,7 @@ function DesignDetailsShowcase() {
           {activeTab === 1 && (
             <div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
                   Progress Bar for Transparency
                 </h3>
                 <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
@@ -429,7 +429,7 @@ function DesignDetailsShowcase() {
                   <img src="/case studies/digital loan application/stepper:mobile.gif" alt="Progress bar — mobile" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
               </div>
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
                 A persistent stepper shows exactly where farmers are and lets them navigate back freely.
               </p>
             </div>
@@ -439,7 +439,7 @@ function DesignDetailsShowcase() {
           {activeTab === 2 && (
             <div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
                   Progressive Disclosure
                 </h3>
                 <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
@@ -450,7 +450,7 @@ function DesignDetailsShowcase() {
                 <WobblyBorder strokeColor="#CCCCCC" />
                 <img src="/case studies/digital loan application/progressive disclosure.gif" alt="Progressive Disclosure" style={{ width: '100%', height: 'auto', display: 'block' }} />
               </div>
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 300, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
                 Questions are revealed based on previous answers, keeping each screen focused and scannable.
               </p>
             </div>
@@ -484,14 +484,14 @@ function FinalDesignShowcase() {
                 </div>
                 <div>
                   <h3 style={{
-                    fontFamily: 'var(--serif)', fontSize: '1.75rem',
+                    fontFamily: 'var(--heading)', fontSize: '1.75rem',
                     fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
                   }}>
                     {tab.title}
                   </h3>
                   <p style={{
                     fontFamily: 'var(--sans)', fontSize: '1rem',
-                    fontWeight: 300, color: '#444', lineHeight: 1.8, margin: 0,
+                    fontWeight: 400, color: '#444', lineHeight: 1.8, margin: 0,
                   }}>
                     {tab.subtitle}
                   </p>
@@ -501,14 +501,14 @@ function FinalDesignShowcase() {
               <>
                 <div>
                   <h3 style={{
-                    fontFamily: 'var(--serif)', fontSize: '1.75rem',
+                    fontFamily: 'var(--heading)', fontSize: '1.75rem',
                     fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
                   }}>
                     {tab.title}
                   </h3>
                   <p style={{
                     fontFamily: 'var(--sans)', fontSize: '1rem',
-                    fontWeight: 300, color: '#444', lineHeight: 1.8, margin: 0,
+                    fontWeight: 400, color: '#444', lineHeight: 1.8, margin: 0,
                   }}>
                     {tab.subtitle}
                   </p>
@@ -610,14 +610,14 @@ export default function DigitalLoanApplication() {
               ))}
             </div>
             <h1 className="hero-h1" style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
               fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.5rem',
             }}>
               Digital Loan Application
             </h1>
             <p className="hero-subtitle" style={{
-              fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.7, marginBottom: '2rem',
             }}>
               From paper forms to a fully self-serve digital loan experience.
@@ -643,7 +643,7 @@ export default function DigitalLoanApplication() {
                   </p>
                   <p style={{
                     fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                    fontWeight: 300, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
+                    fontWeight: 400, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
                     maxWidth: 260,
                   }}>
                     {item.value}
@@ -734,7 +734,7 @@ export default function DigitalLoanApplication() {
           <section id="problem" style={{ paddingTop: '1.85rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Problem</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '0.85rem', maxWidth: 900,
             }}>
@@ -742,7 +742,7 @@ export default function DigitalLoanApplication() {
             </h2>
             <p style={{
               fontFamily: 'var(--sans)', fontSize: '1rem', fontStyle: 'italic',
-              color: '#555', marginBottom: '2.5rem', fontWeight: 300, maxWidth: 900,
+              color: '#555', marginBottom: '2.5rem', fontWeight: 400, maxWidth: 900,
             }}>
               The existing DocuSign-based process was inefficient for both farmers and FBN Finance.
             </p>
@@ -799,7 +799,7 @@ export default function DigitalLoanApplication() {
                         </svg>
                         <p style={{
                           fontFamily: 'var(--sans)', fontSize: '0.9rem',
-                          fontWeight: 300, color: '#1a1a1a', lineHeight: 1.65, margin: 0,
+                          fontWeight: 400, color: '#1a1a1a', lineHeight: 1.65, margin: 0,
                         }}>
                           {item}
                         </p>
@@ -814,7 +814,7 @@ export default function DigitalLoanApplication() {
             <div style={{ textAlign: 'left', padding: '0' }}>
               <SectionLabel>Problem Statement</SectionLabel>
               <p style={{
-                fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
+                fontFamily: 'var(--heading)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
                 fontStyle: 'italic', fontWeight: 400,
                 color: 'var(--terracotta)', lineHeight: 1.5,
                 marginBottom: '1rem', maxWidth: 900,
@@ -835,14 +835,14 @@ export default function DigitalLoanApplication() {
           <section id="design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Approach</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
               From Pillars to Decisions
             </h2>
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '1.75rem',
             }}>
               With a project this foundational, scope creep was a real risk, and we had a hard deadline: the product needed to ship before the spring planting season, when farmers would be actively seeking financing. To stay focused on the MVP, my PM and I led two key activities:
@@ -858,7 +858,7 @@ export default function DigitalLoanApplication() {
                     <path d="M1,5 C2.5,4 4,5.5 5,4.8 C6,4.1 7.5,5.2 9,5"
                       fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
                   </svg>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
                     <strong style={{ fontWeight: 500 }}>{item.label}:</strong> {item.desc}
                   </p>
                 </div>
@@ -866,7 +866,7 @@ export default function DigitalLoanApplication() {
             </div>
 
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '3rem',
             }}>
               From these sessions, I distilled the findings into three design pillars, made them guiding principles that helped us filter feedback, stay focused, and make faster decisions throughout the project.
@@ -877,7 +877,7 @@ export default function DigitalLoanApplication() {
 
             {/* Design details heading */}
             <h3 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.2, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '2rem', maxWidth: 900,
             }}>
@@ -888,7 +888,7 @@ export default function DigitalLoanApplication() {
 
             <div style={{ textAlign: 'left', padding: '0', marginTop: '2.5rem' }}>
               <p style={{
-                fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
+                fontFamily: 'var(--heading)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
                 fontStyle: 'italic', fontWeight: 400,
                 color: 'var(--terracotta)', lineHeight: 1.5,
                 marginBottom: '1rem', maxWidth: 900,
@@ -908,7 +908,7 @@ export default function DigitalLoanApplication() {
           <section id="final-design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Final Design</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1rem', maxWidth: 900, marginTop: '2rem',
             }}>
@@ -921,7 +921,7 @@ export default function DigitalLoanApplication() {
           <section id="impact" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Impact</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '3.5rem', maxWidth: 900,
             }}>
@@ -936,10 +936,10 @@ export default function DigitalLoanApplication() {
               ].map((s, i) => (
                 <div key={i} style={{ position: 'relative', padding: '2.5rem 2rem', background: '#FAF6F1' }}>
                   <WobblyBorder strokeColor="#D4CBC2" />
-                  <p style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
+                  <p style={{ fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
                     {s.stat}
                   </p>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 400, color: '#444', lineHeight: 1.6, margin: 0 }}>
                     {s.detail}
                   </p>
                 </div>
@@ -966,7 +966,7 @@ export default function DigitalLoanApplication() {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--terracotta)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
             >
-              <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>
+              <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>
                 Next
               </span>
               Finance Platform Redesign →
@@ -984,7 +984,7 @@ export default function DigitalLoanApplication() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>

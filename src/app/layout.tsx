@@ -1,26 +1,19 @@
 import type { Metadata } from 'next'
-import { Marcellus, DM_Sans, Playfair_Display, Space_Mono } from 'next/font/google'
+import { Hanken_Grotesk, Source_Sans_3, Space_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 
-const marcellus = Marcellus({
-  weight: '400',
+const hankenGrotesk = Hanken_Grotesk({
   subsets: ['latin'],
-  variable: '--font-marcellus',
+  style: ['normal', 'italic'],
+  variable: '--font-hanken-grotesk',
   display: 'swap',
 })
 
-const dmSans = DM_Sans({
-  weight: ['300', '400', '500'],
+const sourceSans = Source_Sans_3({
   subsets: ['latin'],
-  variable: '--font-dm-sans',
-  display: 'swap',
-})
-
-const playfair = Playfair_Display({
-  weight: ['400', '500', '600', '700'],
-  style: ['italic', 'normal'],
-  subsets: ['latin'],
-  variable: '--font-playfair',
+  style: ['normal', 'italic'],
+  variable: '--font-source-sans',
   display: 'swap',
 })
 
@@ -28,6 +21,12 @@ const spaceMono = Space_Mono({
   weight: ['400', '700'],
   subsets: ['latin'],
   variable: '--font-space-mono',
+  display: 'swap',
+})
+
+const organicHand = localFont({
+  src: './fonts/Hello-OrganicHand.otf',
+  variable: '--font-organic-hand',
   display: 'swap',
 })
 
@@ -46,7 +45,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${marcellus.variable} ${dmSans.variable} ${playfair.variable} ${spaceMono.variable}`}>
+    <html lang="en" className={`${hankenGrotesk.variable} ${sourceSans.variable} ${spaceMono.variable} ${organicHand.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   )

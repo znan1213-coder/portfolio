@@ -114,11 +114,29 @@ const DROPDOWN_CSS = `
     from { opacity: 0; }
     to   { opacity: 1; }
   }
+  /* Logo hover — each letter hops on its own when the cursor touches it */
+  @keyframes logoHop {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    35%      { transform: translateY(-7px) rotate(-4deg); }
+    60%      { transform: translateY(1px) rotate(2deg); }
+  }
+  .nav-logo-letter { display: inline-block; }
+  .nav-logo-letter.is-hopping { animation: logoHop 480ms cubic-bezier(.3,.7,.4,1.4) both; }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-logo-letter.is-hopping { animation: none; }
+  }
   .nav-desktop-links { display: none; }
   .nav-hamburger { display: flex; }
+  .nav-grid { column-gap: 1rem; }
+  .nav-left { justify-self: start; }
+  .nav-right { justify-self: end; }
   @media (min-width: 768px) {
     .nav-desktop-links { display: flex; }
     .nav-hamburger { display: none; }
+    /* Desktop: Work and About sit snug on either side of the centered logo */
+    .nav-grid { column-gap: 3rem; }
+    .nav-left { justify-self: end; }
+    .nav-right { justify-self: start; }
   }
 `
 
@@ -128,7 +146,7 @@ function WorkDropdown({ visible }: { visible: boolean }) {
     <div style={{
       position: 'absolute',
       top: 'calc(100% + 10px)',
-      right: 0,
+      left: 0,
       background: 'var(--background)',
       boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
       borderRadius: 6,
@@ -218,8 +236,8 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null
 
   const linkStyle: React.CSSProperties = {
-    fontFamily: 'var(--serif)', fontSize: '2.25rem', fontWeight: 400,
-    color: 'var(--ink)', textDecoration: 'none', letterSpacing: '-0.01em', lineHeight: 1,
+    fontFamily: 'var(--heading)', fontSize: '2.25rem', fontWeight: 400,
+    color: '#FD1E20', textDecoration: 'none', letterSpacing: '-0.01em', lineHeight: 1,
   }
 
   return (
@@ -309,32 +327,16 @@ export default function Nav({ activePage, variant = 'bar' }: {
    *  dropping the nav directly onto a colored section like the homepage hero. */
   variant?: 'bar' | 'embedded'
 }) {
-  const [rotation, setRotation] = useState(0)
   const [workOpen, setWorkOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    const onScroll = () => setRotation(window.scrollY * 0.5)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   const openWork  = () => { if (closeTimer.current) clearTimeout(closeTimer.current); setWorkOpen(true) }
   const closeWork = () => { closeTimer.current = setTimeout(() => setWorkOpen(false), 120) }
 
   const isEmbedded = variant === 'embedded'
-  // On the gold hero background, the usual muted gray reads too low-contrast — use a solid near-black instead.
-  const baseLinkColor = isEmbedded ? '#1A1200' : 'var(--muted)'
-
-  const linkColor = (href: string) => {
-    if (activePage === 'about' && href === '/about') return 'var(--ink)'
-    return baseLinkColor
-  }
-  const leaveColor = (href: string) => {
-    if (activePage === 'about' && href === '/about') return 'var(--ink)'
-    return baseLinkColor
-  }
+  const NAV_RED = '#FD1E20'
+  const NAV_RED_HOVER = '#C8141A'
 
   return (
     <>
@@ -347,66 +349,85 @@ export default function Nav({ activePage, variant = 'bar' }: {
         zIndex: isEmbedded ? undefined : 100,
         background: isEmbedded ? 'transparent' : 'var(--background)',
       }}>
-        <div style={{
-          maxWidth: 1100, margin: '0 auto', padding: '0.75rem 2rem 0.85rem',
-          display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+        {/* Work · logo · About — clustered around the centered logo on desktop; hamburger at far right on mobile */}
+        <div className="nav-grid" style={{
+          maxWidth: 1100, margin: '0 auto', padding: '1rem 2rem 1.6rem',
+          display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
         }}>
-          {/* Logo — far left */}
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
-            <img src="/yarn black.png" alt="Logo"
-              style={{ height: 46, width: 'auto', transform: `rotate(${rotation}deg)`, transition: 'transform 0.05s linear' }} />
-            <span style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', color: 'var(--ink)', letterSpacing: '0.01em' }}>
-              Zhu Nan
-            </span>
-          </a>
-
-          {/* Desktop links — far right, hidden on mobile */}
-          <div className="nav-desktop-links" style={{ gap: '2.5rem', alignItems: 'center' }}>
-            <a href="/"
-              style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: baseLinkColor, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
-              onMouseLeave={e => (e.currentTarget.style.color = baseLinkColor)}
-            >
-              Home
-            </a>
-
-            {/* Work with dropdown */}
+          {/* Left — Work with dropdown (desktop only) */}
+          <div className="nav-left">
             <div
+              className="nav-desktop-links"
               style={{ position: 'relative' }}
               onMouseEnter={openWork}
               onMouseLeave={closeWork}
             >
               <a href="/#work"
-                style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: baseLinkColor, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s', display: 'block' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
-                onMouseLeave={e => (e.currentTarget.style.color = baseLinkColor)}
+                style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontWeight: 500, color: NAV_RED, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s', display: 'block' }}
+                onMouseEnter={e => (e.currentTarget.style.color = NAV_RED_HOVER)}
+                onMouseLeave={e => (e.currentTarget.style.color = NAV_RED)}
               >
                 Work
               </a>
               <WorkDropdown visible={workOpen} />
             </div>
+          </div>
 
+          {/* Center — logo, links home */}
+          <a href="/" aria-label="Zhu Nan — home" className="nav-logo" style={{ textDecoration: 'none', justifySelf: 'center', position: 'relative', lineHeight: 1 }}>
+            <span aria-hidden="true" style={{ fontFamily: 'var(--font-organic-hand), var(--heading)', textTransform: 'uppercase', fontSize: '1.6rem', color: 'var(--ink)', letterSpacing: '0.02em', lineHeight: 1, whiteSpace: 'nowrap' }}>
+              {'Zhu Nan'.split('').map((ch, i) => (
+                <span key={i} className="nav-logo-letter"
+                  // Class is added on contact and removed when the hop finishes, so the
+                  // letter can't retrigger mid-jump as it moves away from the cursor
+                  onMouseEnter={e => e.currentTarget.classList.add('is-hopping')}
+                  onAnimationEnd={e => e.currentTarget.classList.remove('is-hopping')}
+                >
+                  {ch === ' ' ? '\u00A0' : ch}
+                </span>
+              ))}
+            </span>
+            {/* Hand-drawn smile hangs below the name (absolutely positioned, so the links align to the
+                letters, not the smile) — two slightly offset strokes + a roughen filter
+                so the line weight feels uneven, like a marker */}
+            <svg aria-hidden="true" viewBox="0 0 120 24" preserveAspectRatio="none"
+              style={{ position: 'absolute', left: '-4%', bottom: -18, width: '108%', height: 20, overflow: 'visible', pointerEvents: 'none' }}>
+              <defs>
+                <filter id="logo-smile-rough" x="-10%" y="-50%" width="120%" height="200%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.35" numOctaves="1" seed="11" result="n" />
+                  <feDisplacementMap in="SourceGraphic" in2="n" scale="1" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+              </defs>
+              <g fill="none" stroke="#1A1A1A" strokeLinecap="round" filter="url(#logo-smile-rough)">
+                <path d="M5,3 C18,17 42,23 62,22 C82,21 102,14 115,2" strokeWidth="2.2" />
+                <path d="M10,6 C24,17 46,21.5 64,20.5 C82,19.5 99,13.5 110,5" strokeWidth="1" opacity="0.8" />
+              </g>
+            </svg>
+          </a>
+
+          {/* Right — About (desktop) / hamburger (mobile) */}
+          <div className="nav-right" style={{ display: 'flex', alignItems: 'center' }}>
             <a href="/about"
-              style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontWeight: 400, color: linkColor('/about'), textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--ink)')}
-              onMouseLeave={e => (e.currentTarget.style.color = leaveColor('/about'))}
+              className="nav-desktop-links"
+              style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontWeight: 500, color: NAV_RED, textDecoration: 'none', letterSpacing: '0.04em', transition: 'color 0.15s' }}
+              onMouseEnter={e => (e.currentTarget.style.color = NAV_RED_HOVER)}
+              onMouseLeave={e => (e.currentTarget.style.color = NAV_RED)}
             >
               About
             </a>
-          </div>
 
-          {/* Hamburger — visible on mobile only */}
-          <button
-            className="nav-hamburger"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              padding: '0.5rem', color: 'var(--ink)',
-            }}
-          >
-            <HamburgerIcon />
-          </button>
+            <button
+              className="nav-hamburger"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                padding: '0.5rem', color: 'var(--ink)',
+              }}
+            >
+              <HamburgerIcon />
+            </button>
+          </div>
         </div>
 
         {/* Divider — hand-drawn wobbly line, constrained to content width */}

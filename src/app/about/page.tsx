@@ -134,11 +134,11 @@ function SketchPortrait() {
           strokeLinecap="round"
         />
         <text x="150" y="142" textAnchor="middle"
-          style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 11, fill: '#C0AFA4' }}>
+          style={{ fontFamily: 'var(--sans)', fontSize: 11, fill: '#C0AFA4' }}>
           photo
         </text>
         <text x="150" y="160" textAnchor="middle"
-          style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 11, fill: '#C0AFA4' }}>
+          style={{ fontFamily: 'var(--sans)', fontSize: 11, fill: '#C0AFA4' }}>
           coming soon
         </text>
       </svg>
@@ -280,7 +280,7 @@ export default function About() {
             {/* Heading row */}
             <div className="flex items-center justify-between gap-6 mb-8">
               <h1 style={{
-                fontFamily: 'var(--serif)',
+                fontFamily: 'var(--heading)',
                 fontSize: 'clamp(2rem, 5vw, 3.25rem)',
                 fontWeight: 400,
                 lineHeight: 1.05,
@@ -303,13 +303,13 @@ export default function About() {
 
             {/* Bio */}
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 400,
               color: '#222', lineHeight: 1.8, marginBottom: '1.25rem',
             }}>
               I&apos;m Zhu, a product designer in the Bay Area. I&apos;m currently designing on Capital One&apos;s Enterprise Finance team, where I focus on making complex workflows clearer and easier for our financial analysts to use every day.
             </p>
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 300,
+              fontFamily: 'var(--sans)', fontSize: '1rem', fontWeight: 400,
               color: '#222', lineHeight: 1.8, marginBottom: '2rem',
             }}>
               I started my career in startups, which taught me to move fast, be scrappy and stay close to users, and only design what truly matters. Working in a large enterprise has expanded that perspective — I&apos;ve learned how to design for scale, collaborate across many teams, and create solutions that last.
@@ -347,7 +347,7 @@ export default function About() {
         <div>
           <div style={{ marginBottom: '2rem' }}>
             <h2 style={{
-              fontFamily: 'var(--serif)', fontSize: '1rem', fontWeight: 400,
+              fontFamily: 'var(--heading)', fontSize: '1rem', fontWeight: 400,
               fontStyle: 'italic', color: '#555', marginBottom: '0.4rem', letterSpacing: '0.01em',
             }}>
               Experience
@@ -372,10 +372,10 @@ export default function About() {
                   {entry.years}
                 </span>
                 <div>
-                  <span style={{ fontFamily: 'var(--serif)', fontSize: '1.15rem', fontWeight: 400, color: 'var(--ink)' }}>
+                  <span style={{ fontFamily: 'var(--heading)', fontSize: '1.15rem', fontWeight: 400, color: 'var(--ink)' }}>
                     {entry.role}
                   </span>
-                  <span style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 300, color: '#444', marginLeft: '0.6rem' }}>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 400, color: '#444', marginLeft: '0.6rem' }}>
                     @ {entry.company}
                   </span>
                 </div>
@@ -403,7 +403,7 @@ export default function About() {
       <section className="yarn-section" style={{ background: '#D8D7D3', padding: '4rem 2rem' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <h2 style={{
-            fontFamily: 'var(--serif)',
+            fontFamily: 'var(--heading)',
             fontSize: 'clamp(2rem, 4vw, 3.25rem)',
             fontWeight: 400,
             color: 'var(--ink)',
@@ -416,7 +416,7 @@ export default function About() {
           <p style={{
             fontFamily: 'var(--sans)',
             fontSize: '0.95rem',
-            fontWeight: 300,
+            fontWeight: 400,
             color: '#222',
             lineHeight: 1.8,
             maxWidth: 560,
@@ -465,7 +465,7 @@ export default function About() {
         flexWrap: 'wrap' as const,
         gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--serif)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>
