@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Nav from '../../components/Nav'
+import BackToTop from '../../components/BackToTop'
 import { DoodleDefs } from '../../components/Doodles'
 import PageMenu from '../../components/PageMenu'
 
@@ -589,6 +590,7 @@ export default function DigitalLoanApplication() {
 
       <DoodleDefs />
       <Nav heroBg="#F6F5F1" />
+      <BackToTop />
       <PageMenu sections={NAV_SECTIONS} />
 
       {/* Mobile progress bar */}

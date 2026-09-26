@@ -1,6 +1,7 @@
 'use client'
 
 import Nav from '../../components/Nav'
+import BackToTop from '../../components/BackToTop'
 
 export default function LogoDesign() {
   return (
@@ -18,6 +19,8 @@ export default function LogoDesign() {
       `}</style>
 
       <Nav />
+
+      <BackToTop />
 
       {/* ── Full-bleed hero ───────────────────────────────────────────────── */}
       <div style={{
