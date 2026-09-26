@@ -657,9 +657,9 @@ export default function DigitalLoanApplication() {
             padding: '1.5rem 0', marginTop: 64,
           }}>
             {[
-              { label: 'Role', value: 'End-to-end design, design research, design strategy' },
-              { label: 'Team', value: '1 PM, 1 Designer, 4 Engineers' },
-              { label: 'Timeline', value: 'May 2021 – Dec. 2023' },
+              { label: 'Role', value: 'Design research, strategy,\nend-to-end UI & UX' },
+              { label: 'Team', value: '1 PM, 1 Designer,\n4 Engineers' },
+              { label: 'Timeline', value: 'V1: May – Oct 2021\nV2: Nov – Dec 2023' },
             ].map(item => (
               <div key={item.label}>
                 <p style={{
@@ -668,7 +668,7 @@ export default function DigitalLoanApplication() {
                 }}>
                   {item.label}
                 </p>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '1rem', color: 'var(--ink)', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '1rem', color: 'var(--ink)', lineHeight: 1.5, margin: 0, whiteSpace: 'pre-line' }}>
                   {item.value}
                 </p>
               </div>
