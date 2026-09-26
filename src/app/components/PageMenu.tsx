@@ -6,7 +6,11 @@ import { useEffect, useState } from 'react'
 // Appears once the reader scrolls past the hero (the element marked data-nav-hero)
 // and highlights the section currently in view. On wide screens it's an open card in
 // the right margin; on narrower screens it collapses to a small tab that opens on click.
-export default function PageMenu({ sections }: { sections: { id: string; label: string }[] }) {
+type MenuItem = { id: string; label: string; children?: { id: string; label: string }[] }
+
+export default function PageMenu({ sections }: { sections: MenuItem[] }) {
+  // Flatten top-level items + sub-items for scroll tracking
+  const all = sections.flatMap(s => [s, ...(s.children ?? [])])
   const [visible, setVisible] = useState(false)
   const [active, setActive] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
@@ -16,7 +20,7 @@ export default function PageMenu({ sections }: { sections: { id: string; label: 
       const hero = document.querySelector('[data-nav-hero]') as HTMLElement | null
       setVisible(hero ? hero.getBoundingClientRect().bottom < 120 : window.scrollY > 300)
       let current: string | null = null
-      for (const s of sections) {
+      for (const s of all) {
         const el = document.getElementById(s.id)
         if (el && el.getBoundingClientRect().top < 200) current = s.id
       }
@@ -26,11 +30,14 @@ export default function PageMenu({ sections }: { sections: { id: string; label: 
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sections])
 
   useEffect(() => { if (!visible) setOpen(false) }, [visible])
 
-  const activeLabel = sections.find(s => s.id === active)?.label ?? sections[0]?.label
+  const activeLabel = all.find(s => s.id === active)?.label ?? sections[0]?.label
+  // A parent counts as active while any of its sub-items is
+  const parentOf = (id: string | null) => sections.find(s => s.id === id || s.children?.some(c => c.id === id))?.id
 
   return (
     <>
@@ -46,10 +53,21 @@ export default function PageMenu({ sections }: { sections: { id: string; label: 
         <nav className="page-menu-card" aria-label="On this page">
           <p className="page-menu-title">On this page</p>
           {sections.map(s => (
-            <a key={s.id} href={`#${s.id}`} className={active === s.id ? 'is-active' : ''} onClick={() => setOpen(false)}>
-              <span className="page-menu-dot" aria-hidden="true" />
-              {s.label}
-            </a>
+            <div key={s.id}>
+              <a href={`#${s.id}`} className={parentOf(active) === s.id ? 'is-active' : ''} onClick={() => setOpen(false)}>
+                <span className="page-menu-dot" aria-hidden="true" />
+                {s.label}
+              </a>
+              {s.children && (
+                <div className="page-menu-sub">
+                  {s.children.map(c => (
+                    <a key={c.id} href={`#${c.id}`} className={active === c.id ? 'is-active' : ''} onClick={() => setOpen(false)}>
+                      {c.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
       </div>
@@ -67,6 +85,9 @@ const PAGE_MENU_CSS = `
   .page-menu-card a.is-active { color: #FD1E20; }
   .page-menu-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0; flex-shrink: 0; }
   .page-menu-card a.is-active .page-menu-dot { opacity: 1; }
+  .page-menu-sub { display: flex; flex-direction: column; margin: 0 0 0.2rem 0.95rem; padding-left: 0.6rem; border-left: 1px solid rgba(0,0,0,0.1); }
+  .page-menu-sub a { font-size: 0.85rem; padding: 0.18rem 0; }
+  .page-menu-card .page-menu-sub a.is-active { color: #FD1E20; }
   .page-menu-tab { display: none; }
 
   /* Not enough margin beside the content: collapse to a tab that opens the card */

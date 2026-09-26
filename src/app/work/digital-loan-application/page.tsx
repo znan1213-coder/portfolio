@@ -152,7 +152,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 const NAV_SECTIONS = [
   { id: 'problem', label: 'Problem' },
   { id: 'design', label: 'Strategy' },
-  { id: 'form-design', label: 'Design' },
+  { id: 'form-design', label: 'Design', children: [
+    { id: 'design-layout', label: 'Layout' },
+    { id: 'design-flow', label: 'Flow' },
+    { id: 'design-content', label: 'Content' },
+  ] },
   { id: 'final-design', label: 'Final design' },
   { id: 'impact', label: 'Impact' },
 ]
@@ -296,176 +300,143 @@ const DIMENSION_CARDS = [
   { title: 'Layout',  desc: 'How information is revealed and presented on each screen' },
 ]
 
-function DesignDetailsShowcase() {
-  const [activeTab, setActiveTab] = useState(1)
-  const [direction, setDirection] = useState<'up' | 'down'>('up')
-  const [animKey, setAnimKey] = useState(0)
-
-  const handleTabChange = (i: number) => {
-    if (i === activeTab) return
-    setDirection(i > activeTab ? 'up' : 'down')
-    setActiveTab(i)
-    setAnimKey(k => k + 1)
-  }
-
-  const animName = direction === 'up' ? 'slideLeftIn' : 'slideRightIn'
-
+function DimensionHeading({ card, index }: { card: { title: string; desc: string }; index: number }) {
   return (
-    <div>
-      <style>{SLIDE_CSS}</style>
-
-      {/* Pill tabs */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '3rem' }}>
-        {DIMENSION_CARDS.map((card, i) => {
-          const active = i === activeTab
-          return (
-            <button key={card.title} onClick={() => handleTabChange(i)}
-              style={{
-                position: 'relative',
-                fontFamily: 'var(--heading)', fontSize: '0.95rem',
-                fontWeight: 500,
-                color: active ? '#fff' : 'var(--ink)',
-                background: active ? '#FD1E20' : '#fff',
-                border: '1.4px solid #1A1A1A', borderRadius: 8, cursor: 'pointer',
-                boxShadow: active ? '3px 3px 0 #1A1A1A' : 'none',
-                padding: '0.45rem 1.1rem',
-                transition: 'background 0.2s, color 0.2s, box-shadow 0.2s',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {card.title}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Tab content */}
-      <div style={{ overflow: 'hidden' }}>
-        <div key={animKey} style={{ animation: `${animName} 320ms ease-in-out both` }}>
-
-          {/* ── CONTENT ── */}
-          {activeTab === 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem' }}>
-              {/* Subsection 1 */}
-              <div>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                    Eliminated 23% of redundant questions
-                  </h3>
-                  <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
-                    → Farmers reached the end without being stopped by unfamiliar or irrelevant questions.
-                  </p>
-                </div>
-                <div style={{ position: 'relative', width: '100%', height: 350, overflow: 'hidden' }}>
-                  <span className="shot-frame" aria-hidden="true" />
-                  <img
-                    src="/case studies/digital loan application/eliminate redundent questions.png"
-                    alt="Form field documentation spreadsheet"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
-                  />
-                </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
-                  To manage complexity, I documented every form field with its conditions, helper text, and API endpoints in a shared spreadsheet — this became the single source of truth for the entire application.
-                </p>
-              </div>
-
-              {/* Subsection 2 */}
-              <div>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                    Building trust through credibility & transparency
-                  </h3>
-                  <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
-                    → Farmers knew who they were dealing with and why each step mattered before committing.
-                  </p>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '0.75rem', alignItems: 'start' }}>
-                  <div>
-                    <div style={{ position: 'relative', width: '100%' }}>
-                      <span className="shot-frame" aria-hidden="true" />
-                      <img src="/case studies/digital loan application/transparency 1.png" alt="Start page showing FBN credibility stats" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                    </div>
-                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9rem', color: 'rgba(0,0,0,0.55)', marginTop: '0.6rem', marginBottom: 0 }}>
-                      Start page — right rail highlights what FBN offers to build credibility upfront
-                    </p>
-                  </div>
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                      <div style={{ position: 'relative', width: 290 }}>
-                        <span className="shot-frame" aria-hidden="true" />
-                        <img src="/case studies/digital loan application/transparency 2.png" alt="ID Verification screen" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                      </div>
-                    </div>
-                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9rem', color: 'rgba(0,0,0,0.55)', marginTop: '0.6rem', marginBottom: 0 }}>
-                      ID Verification — we explained why identity verification is needed before submission
-                    </p>
-                  </div>
-                </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
-                  FBN's credibility and data usage policy are surfaced at the very start of the flow — and identity verification is explained before it's requested.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* ── FLOW ── */}
-          {activeTab === 1 && (
-            <div>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                  Progress bar for transparency
-                </h3>
-                <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
-                  → Abandonment reduced — users knew how much was left and felt in control of the process.
-                </p>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '60% 40%', gap: '1.25rem', alignItems: 'start', paddingRight: '2px', maxWidth: 800 }}>
-                <div style={{ position: 'relative', width: '100%' }}>
-                  <span className="shot-frame" aria-hidden="true" />
-                  <img src="/case studies/digital loan application/stepper:desktop.gif" alt="Progress bar — desktop" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                </div>
-                <div style={{ position: 'relative', width: '100%' }}>
-                  <span className="shot-frame" aria-hidden="true" />
-                  <img src="/case studies/digital loan application/stepper:mobile.gif" alt="Progress bar — mobile" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                </div>
-              </div>
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
-                A persistent stepper shows exactly where farmers are and lets them navigate back freely.
-              </p>
-            </div>
-          )}
-
-          {/* ── LAYOUT ── */}
-          {activeTab === 2 && (
-            <div>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                  Progressive disclosure
-                </h3>
-                <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
-                  → Cognitive load dropped significantly — farmers never felt overwhelmed mid-application.
-                </p>
-              </div>
-              <div style={{ width: '80%', position: 'relative' }}>
-                <span className="shot-frame" aria-hidden="true" />
-                <img src="/case studies/digital loan application/progressive disclosure.gif" alt="Progressive Disclosure" style={{ width: '100%', height: 'auto', display: 'block' }} />
-              </div>
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
-                Questions are revealed based on previous answers, keeping each screen focused and scannable.
-              </p>
-            </div>
-          )}
-
-        </div>
-      </div>
+    <div style={{ marginBottom: '2rem', borderTop: '1.5px solid #6B6B6B', paddingTop: '1rem' }}>
+      <span style={{ display: 'block', fontFamily: 'var(--heading)', fontSize: '0.95rem', fontWeight: 500, color: '#FD1E20', marginBottom: '0.35rem' }}>
+        {String(index).padStart(2, '0')}
+      </span>
+      <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.35rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, margin: '0 0 0.35rem' }}>
+        {card.title}
+      </h3>
+      <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.6, margin: 0 }}>
+        {card.desc}
+      </p>
     </div>
   )
 }
 
-const SLIDE_CSS = `
-  @keyframes slideLeftIn  { from { transform: translateX(60px);  opacity: 0 } to { transform: translateX(0); opacity: 1 } }
-  @keyframes slideRightIn { from { transform: translateX(-60px); opacity: 0 } to { transform: translateX(0); opacity: 1 } }
-`
+// All three dimensions laid out in order (Layout → Flow → Content); each has its own
+// anchor so the PageMenu can list them as sub-items under Design
+function DesignDetailsShowcase() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '96px' }}>
+      {/* ──  ── */}
+      <div id="design-layout" className="dimension-block">
+        <DimensionHeading card={DIMENSION_CARDS[2]} index={1} />
+          <div>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h4 style={{ fontFamily: 'var(--heading)', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--ink)', lineHeight: 1.25, margin: '0 0 0.4rem' }}>
+                Progressive disclosure
+              </h4>
+              <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                → Cognitive load dropped significantly — farmers never felt overwhelmed mid-application.
+              </p>
+            </div>
+            <div style={{ width: '80%', position: 'relative' }}>
+              <span className="shot-frame" aria-hidden="true" />
+              <img src="/case studies/digital loan application/progressive disclosure.gif" alt="Progressive Disclosure" style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </div>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
+              Questions are revealed based on previous answers, keeping each screen focused and scannable.
+            </p>
+          </div>
+      </div>
+      {/* ──  ── */}
+      <div id="design-flow" className="dimension-block">
+        <DimensionHeading card={DIMENSION_CARDS[1]} index={2} />
+          <div>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h4 style={{ fontFamily: 'var(--heading)', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--ink)', lineHeight: 1.25, margin: '0 0 0.4rem' }}>
+                Progress bar for transparency
+              </h4>
+              <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                → Abandonment reduced — users knew how much was left and felt in control of the process.
+              </p>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '60% 40%', gap: '1.25rem', alignItems: 'start', paddingRight: '2px', maxWidth: 800 }}>
+              <div style={{ position: 'relative', width: '100%' }}>
+                <span className="shot-frame" aria-hidden="true" />
+                <img src="/case studies/digital loan application/stepper:desktop.gif" alt="Progress bar — desktop" style={{ width: '100%', height: 'auto', display: 'block' }} />
+              </div>
+              <div style={{ position: 'relative', width: '100%' }}>
+                <span className="shot-frame" aria-hidden="true" />
+                <img src="/case studies/digital loan application/stepper:mobile.gif" alt="Progress bar — mobile" style={{ width: '100%', height: 'auto', display: 'block' }} />
+              </div>
+            </div>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
+              A persistent stepper shows exactly where farmers are and lets them navigate back freely.
+            </p>
+          </div>
+      </div>
+      {/* ──  ── */}
+      <div id="design-content" className="dimension-block">
+        <DimensionHeading card={DIMENSION_CARDS[0]} index={3} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem' }}>
+            {/* Subsection 1 */}
+            <div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h4 style={{ fontFamily: 'var(--heading)', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--ink)', lineHeight: 1.25, margin: '0 0 0.4rem' }}>
+                  Eliminated 23% of redundant questions
+                </h4>
+                <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                  → Farmers reached the end without being stopped by unfamiliar or irrelevant questions.
+                </p>
+              </div>
+              <div style={{ position: 'relative', width: '100%', height: 350, overflow: 'hidden' }}>
+                <span className="shot-frame" aria-hidden="true" />
+                <img
+                  src="/case studies/digital loan application/eliminate redundent questions.png"
+                  alt="Form field documentation spreadsheet"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                />
+              </div>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
+                To manage complexity, I documented every form field with its conditions, helper text, and API endpoints in a shared spreadsheet — this became the single source of truth for the entire application.
+              </p>
+            </div>
+
+            {/* Subsection 2 */}
+            <div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h4 style={{ fontFamily: 'var(--heading)', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--ink)', lineHeight: 1.25, margin: '0 0 0.4rem' }}>
+                  Building trust through credibility & transparency
+                </h4>
+                <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                  → Farmers knew who they were dealing with and why each step mattered before committing.
+                </p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '0.75rem', alignItems: 'start' }}>
+                <div>
+                  <div style={{ position: 'relative', width: '100%' }}>
+                    <span className="shot-frame" aria-hidden="true" />
+                    <img src="/case studies/digital loan application/transparency 1.png" alt="Start page showing FBN credibility stats" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                  </div>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9rem', color: 'rgba(0,0,0,0.55)', marginTop: '0.6rem', marginBottom: 0 }}>
+                    Start page — right rail highlights what FBN offers to build credibility upfront
+                  </p>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ position: 'relative', width: 290 }}>
+                      <span className="shot-frame" aria-hidden="true" />
+                      <img src="/case studies/digital loan application/transparency 2.png" alt="ID Verification screen" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    </div>
+                  </div>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9rem', color: 'rgba(0,0,0,0.55)', marginTop: '0.6rem', marginBottom: 0 }}>
+                    ID Verification — we explained why identity verification is needed before submission
+                  </p>
+                </div>
+              </div>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
+                FBN's credibility and data usage policy are surfaced at the very start of the flow — and identity verification is explained before it's requested.
+              </p>
+            </div>
+          </div>
+      </div>
+    </div>
+  )
+}
 
 function FinalDesignShowcase() {
   return (
@@ -562,6 +533,7 @@ export default function DigitalLoanApplication() {
         /* "Sticker" surfaces — thin black outline + solid red offset shadow (matches About buttons) */
         .sticker { background: #FFFFFF; border: 1.6px solid #1A1A1A; border-radius: 12px; box-shadow: 5px 5px 0 #FD1E20; }
         .sticker-chip { background: #FFFFFF; border: 1.4px solid #1A1A1A; border-radius: 8px; box-shadow: 3px 3px 0 #FD1E20; }
+        .dimension-block { scroll-margin-top: 90px; }
         .shot-frame { position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.12); border-radius: 6px; pointer-events: none; z-index: 1; }
         .cs-print { background: #FFFFFF; padding: 14px 14px 16px; box-shadow: 0 10px 28px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06); }
         @media (max-width: 768px) {
