@@ -60,42 +60,6 @@ function WobblyBorder() {
   )
 }
 
-// ── Wobbly divider (hand-drawn line under the nav, content-width) ──────────────
-function WobblyDivider() {
-  const ref = useRef<SVGSVGElement>(null)
-  const [vw, setVw] = useState(0)
-  const [path, setPath] = useState('')
-  const prev = useRef(0)
-
-  useEffect(() => {
-    if (!ref.current) return
-    const update = () => {
-      const { width: w } = ref.current!.getBoundingClientRect()
-      const rw = Math.round(w)
-      if (rw === prev.current) return
-      prev.current = rw
-      if (rw) {
-        const wb = 1.4
-        const n = Math.max(4, Math.floor(rw / 70))
-        setPath('M 0 3' + seg(0, 3, rw, 3, wb, n))
-        setVw(rw)
-      }
-    }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(ref.current)
-    return () => ro.disconnect()
-  }, [])
-
-  return (
-    <svg ref={ref} width="100%" height="6" viewBox={`0 0 ${vw || 1} 6`} preserveAspectRatio="none"
-      aria-hidden="true" style={{ display: 'block' }}>
-      {path && <path d={path} fill="none" stroke="var(--border)" strokeWidth="1"
-        strokeLinecap="round" strokeLinejoin="round" />}
-    </svg>
-  )
-}
-
 // ── Case studies ──────────────────────────────────────────────────────────────
 const CASE_STUDIES = [
   { title: 'Digital Loan Application',           href: '/work/digital-loan-application',   live: true  },
@@ -320,13 +284,29 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 }
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
-export default function Nav({ activePage, variant = 'bar' }: {
+export default function Nav({ activePage, variant = 'bar', heroBg }: {
   activePage?: 'home' | 'about' | 'work'
-  /** 'bar' = fixed white bar with divider (default, used on inner pages).
-   *  'embedded' = sits inline in normal flow with no background/divider — for
+  /** 'bar' = fixed white bar (default, used on inner pages).
+   *  'embedded' = sits inline in normal flow with no background — for
    *  dropping the nav directly onto a colored section like the homepage hero. */
   variant?: 'bar' | 'embedded'
+  /** Optional: the fixed bar takes this color while it sits over the page's hero
+   *  (an element marked data-nav-hero), then fades to white once scrolled past it. */
+  heroBg?: string
 }) {
+  const [overHero, setOverHero] = useState(true)
+  useEffect(() => {
+    if (!heroBg) return
+    const onScroll = () => {
+      const hero = document.querySelector('[data-nav-hero]') as HTMLElement | null
+      if (!hero) return
+      setOverHero(hero.getBoundingClientRect().bottom > 64)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
+  }, [heroBg])
   const [workOpen, setWorkOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -347,7 +327,8 @@ export default function Nav({ activePage, variant = 'bar' }: {
         left: isEmbedded ? undefined : 0,
         right: isEmbedded ? undefined : 0,
         zIndex: isEmbedded ? undefined : 100,
-        background: isEmbedded ? 'transparent' : 'var(--background)',
+        background: isEmbedded ? 'transparent' : (heroBg && overHero ? heroBg : 'var(--background)'),
+        transition: 'background 0.25s ease',
       }}>
         {/* Work · logo · About — clustered around the centered logo on desktop; hamburger at far right on mobile */}
         <div className="nav-grid" style={{
@@ -430,12 +411,6 @@ export default function Nav({ activePage, variant = 'bar' }: {
           </div>
         </div>
 
-        {/* Divider — hand-drawn wobbly line, constrained to content width */}
-        {!isEmbedded && (
-          <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 2rem' }}>
-            <WobblyDivider />
-          </div>
-        )}
       </nav>
 
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />

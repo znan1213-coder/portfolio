@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Nav from '../../components/Nav'
+import { DoodleDefs } from '../../components/Doodles'
+import PageMenu from '../../components/PageMenu'
 
 // ── Wobbly border ─────────────────────────────────────────────────────────────
 function seg(x1: number, y1: number, x2: number, y2: number, wobble: number, n: number) {
@@ -108,7 +110,7 @@ function PlaceholderImage({ aspect = '16/9', bg = '#EAE3DA', label = 'screenshot
 }) {
   return (
     <div style={{ position: 'relative', aspectRatio: aspect, width: '100%', background: bg, overflow: 'hidden' }}>
-      <WobblyBorder strokeColor="#CCCCCC" />
+      <span className="shot-frame" aria-hidden="true" />
       <div style={{
         position: 'absolute', inset: 0, opacity: 0.14,
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
@@ -136,7 +138,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
       fontSize: '1.05rem',
       letterSpacing: '0.08em',
       textTransform: 'uppercase',
-      color: 'var(--terracotta)',
+      color: 'var(--ink)',
       marginBottom: '1.25rem',
       fontWeight: 400,
     }}>
@@ -149,8 +151,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 const NAV_SECTIONS = [
   { id: 'problem', label: 'Problem' },
-  { id: 'design', label: 'Approach' },
-  { id: 'final-design', label: 'Final Design' },
+  { id: 'design', label: 'Strategy' },
+  { id: 'form-design', label: 'Design' },
+  { id: 'final-design', label: 'Final design' },
   { id: 'impact', label: 'Impact' },
 ]
 
@@ -159,35 +162,35 @@ const TABS = [
   {
     label: 'Eligibility',
     image: '/case studies/digital loan application/Eligibility.png',
-    title: 'Eligibility Check',
+    title: 'Eligibility check',
     subtitle: 'Farmers confirm minimum requirements before starting. This prevents unqualified applications and reduces noise for the loan team.',
     inactiveBg: '#EAE3DA', inactiveColor: '#7A3A1A',
   },
   {
     label: 'Application',
     image: '/case studies/digital loan application/App form.gif',
-    title: 'Application Form',
+    title: 'Application form',
     subtitle: 'A guided, save-anytime experience with a progress bar for clear visibility and flexibility to navigate back to any section.',
     inactiveBg: '#C5CEA0', inactiveColor: '#4A5E35',
   },
   {
     label: 'Co-applicant',
     image: '/case studies/digital loan application/Co-app.gif',
-    title: 'Co-Applicant',
+    title: 'Co-applicant',
     subtitle: 'The primary applicant can either fill in co-applicant details themselves or invite the co-applicant to complete their own section independently.',
     inactiveBg: '#D4B8C7', inactiveColor: '#6B3D5E',
   },
   {
     label: 'ID Verification',
     image: '/case studies/digital loan application/ID verification.gif',
-    title: 'ID Verification',
+    title: 'ID verification',
     subtitle: 'Identity is verified before submission in under 1 minute, ensuring accuracy and preventing fraud without adding friction.',
     inactiveBg: '#B8CED4', inactiveColor: '#2A5A6A',
   },
   {
     label: 'Task Management',
     image: '/case studies/digital loan application/Task mgmt.gif',
-    title: 'Task Management',
+    title: 'Task management',
     subtitle: "A centralized hub for all post-submission tasks, giving farmers clarity on what's needed to move their application forward.",
     inactiveBg: '#E8C4A8', inactiveColor: '#7A3A1A',
   },
@@ -196,39 +199,39 @@ const TABS = [
 // ── Pillar rows ───────────────────────────────────────────────────────────────
 const PILLARS = [
   {
-    name: 'Self Service',
+    name: 'Self service',
     desc: 'Simplified flow, eliminated unnecessary questions, and provided contextual help throughout the application',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-        <circle cx="11" cy="11" r="8.5" stroke="#B05A2B" strokeWidth="1.4" strokeLinecap="round"
+        <circle cx="11" cy="11" r="8.5" stroke="#FD1E20" strokeWidth="1.4" strokeLinecap="round"
           strokeDasharray="2 0" strokeLinejoin="round"
           style={{ strokeDashoffset: 0 }} />
-        <circle cx="11" cy="11" r="3.5" stroke="#B05A2B" strokeWidth="1.2" />
+        <circle cx="11" cy="11" r="3.5" stroke="#FD1E20" strokeWidth="1.2" />
       </svg>
     ),
   },
   {
-    name: 'Application Security',
+    name: 'Application security',
     desc: 'Early identity verification and centralized document upload to prevent fraud and reduce email exchanges',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
         <path d="M11 2.5 C11 2.5 4 5 4 11 C4 15.5 7 18.5 11 19.5 C15 18.5 18 15.5 18 11 C18 5 11 2.5 11 2.5Z"
-          stroke="#B05A2B" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M8 11 L10 13 L14 9" stroke="#B05A2B" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+          stroke="#FD1E20" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8 11 L10 13 L14 9" stroke="#FD1E20" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
   {
-    name: 'Data Accuracy',
+    name: 'Data accuracy',
     desc: 'Real-time error feedback and plain language over jargon to reduce mistakes',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-        <circle cx="11" cy="11" r="8.5" stroke="#B05A2B" strokeWidth="1.4" strokeLinecap="round" />
-        <circle cx="11" cy="11" r="2" fill="#B05A2B" />
-        <line x1="11" y1="2.5" x2="11" y2="5" stroke="#B05A2B" strokeWidth="1.3" strokeLinecap="round" />
-        <line x1="11" y1="17" x2="11" y2="19.5" stroke="#B05A2B" strokeWidth="1.3" strokeLinecap="round" />
-        <line x1="2.5" y1="11" x2="5" y2="11" stroke="#B05A2B" strokeWidth="1.3" strokeLinecap="round" />
-        <line x1="17" y1="11" x2="19.5" y2="11" stroke="#B05A2B" strokeWidth="1.3" strokeLinecap="round" />
+        <circle cx="11" cy="11" r="8.5" stroke="#FD1E20" strokeWidth="1.4" strokeLinecap="round" />
+        <circle cx="11" cy="11" r="2" fill="#FD1E20" />
+        <line x1="11" y1="2.5" x2="11" y2="5" stroke="#FD1E20" strokeWidth="1.3" strokeLinecap="round" />
+        <line x1="11" y1="17" x2="11" y2="19.5" stroke="#FD1E20" strokeWidth="1.3" strokeLinecap="round" />
+        <line x1="2.5" y1="11" x2="5" y2="11" stroke="#FD1E20" strokeWidth="1.3" strokeLinecap="round" />
+        <line x1="17" y1="11" x2="19.5" y2="11" stroke="#FD1E20" strokeWidth="1.3" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -246,40 +249,38 @@ function WobblyHRule() {
 const PILLAR_ICONS = [
   // Slightly wider on the left, a bit flat at the bottom
   <svg key="0" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <path d="M10,1.2 C13.8,1.0 18.4,4.6 18.8,9.2 C19.2,13.9 16.1,18.5 11.2,18.9 C6.3,19.3 1.4,16.0 1.1,10.8 C0.8,5.7 4.8,1.4 10,1.2 Z" fill="#A0522D" />
+    <path d="M10,1.2 C13.8,1.0 18.4,4.6 18.8,9.2 C19.2,13.9 16.1,18.5 11.2,18.9 C6.3,19.3 1.4,16.0 1.1,10.8 C0.8,5.7 4.8,1.4 10,1.2 Z" fill="#FD1E20" />
     <path d="M6.2 10.2 L8.8 12.8 L13.8 7.2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>,
   // Slightly taller, nudged left at top
   <svg key="1" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <path d="M9.5,0.9 C13.5,0.6 18.6,4.2 18.9,9.5 C19.2,14.4 15.8,19.1 10.5,19.2 C5.6,19.3 0.8,15.5 0.9,10.2 C1.0,5.0 5.2,1.2 9.5,0.9 Z" fill="#A0522D" />
+    <path d="M9.5,0.9 C13.5,0.6 18.6,4.2 18.9,9.5 C19.2,14.4 15.8,19.1 10.5,19.2 C5.6,19.3 0.8,15.5 0.9,10.2 C1.0,5.0 5.2,1.2 9.5,0.9 Z" fill="#FD1E20" />
     <path d="M6.2 10.2 L8.8 12.8 L13.8 7.2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>,
   // Slightly irregular, bumpy on the right
   <svg key="2" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-    <path d="M10.2,1.1 C14.2,1.3 19.0,5.2 18.7,9.8 C18.4,14.7 14.5,19.2 9.8,18.9 C5.0,18.6 0.7,14.8 1.0,10.0 C1.3,5.2 5.8,0.9 10.2,1.1 Z" fill="#A0522D" />
+    <path d="M10.2,1.1 C14.2,1.3 19.0,5.2 18.7,9.8 C18.4,14.7 14.5,19.2 9.8,18.9 C5.0,18.6 0.7,14.8 1.0,10.0 C1.3,5.2 5.8,0.9 10.2,1.1 Z" fill="#FD1E20" />
     <path d="M6.2 10.2 L8.8 12.8 L13.8 7.2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>,
 ]
 
 function PillarRows() {
   return (
-    <div className="pillar-cols" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '4rem' }}>
+    <div className="pillar-cols" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '1rem' }}>
       {PILLARS.map((p, i) => (
-        <div key={p.name} style={{ position: 'relative', padding: '1.75rem' }}>
-          <WobblyBorder />
+        <div key={p.name} style={{ position: 'relative' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
             {PILLAR_ICONS[i]}
             <span style={{
-              fontFamily: 'var(--sans)', fontSize: '0.7rem',
-              fontWeight: 700, color: 'var(--terracotta)',
-              textTransform: 'uppercase', letterSpacing: '0.14em',
+              fontFamily: 'var(--heading)', fontSize: '1.1rem',
+              fontWeight: 500, color: 'var(--ink)', letterSpacing: '-0.01em',
             }}>
               {p.name}
             </span>
           </div>
           <p style={{
-            fontFamily: 'var(--sans)', fontSize: '0.9rem',
-            fontWeight: 400, color: '#555', lineHeight: 1.7, margin: 0,
+            fontFamily: 'var(--sans)', fontSize: '1rem',
+            fontWeight: 400, color: 'var(--ink)', lineHeight: 1.6, margin: 0,
           }}>
             {p.desc}
           </p>
@@ -321,18 +322,17 @@ function DesignDetailsShowcase() {
             <button key={card.title} onClick={() => handleTabChange(i)}
               style={{
                 position: 'relative',
-                fontFamily: 'var(--sans)', fontSize: '0.75rem',
+                fontFamily: 'var(--heading)', fontSize: '0.95rem',
                 fontWeight: 500,
-                color: active ? '#fff' : '#1a1a1a',
-                background: active ? 'var(--terracotta)' : '#fff',
-                border: 'none', borderRadius: 999, cursor: 'pointer',
-                padding: '0.45rem 1rem',
-                letterSpacing: '0.02em',
-                transition: 'background 0.2s, color 0.2s',
+                color: active ? '#fff' : 'var(--ink)',
+                background: active ? '#FD1E20' : '#fff',
+                border: '1.4px solid #1A1A1A', borderRadius: 8, cursor: 'pointer',
+                boxShadow: active ? '3px 3px 0 #1A1A1A' : 'none',
+                padding: '0.45rem 1.1rem',
+                transition: 'background 0.2s, color 0.2s, box-shadow 0.2s',
                 whiteSpace: 'nowrap',
               }}
             >
-              {!active && <WobblyPillBorder />}
               {card.title}
             </button>
           )
@@ -349,22 +349,22 @@ function DesignDetailsShowcase() {
               {/* Subsection 1 */}
               <div>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                    Eliminated 23% of Redundant Questions
+                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                    Eliminated 23% of redundant questions
                   </h3>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                  <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
                     → Farmers reached the end without being stopped by unfamiliar or irrelevant questions.
                   </p>
                 </div>
                 <div style={{ position: 'relative', width: '100%', height: 350, overflow: 'hidden' }}>
-                  <WobblyBorder strokeColor="#CCCCCC" />
+                  <span className="shot-frame" aria-hidden="true" />
                   <img
                     src="/case studies/digital loan application/eliminate redundent questions.png"
                     alt="Form field documentation spreadsheet"
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
                   />
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
                   To manage complexity, I documented every form field with its conditions, helper text, and API endpoints in a shared spreadsheet — this became the single source of truth for the entire application.
                 </p>
               </div>
@@ -372,36 +372,36 @@ function DesignDetailsShowcase() {
               {/* Subsection 2 */}
               <div>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                    Building Trust Through Credibility & Transparency
+                  <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                    Building trust through credibility & transparency
                   </h3>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                  <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
                     → Farmers knew who they were dealing with and why each step mattered before committing.
                   </p>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '0.75rem', alignItems: 'start' }}>
                   <div>
                     <div style={{ position: 'relative', width: '100%' }}>
-                      <WobblyBorder strokeColor="#CCCCCC" />
+                      <span className="shot-frame" aria-hidden="true" />
                       <img src="/case studies/digital loan application/transparency 1.png" alt="Start page showing FBN credibility stats" style={{ width: '100%', height: 'auto', display: 'block' }} />
                     </div>
-                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontStyle: 'italic', color: '#999', marginTop: '0.5rem', marginBottom: 0 }}>
+                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9rem', color: 'rgba(0,0,0,0.55)', marginTop: '0.6rem', marginBottom: 0 }}>
                       Start page — right rail highlights what FBN offers to build credibility upfront
                     </p>
                   </div>
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <div style={{ position: 'relative', width: 290 }}>
-                        <WobblyBorder strokeColor="#CCCCCC" />
+                        <span className="shot-frame" aria-hidden="true" />
                         <img src="/case studies/digital loan application/transparency 2.png" alt="ID Verification screen" style={{ width: '100%', height: 'auto', display: 'block' }} />
                       </div>
                     </div>
-                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.8rem', fontStyle: 'italic', color: '#999', marginTop: '0.5rem', marginBottom: 0 }}>
+                    <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9rem', color: 'rgba(0,0,0,0.55)', marginTop: '0.6rem', marginBottom: 0 }}>
                       ID Verification — we explained why identity verification is needed before submission
                     </p>
                   </div>
                 </div>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
                   FBN's credibility and data usage policy are surfaced at the very start of the flow — and identity verification is explained before it's requested.
                 </p>
               </div>
@@ -412,24 +412,24 @@ function DesignDetailsShowcase() {
           {activeTab === 1 && (
             <div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                  Progress Bar for Transparency
+                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                  Progress bar for transparency
                 </h3>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
                   → Abandonment reduced — users knew how much was left and felt in control of the process.
                 </p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '60% 40%', gap: '1.25rem', alignItems: 'start', paddingRight: '2px', maxWidth: 800 }}>
                 <div style={{ position: 'relative', width: '100%' }}>
-                  <WobblyBorder strokeColor="#CCCCCC" />
+                  <span className="shot-frame" aria-hidden="true" />
                   <img src="/case studies/digital loan application/stepper:desktop.gif" alt="Progress bar — desktop" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
                 <div style={{ position: 'relative', width: '100%' }}>
-                  <WobblyBorder strokeColor="#CCCCCC" />
+                  <span className="shot-frame" aria-hidden="true" />
                   <img src="/case studies/digital loan application/stepper:mobile.gif" alt="Progress bar — mobile" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
               </div>
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
                 A persistent stepper shows exactly where farmers are and lets them navigate back freely.
               </p>
             </div>
@@ -439,18 +439,18 @@ function DesignDetailsShowcase() {
           {activeTab === 2 && (
             <div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-                  Progressive Disclosure
+                <h3 style={{ fontFamily: 'var(--heading)', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '0.6rem' }}>
+                  Progressive disclosure
                 </h3>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1.7, margin: '0 0 0.6rem', maxWidth: 900 }}>
+                <p style={{ fontFamily: 'var(--heading)', fontSize: '1.05rem', fontWeight: 500, color: '#FD1E20', lineHeight: 1.55, margin: '0 0 0.6rem', maxWidth: 900 }}>
                   → Cognitive load dropped significantly — farmers never felt overwhelmed mid-application.
                 </p>
               </div>
               <div style={{ width: '80%', position: 'relative' }}>
-                <WobblyBorder strokeColor="#CCCCCC" />
+                <span className="shot-frame" aria-hidden="true" />
                 <img src="/case studies/digital loan application/progressive disclosure.gif" alt="Progressive Disclosure" style={{ width: '100%', height: 'auto', display: 'block' }} />
               </div>
-              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.9375rem', fontWeight: 400, color: '#444', lineHeight: 1.7, margin: '0.5rem 0 0', maxWidth: 900 }}>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: '0.9rem 0 0', maxWidth: 900 }}>
                 Questions are revealed based on previous answers, keeping each screen focused and scannable.
               </p>
             </div>
@@ -484,14 +484,14 @@ function FinalDesignShowcase() {
                 </div>
                 <div>
                   <h3 style={{
-                    fontFamily: 'var(--heading)', fontSize: '1.75rem',
-                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
+                    fontFamily: 'var(--heading)', fontSize: '1.5rem',
+                    fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
                   }}>
                     {tab.title}
                   </h3>
                   <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '1rem',
-                    fontWeight: 400, color: '#444', lineHeight: 1.8, margin: 0,
+                    fontFamily: 'var(--sans)', fontSize: '1.125rem',
+                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: 0,
                   }}>
                     {tab.subtitle}
                   </p>
@@ -501,14 +501,14 @@ function FinalDesignShowcase() {
               <>
                 <div>
                   <h3 style={{
-                    fontFamily: 'var(--heading)', fontSize: '1.75rem',
-                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
+                    fontFamily: 'var(--heading)', fontSize: '1.5rem',
+                    fontWeight: 500, letterSpacing: '-0.015em', color: 'var(--ink)', lineHeight: 1.2, marginBottom: '1rem',
                   }}>
                     {tab.title}
                   </h3>
                   <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '1rem',
-                    fontWeight: 400, color: '#444', lineHeight: 1.8, margin: 0,
+                    fontFamily: 'var(--sans)', fontSize: '1.125rem',
+                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.7, margin: 0,
                   }}>
                     {tab.subtitle}
                   </p>
@@ -527,39 +527,45 @@ function FinalDesignShowcase() {
 }
 
 export default function DigitalLoanApplication() {
-  const [activeSection, setActiveSection] = useState('problem')
   const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    const sectionEls = NAV_SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean) as HTMLElement[]
-
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) setActiveSection(entry.target.id)
-      })
-    }, { rootMargin: '-35% 0px -60% 0px', threshold: 0 })
-
-    sectionEls.forEach(el => observer.observe(el))
-
     const onScroll = () => {
       const doc = document.documentElement
       const progress = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100
       setScrollProgress(Math.min(progress, 100))
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('scroll', onScroll)
-    }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#fff', ['--terracotta' as any]: '#FD1E20' }}>
       <style>{`
+        /* Spacing system (8px rhythm) for the case study body — overrides the per-element inline
+           margins so every section follows the same rules:
+           eyebrow → title 8 · title → body 24 · paragraph → paragraph 24 · bullet → bullet 16
+           content → subheading 48 · subheading → content 16 · section → section 120 */
+        main.cs-content > section { padding-top: 0 !important; padding-bottom: 120px !important; }
+        main.cs-content > section#problem { padding-top: 88px !important; }
+        main.cs-content > section > p:first-child { margin-bottom: 8px !important; }
+        main.cs-content > section > h2 { margin-top: 0 !important; margin-bottom: 24px !important; }
+        main.cs-content > section > p:not(:first-child) { margin-top: 0 !important; margin-bottom: 24px !important; }
+        main.cs-content > section > h3 { margin-top: 48px !important; margin-bottom: 16px !important; }
+        main.cs-content > section > div[style*="flex-direction: column"] { margin-bottom: 24px !important; }
+        main.cs-content section div[style*="gap: 1rem"][style*="padding-left"] { gap: 16px !important; }
+        main.cs-content section div[style*="gap: 2rem"][style*="flex-direction: column"] { gap: 24px !important; }
+        main.cs-content section div[style*="gap: 2rem"][style*="flex-direction: column"] h3 { margin-bottom: 8px !important; }
+        .pillar-cols { margin-bottom: 0 !important; }
+        .pillar-cols > div > div:first-child { margin-bottom: 8px !important; }
+
+        /* "Sticker" surfaces — thin black outline + solid red offset shadow (matches About buttons) */
+        .sticker { background: #FFFFFF; border: 1.6px solid #1A1A1A; border-radius: 12px; box-shadow: 5px 5px 0 #FD1E20; }
+        .sticker-chip { background: #FFFFFF; border: 1.4px solid #1A1A1A; border-radius: 8px; box-shadow: 3px 3px 0 #FD1E20; }
+        .shot-frame { position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.12); border-radius: 6px; pointer-events: none; z-index: 1; }
+        .cs-print { background: #FFFFFF; padding: 14px 14px 16px; box-shadow: 0 10px 28px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06); }
         @media (max-width: 768px) {
           .cs-layout { grid-template-columns: 1fr !important; }
-          .cs-sidenav { display: none !important; }
           .cs-progress { display: block !important; }
           .cs-content { padding: 0 1.25rem !important; }
           .problem-cols { grid-template-columns: 1fr !important; }
@@ -569,7 +575,7 @@ export default function DigitalLoanApplication() {
           .pillar-cols { grid-template-columns: 1fr !important; }
           .hero-wrapper { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
           .hero-section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
-          .hero-h1 { font-size: 2.25rem !important; }
+          .hero-h1 { font-size: 2rem !important; }
           .hero-subtitle { max-width: 100% !important; font-size: 1rem !important; }
           .hero-tags { flex-wrap: wrap !important; flex-direction: row !important; }
           .hero-cover { width: 100% !important; }
@@ -577,7 +583,9 @@ export default function DigitalLoanApplication() {
         }
       `}</style>
 
-      <Nav />
+      <DoodleDefs />
+      <Nav heroBg="#F6F5F1" />
+      <PageMenu sections={NAV_SECTIONS} />
 
       {/* Mobile progress bar */}
       <div className="cs-progress" style={{
@@ -591,30 +599,29 @@ export default function DigitalLoanApplication() {
       </div>
 
       {/* ── Full-bleed cream hero ──────────────────────────────────────────── */}
-      <div style={{ background: '#E8EDE8', borderBottom: '1px solid #E4DDD4', paddingTop: 56, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+      <div data-nav-hero style={{ background: '#F6F5F1', paddingTop: 56, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <div className="hero-wrapper" style={{ maxWidth: 1200, width: '100%', margin: '0 auto', paddingLeft: '3rem', paddingRight: '3rem' }}>
           <section id="overview" className="hero-section text-center" style={{ paddingTop: '3rem', paddingBottom: '4rem', scrollMarginTop: '90px' }}>
             <div className="max-w-2xl mx-auto">
             {/* Meta pills */}
             <div className="hero-tags flex flex-wrap gap-2" style={{ marginBottom: '2rem', justifyContent: 'center' }}>
               {['Consumer Facing', 'Responsive', 'Agtech'].map(tag => (
-                <span key={tag} style={{
-                  fontFamily: 'var(--sans)', fontSize: '0.7rem',
+                <span key={tag} className="sticker-chip" style={{
+                  fontFamily: 'var(--sans)', fontSize: '0.75rem',
                   letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--terracotta)', fontWeight: 500,
-                  border: '1px solid #E8C9B4', borderRadius: 999,
-                  padding: '0.3rem 0.85rem',
+                  color: 'var(--ink)', fontWeight: 600,
+                  padding: '0.3rem 0.8rem',
                 }}>
                   {tag}
                 </span>
               ))}
             </div>
             <h1 className="hero-h1" style={{
-              fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(2.1rem, 4vw, 3.25rem)',
               fontWeight: 400, lineHeight: 1.05, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.5rem',
             }}>
-              Digital Loan Application
+              Digital loan application
             </h1>
             <p className="hero-subtitle" style={{
               fontFamily: 'var(--sans)', fontSize: '1.075rem', fontWeight: 400,
@@ -635,15 +642,15 @@ export default function DigitalLoanApplication() {
               ].map(item => (
                 <div key={item.label}>
                   <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    letterSpacing: '0.14em', textTransform: 'uppercase',
-                    color: 'var(--terracotta)', fontWeight: 700, marginBottom: '0.3rem',
+                    fontFamily: 'var(--sans)', fontSize: '0.75rem',
+                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                    color: 'rgba(0,0,0,0.55)', fontWeight: 600, marginBottom: '0.35rem',
                   }}>
                     {item.label}
                   </p>
                   <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '0.875rem',
-                    fontWeight: 400, color: '#1a1a1a', lineHeight: 1.5, margin: 0,
+                    fontFamily: 'var(--sans)', fontSize: '1rem',
+                    fontWeight: 400, color: 'var(--ink)', lineHeight: 1.5, margin: 0,
                     maxWidth: 260,
                   }}>
                     {item.value}
@@ -656,190 +663,88 @@ export default function DigitalLoanApplication() {
               src="/case studies/digital loan application/Cover.png"
               alt="Digital Loan Application cover"
               className="hero-cover"
-              style={{ width: '65%', height: 'auto', display: 'block', borderRadius: '0.75rem', margin: '2.5rem auto 0' }}
+              style={{ width: '65%', height: 'auto', display: 'block', margin: '2.5rem auto 0' }}
             />
           </section>
         </div>
       </div>
 
       {/* Page layout */}
-      <div className="cs-layout" style={{
-        maxWidth: 1200, margin: '0 auto',
-        display: 'grid', gridTemplateColumns: '200px 1fr',
-      }}>
+      {/* Page layout — single centered column; section links live in the PageMenu */}
+      <div className="cs-layout" style={{ maxWidth: 820, margin: '0 auto' }}>
 
-        {/* Sticky side nav */}
-        <aside className="cs-sidenav" style={{
-          position: 'sticky', top: 56, height: 'calc(100vh - 56px)',
-          display: 'flex', flexDirection: 'column',
-          padding: '1.2rem 1.5rem 2rem 2rem',
-          borderRight: '1px solid #F0EBE4',
-          background: '#fff',
-        }}>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
-            {NAV_SECTIONS.map(s => {
-              const active = activeSection === s.id
-              return (
-                <a key={s.id} href={`#${s.id}`}
-                  style={{
-                    position: 'relative',
-                    display: 'block',
-                    fontFamily: 'var(--sans)', fontSize: '0.9rem',
-                    fontWeight: active ? 700 : 400,
-                    color: active ? 'var(--terracotta)' : '#999',
-                    textDecoration: 'none', letterSpacing: '0.01em',
-                    padding: '0.65rem 0 0.65rem 1.25rem',
-                    lineHeight: 1.4,
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={e => { if (!active) e.currentTarget.style.color = 'var(--ink)' }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#999' }}
-                >
-                  {active && (
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 6 40"
-                      preserveAspectRatio="none"
-                      style={{
-                        position: 'absolute',
-                        left: 0,
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        width: 6,
-                        height: 'calc(100% - 12px)',
-                        overflow: 'visible',
-                      }}
-                    >
-                      <path
-                        d="M 3 1 C 4.5 8, 1.5 16, 3 22 C 4.5 28, 1.8 34, 3 39"
-                        stroke="var(--terracotta)"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"
-                      />
-                    </svg>
-                  )}
-                  {s.label}
-                </a>
-              )
-            })}
-          </nav>
-        </aside>
-
-        {/* Main content */}
-        <main className="cs-content" style={{ padding: '0 3rem 0 3rem', minWidth: 0 }}>
+        <main className="cs-content" style={{ padding: '0 2rem', minWidth: 0 }}>
 
           {/* ── Problem ────────────────────────────────────────────────── */}
           <section id="problem" style={{ paddingTop: '1.85rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Problem</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.6rem, 3vw, 2.25rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '0.85rem', maxWidth: 900,
             }}>
-              Farmers Are Struggling With the Outdated Loan Process
+              Farmers are struggling with the outdated loan process
             </h2>
             <p style={{
-              fontFamily: 'var(--sans)', fontSize: '1rem', fontStyle: 'italic',
-              color: '#555', marginBottom: '2.5rem', fontWeight: 400, maxWidth: 900,
+              fontFamily: 'var(--sans)', fontSize: '1.125rem',
+              color: 'var(--ink)', marginBottom: '2.5rem', fontWeight: 400, maxWidth: 900,
             }}>
               The existing DocuSign-based process was inefficient for both farmers and FBN Finance.
             </p>
 
-            {/* Two problem cards */}
-            <div className="problem-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3.5rem' }}>
+            {/* Problem — who it hurt, stacked as short paragraphs */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '2rem', maxWidth: 720 }}>
               {[
                 {
-                  label: 'For Farmers',
-                  tag: 'USER', tagBg: '#F2DFA0', tagColor: '#8B6914',
-                  items: [
-                    'Struggled to complete applications without assistance',
-                    'Errors led to delays, denials, or increased rates',
-                    'Complex sections like collateral had no digital guidance',
-                  ],
+                  label: 'For farmers',
+                  text: 'Farmers struggled to complete applications without assistance. Errors led to delays, denials, or increased rates, and complex sections like collateral had no digital guidance.',
                 },
                 {
                   label: 'For FBN',
-                  tag: 'BUSINESS', tagBg: '#B8CED4', tagColor: '#2A5A6A',
-                  items: [
-                    'Human touchpoints required at nearly every stage',
-                    'Impossible to scale during high-volume periods',
-                    'No visibility into application status or bottlenecks',
-                  ],
+                  text: 'Human touchpoints were required at nearly every stage, which made the process impossible to scale during high-volume periods. The team also had no visibility into application status or bottlenecks.',
                 },
-              ].map(card => (
-                <div key={card.label} style={{ position: 'relative', padding: '1.75rem 1.75rem 1.5rem' }}>
-                  <WobblyBorder />
-                  <span style={{
-                    display: 'inline-block',
-                    background: card.tagBg, color: card.tagColor,
-                    fontFamily: 'var(--sans)', fontSize: '0.6rem',
-                    fontWeight: 600, letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 999,
-                    marginBottom: '0.6rem',
+              ].map(block => (
+                <div key={block.label}>
+                  <h3 style={{
+                    fontFamily: 'var(--heading)', fontSize: '1.35rem', fontWeight: 500,
+                    letterSpacing: '-0.015em', color: 'var(--ink)', margin: '0 0 0.5rem',
                   }}>
-                    {card.tag}
-                  </span>
-                  <p style={{
-                    fontFamily: 'var(--sans)', fontSize: '0.7rem',
-                    letterSpacing: '0.14em', textTransform: 'uppercase',
-                    color: 'var(--terracotta)', fontWeight: 700, marginBottom: '1.25rem',
-                  }}>
-                    {card.label}
+                    {block.label}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.7, margin: 0 }}>
+                    {block.text}
                   </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-                    {card.items.map((item, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'baseline' }}>
-                        <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style={{ flexShrink: 0, marginTop: 3 }}>
-                          <path d="M1,5 C2.5,4 4,5.5 5,4.8 C6,4.1 7.5,5.2 9,5"
-                            fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
-                        </svg>
-                        <p style={{
-                          fontFamily: 'var(--sans)', fontSize: '0.9rem',
-                          fontWeight: 400, color: '#1a1a1a', lineHeight: 1.65, margin: 0,
-                        }}>
-                          {item}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               ))}
             </div>
 
             {/* Pull quote */}
             <div style={{ textAlign: 'left', padding: '0' }}>
-              <SectionLabel>Problem Statement</SectionLabel>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '1.125rem', color: 'var(--ink)', lineHeight: 1.7, margin: '0 0 1.25rem', maxWidth: 720 }}>
+                Together, these gaps shaped the question at the heart of the project:
+              </p>
               <p style={{
-                fontFamily: 'var(--heading)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
-                fontStyle: 'italic', fontWeight: 400,
-                color: 'var(--terracotta)', lineHeight: 1.5,
-                marginBottom: '1rem', maxWidth: 900,
+                fontFamily: 'var(--heading)', fontSize: 'clamp(1.35rem, 2.5vw, 1.85rem)',
+                fontWeight: 500, letterSpacing: '-0.015em',
+                color: 'var(--ink)', lineHeight: 1.35,
+                margin: 0, maxWidth: 900,
+                background: '#F6F5F1', borderRadius: 8, padding: '1.5rem 1.75rem',
               }}>
                 How might we empower farmers to apply independently, while giving FBN the tools to scale?
               </p>
-              <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
-                <path
-                  d="M4,5 C22,3 45,6 70,4.5 C95,3 118,6 142,4 C166,2.5 188,5.5 216,4"
-                  fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"
-                />
-              </svg>
             </div>
           </section>
 
           {/* ── Approach ───────────────────────────────────────────────── */}
           {/* ── Design (merged) ────────────────────────────────────────── */}
           <section id="design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
-            <SectionLabel>Approach</SectionLabel>
+            <SectionLabel>Strategy</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.6rem, 3vw, 2.25rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
-              From Pillars to Decisions
+              From pillars to decisions
             </h2>
             <p style={{
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
@@ -856,10 +761,10 @@ export default function DigitalLoanApplication() {
                 <div key={item.label} style={{ display: 'flex', gap: '0.75rem', alignItems: 'baseline' }}>
                   <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style={{ flexShrink: 0, marginTop: 3 }}>
                     <path d="M1,5 C2.5,4 4,5.5 5,4.8 C6,4.1 7.5,5.2 9,5"
-                      fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round" />
+                      fill="none" stroke="#FD1E20" strokeWidth="1.2" strokeLinecap="round" />
                   </svg>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400, color: '#1a1a1a', lineHeight: 1.7, margin: 0, maxWidth: 900 }}>
-                    <strong style={{ fontWeight: 500 }}>{item.label}:</strong> {item.desc}
+                    <strong style={{ fontWeight: 700 }}>{item.label}:</strong> {item.desc}
                   </p>
                 </div>
               ))}
@@ -869,38 +774,49 @@ export default function DigitalLoanApplication() {
               fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
               color: '#1a1a1a', lineHeight: 1.7, maxWidth: 900, marginBottom: '3rem',
             }}>
-              From these sessions, I distilled the findings into three design pillars, made them guiding principles that helped us filter feedback, stay focused, and make faster decisions throughout the project.
+              From these two activities, we built a now, next, and later list at the feature level, prioritized by feasibility from product, tech, design, and business perspectives. We also established three design principles to apply across the experience. These became critical later in the process, helping us filter feedback, stay focused, and make faster decisions.
             </p>
 
             {/* Design pillars — row layout */}
+            <h3 style={{
+              fontFamily: 'var(--heading)', fontSize: '1.35rem', fontWeight: 500,
+              letterSpacing: '-0.015em', color: 'var(--ink)', margin: '0 0 1.25rem',
+            }}>
+              Guiding design principles:
+            </h3>
             <PillarRows />
 
-            {/* Design details heading */}
-            <h3 style={{
-              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
-              fontWeight: 400, lineHeight: 1.2, color: 'var(--ink)',
-              letterSpacing: '-0.01em', marginBottom: '2rem', maxWidth: 900,
+          </section>
+
+          {/* ── Design ─────────────────────────────────────────────────── */}
+          <section id="form-design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
+            <SectionLabel>Design</SectionLabel>
+            <h2 style={{
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.6rem, 3vw, 2.25rem)',
+              fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
+              letterSpacing: '-0.01em', marginBottom: '1.25rem', maxWidth: 900,
             }}>
-              Key Dimensions of Form UX
-            </h3>
+              Key dimensions of form UX
+            </h2>
+            <p style={{
+              fontFamily: 'var(--sans)', fontSize: '1.0625rem', fontWeight: 400,
+              color: 'var(--ink)', lineHeight: 1.7, maxWidth: 900, marginBottom: '2rem',
+            }}>
+              With these principles in place, I broke the form experience into three dimensions to design against.
+            </p>
 
             <DesignDetailsShowcase />
 
             <div style={{ textAlign: 'left', padding: '0', marginTop: '2.5rem' }}>
               <p style={{
-                fontFamily: 'var(--heading)', fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
-                fontStyle: 'italic', fontWeight: 400,
-                color: 'var(--terracotta)', lineHeight: 1.5,
-                marginBottom: '1rem', maxWidth: 900,
+                fontFamily: 'var(--heading)', fontSize: 'clamp(1.35rem, 2.5vw, 1.85rem)',
+                fontWeight: 500, letterSpacing: '-0.015em',
+                color: 'var(--ink)', lineHeight: 1.35,
+                margin: 0, maxWidth: 900,
+                background: '#F6F5F1', borderRadius: 8, padding: '1.5rem 1.75rem',
               }}>
-                ✦ The UX patterns built for this project — steppers, forms, and complex accordions — were later adopted by other teams and added to FBN's company design library, Harvest.
+                The UX patterns built for this project (steppers, forms, and complex accordions) were later adopted by other teams and added to FBN's company design library, Harvest.
               </p>
-              <svg width="220" height="8" viewBox="0 0 220 8" aria-hidden="true" style={{ display: 'block' }}>
-                <path
-                  d="M4,5 C22,3 45,6 70,4.5 C95,3 118,6 142,4 C166,2.5 188,5.5 216,4"
-                  fill="none" stroke="#B05A2B" strokeWidth="1.2" strokeLinecap="round"
-                />
-              </svg>
             </div>
           </section>
 
@@ -908,11 +824,11 @@ export default function DigitalLoanApplication() {
           <section id="final-design" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Final Design</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.6rem, 3vw, 2.25rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '1rem', maxWidth: 900, marginTop: '2rem',
             }}>
-              The Finished Experience
+              The finished experience
             </h2>
             <FinalDesignShowcase />
           </section>
@@ -921,11 +837,11 @@ export default function DigitalLoanApplication() {
           <section id="impact" style={{ paddingTop: '2rem', paddingBottom: '5rem', scrollMarginTop: '80px' }}>
             <SectionLabel>Impact</SectionLabel>
             <h2 style={{
-              fontFamily: 'var(--heading)', fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              fontFamily: 'var(--heading)', fontSize: 'clamp(1.6rem, 3vw, 2.25rem)',
               fontWeight: 400, lineHeight: 1.15, color: 'var(--ink)',
               letterSpacing: '-0.01em', marginBottom: '3.5rem', maxWidth: 900,
             }}>
-              What It Changed
+              What it changed
             </h2>
 
             <div className="stat-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '3.5rem' }}>
@@ -934,12 +850,11 @@ export default function DigitalLoanApplication() {
                 { stat: '10,000+', detail: 'Farmers reached at launch' },
                 { stat: '87%', detail: 'Customer satisfaction score (CSAT)' },
               ].map((s, i) => (
-                <div key={i} style={{ position: 'relative', padding: '2.5rem 2rem', background: '#FAF6F1' }}>
-                  <WobblyBorder strokeColor="#D4CBC2" />
-                  <p style={{ fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 400, color: 'var(--terracotta)', lineHeight: 1, marginBottom: '0.75rem' }}>
+                <div key={i} className="sticker" style={{ position: 'relative', padding: '2.25rem 2rem' }}>
+                  <p style={{ fontFamily: 'var(--heading)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 500, letterSpacing: '-0.03em', color: '#FD1E20', lineHeight: 1, marginBottom: '0.75rem' }}>
                     {s.stat}
                   </p>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: '0.875rem', fontWeight: 400, color: '#444', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: '1.05rem', fontWeight: 400, color: 'var(--ink)', lineHeight: 1.5, margin: 0 }}>
                     {s.detail}
                   </p>
                 </div>
@@ -966,7 +881,7 @@ export default function DigitalLoanApplication() {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--terracotta)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
             >
-              <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', fontStyle: 'italic', color: '#999', marginRight: '0.25rem' }}>
+              <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'rgba(0,0,0,0.5)', marginRight: '0.25rem' }}>
                 Next
               </span>
               Finance Platform Redesign →
@@ -978,24 +893,22 @@ export default function DigitalLoanApplication() {
 
       {/* Footer */}
       <footer style={{
-        background: '#fff',
         borderTop: '1px solid #EBEBEB', maxWidth: 1200,
         margin: '0 auto', padding: '2rem',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--heading)', fontSize: '0.95rem', color: 'var(--ink)' }}>
+        <span style={{ fontFamily: 'var(--font-organic-hand), var(--heading)', textTransform: 'uppercase', fontSize: '1.4rem', letterSpacing: '0.02em', color: 'var(--ink)' }}>
           Zhu Nan
         </span>
         <div style={{ display: 'flex', gap: '2rem' }}>
           {[{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/zhunan/' }, { label: 'Resume', href: '/Zhu_Nan_Resume_2025.html' }].map(link => (
             <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" style={{
-              fontFamily: 'var(--sans)', fontSize: '0.75rem', color: 'var(--muted)',
-              textDecoration: 'none', letterSpacing: '0.06em', textTransform: 'uppercase',
-              transition: 'color 0.15s',
+              fontFamily: 'var(--heading)', fontSize: '0.95rem', fontWeight: 500, color: '#FD1E20',
+              textDecoration: 'none', transition: 'color 0.15s',
             }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--terracotta)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
+              onMouseEnter={e => (e.currentTarget.style.color = '#C8141A')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#FD1E20')}
             >{link.label}</a>
           ))}
         </div>
