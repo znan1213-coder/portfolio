@@ -534,7 +534,7 @@ export default function FBNFinanceArchetypes() {
           <div style={{ borderTop: '1px solid #EBEBEB', padding: '3rem 0 5rem', display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
             {[
               { href: '/work/finance-platform-redesign', kicker: 'Prev', label: '← Finance Platform Redesign' },
-              { href: '/work/logo-design', kicker: 'Next', label: 'Logo Design →' },
+              { href: '/work/digital-loan-application', kicker: 'Next', label: 'Digital Loan Application →' },
             ].map(l => (
               <a key={l.href} href={l.href} style={{
                 fontFamily: 'var(--sans)', fontSize: '0.875rem', color: 'var(--terracotta)',

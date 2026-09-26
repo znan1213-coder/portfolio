@@ -9,7 +9,6 @@ const CASE_STUDIES = [
   { title: 'Finance Platform Redesign', meta: 'Capital One', href: '/work/finance-platform-redesign', locked: true },
   { title: 'FBN Finance Archetypes',    meta: 'FBN',         href: '/work/fbn-finance-archetypes' },
   { title: 'Bank Reconciliation',       meta: 'Prototype',   href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed' },
-  { title: 'Logo Design',               meta: 'Branding',    href: '/work/logo-design' },
 ]
 
 const DROPDOWN_CSS = `
@@ -107,7 +106,6 @@ const MOBILE_WORK_ITEMS = [
   { title: 'Finance Platform Redesign',           href: '/work/finance-platform-redesign' },
   { title: "Define FBN's First Finance Archetype", href: '/work/fbn-finance-archetypes'  },
   { title: 'Bank Reconciliation',                 href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed' },
-  { title: 'Logo Design',                         href: '/work/logo-design'               },
 ]
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {

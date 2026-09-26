@@ -11,13 +11,11 @@ const DOODLES = {
     { el: <Star size={21} />,     top: '-34%', left: '-30%', rotate: -17 },
     { el: <Sparkle size={14} />,  top: '-44%', left: '58%',  rotate: 11 },
     { el: <Squiggle width={32} />, top: '104%', left: '-46%', rotate: -24 },
-    { el: <Burst size={18} />,    top: '-20%', left: '98%',  rotate: 28 },
   ],
   right: [
     { el: <Sparkle size={18} />,  top: '-40%', left: '92%',  rotate: 13 },
     { el: <Star size={13} />,     top: '-8%',  left: '-38%', rotate: 22 },
     { el: <Loop size={27} />,     top: '108%', left: '58%',  rotate: 9 },
-    { el: <Burst size={16} />,    top: '-38%', left: '10%',  rotate: -32 },
   ],
 }
 
@@ -111,31 +109,6 @@ const projects = [
     imagePos: 'center',
     href: 'https://www.figma.com/proto/2Kys8Q12zNKQzmreAhvLxr/Bank-Reconciliation?page-id=0%3A1&node-id=0-202&node-type=canvas&viewport=2285%2C258%2C0.13&t=iULq9RIBfJr5Vadz-1&scaling=contain&content-scaling=fixed',
     target: '_blank',
-  },
-  {
-    id: 5,
-    category: 'Branding · Identity',
-    title: 'Logo Design',
-    description: 'A collection of logo and brand mark work across personal projects and freelance clients.',
-    bg: '#F5ECCB',
-    // Cover: a 3×2 wall of logos on white tiles
-    customContent: (
-      <div style={{
-        position: 'absolute', inset: 0, padding: '17% 19%',
-        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: 10,
-      }}>
-        {['logo_megi.png', 'logo_acheva.png', 'logo_lightning expense.png', 'logo_EA.png', 'logo_pospal.png', 'logo_startupweekend_chengdu.png'].map(file => (
-          <div key={file} style={{ background: '#FFFFFF', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '12%', overflow: 'hidden' }}>
-            <img
-              src={`/case%20studies/logo%20design/${encodeURIComponent(file)}`}
-              alt=""
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
-            />
-          </div>
-        ))}
-      </div>
-    ),
-    href: '/work/logo-design',
   },
 ]
 
