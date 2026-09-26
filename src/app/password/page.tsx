@@ -2,6 +2,17 @@
 
 import { useActionState, useState } from 'react'
 import { authenticate } from './actions'
+import { DoodleDefs, Star, Sparkle, Squiggle, Loop, Burst } from '../components/Doodles'
+
+// A few scattered doodles, kept well away from the form
+const DOODLES = [
+  { el: <Star size={22} />,      top: '14%', left: '12%',  rotate: -14 },
+  { el: <Squiggle width={40} />, top: '22%', left: '80%',  rotate: 18 },
+  { el: <Sparkle size={18} />,   top: '72%', left: '86%',  rotate: 10 },
+  { el: <Loop size={30} />,      top: '78%', left: '16%',  rotate: -8 },
+  { el: <Burst size={20} />,     top: '48%', left: '6%',   rotate: 24, hideMobile: true },
+  { el: <Star size={14} />,      top: '88%', left: '58%',  rotate: 20, hideMobile: true },
+]
 
 export default function PasswordPage() {
   const [state, action, pending] = useActionState(authenticate, null)
@@ -11,10 +22,19 @@ export default function PasswordPage() {
 
   return (
     <div style={{
+      position: 'relative', overflow: 'hidden',
       minHeight: '100vh', background: '#F6F5F1',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1.25rem',
     }}>
-      <div style={{ width: '100%', maxWidth: 420, textAlign: 'center' }}>
+      <style>{`@media (max-width: 640px) { .lock-doodle-hide { display: none; } }`}</style>
+      <DoodleDefs />
+      {DOODLES.map((d, i) => (
+        <span key={i} aria-hidden="true" className={d.hideMobile ? 'lock-doodle-hide' : undefined}
+          style={{ position: 'absolute', top: d.top, left: d.left, transform: `rotate(${d.rotate}deg)`, pointerEvents: 'none', lineHeight: 0 }}>
+          {d.el}
+        </span>
+      ))}
+      <div style={{ position: 'relative', width: '100%', maxWidth: 420, textAlign: 'center' }}>
         {/* Logo — same Organic Hand wordmark + smile as the nav */}
         <div style={{ position: 'relative', display: 'inline-block', marginBottom: 40 }}>
           <span style={{ fontFamily: 'var(--font-organic-hand), var(--heading)', textTransform: 'uppercase', fontSize: '2.4rem', letterSpacing: '0.02em', color: 'var(--ink)', lineHeight: 1 }}>

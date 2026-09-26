@@ -9,8 +9,8 @@ export function DoodleDefs() {
     <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute' }}>
       <defs>
         <filter id="doodle-rough" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" seed="7" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.35" numOctaves="2" seed="7" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </defs>
     </svg>
