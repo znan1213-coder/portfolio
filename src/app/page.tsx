@@ -22,9 +22,10 @@ const DOODLES = {
 function DoodledCat({ side, src }: { side: 'left' | 'right'; src: string }) {
   return (
     <div className={`hero-cat hero-cat-${side}`} style={{ position: 'relative' }}>
-      <img src={src} alt="" aria-hidden="true" style={{ width: '100%', height: 'auto', display: 'block' }} />
+      <img src={src} alt="" aria-hidden="true" className="hero-cat-img" style={{ width: '100%', height: 'auto', display: 'block' }} />
       {DOODLES[side].map((d, i) => (
-        <span key={i} className="hero-doodle" style={{ position: 'absolute', top: d.top, left: d.left, transform: `rotate(${d.rotate}deg)`, lineHeight: 0 }}>
+        // Doodles draw themselves on after the cats appear, alternating left/right
+        <span key={i} className="hero-doodle" style={{ position: 'absolute', top: d.top, left: d.left, transform: `rotate(${d.rotate}deg)`, lineHeight: 0, ['--doodle-delay' as any]: `${900 + (i * 2 + (side === 'right' ? 1 : 0)) * 140}ms` }}>
           {d.el}
         </span>
       ))}
@@ -261,6 +262,24 @@ export default function Home() {
         /* Balance centered lines so no word is left alone on the last line */
         .hero-text p, .hero-text h1 { text-wrap: balance; }
         .hero-cat { width: clamp(66px, 7.8vw, 102px); flex-shrink: 0; }
+        /* First-load entrance: cats fade up, then each doodle draws itself on like a pen stroke */
+        @keyframes heroCatIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        @keyframes doodleShow { to { opacity: 1; } }
+        @keyframes doodleDraw { to { stroke-dashoffset: 0; } }
+        .hero-cat-img { animation: heroCatIn 500ms ease-out both; }
+        .hero-doodle { opacity: 0; animation: doodleShow 1ms linear var(--doodle-delay, 900ms) both; }
+        .hero-doodle path { stroke-dasharray: 120; stroke-dashoffset: 120; animation: doodleDraw 650ms ease-out var(--doodle-delay, 900ms) both; }
+        /* "Scroll" cue at the bottom of the full-screen hero */
+        @keyframes scrollCueIn { to { opacity: 1; } }
+        @keyframes scrollCueBob { 50% { transform: translateY(5px); } }
+        .scroll-cue { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px;
+          font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.45); text-decoration: none;
+          opacity: 0; animation: scrollCueIn 400ms ease 2.2s both; }
+        .scroll-cue svg { animation: scrollCueBob 1.6s ease-in-out 2.6s infinite; }
+        .scroll-cue:hover { color: #FD1E20; }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-cat-img, .hero-doodle, .hero-doodle path, .scroll-cue, .scroll-cue svg { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+        }
         .hero-cat-left { order: 1; transform: translate(clamp(-4rem, -4vw, -1rem), -6px) rotate(-9deg); }
         .hero-cat-right { order: 3; transform: translate(clamp(1rem, 4vw, 4rem), 10px) rotate(6deg); }
         @media (max-width: 760px) {
@@ -276,10 +295,10 @@ export default function Home() {
       `}</style>
 
       {/* Hero */}
-      <section style={{ position: 'relative', background: 'var(--background)', overflowX: 'clip' }}>
+      <section style={{ position: 'relative', background: 'var(--background)', overflowX: 'clip', minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
         <Nav variant="embedded" />
 
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '6rem 2rem 5rem' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%', maxWidth: 1100, margin: '0 auto', padding: '2rem 2rem 6rem' }}>
           <div className="hero-row">
           <div className="hero-text">
 
@@ -311,7 +330,7 @@ export default function Home() {
               fontWeight: 300,
               lineHeight: 1.5,
               color: 'var(--ink)',
-              margin: '1.5rem 0 0',
+              margin: '12px 0 0',
               maxWidth: 640,
             }}>
               I turn complex ideas into simple, trusted experiences.
@@ -321,7 +340,7 @@ export default function Home() {
               display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',
               columnGap: '0.75rem', rowGap: '0.25rem',
               fontFamily: 'var(--heading)', fontSize: '1rem', fontWeight: 300, color: 'var(--ink)',
-              margin: '2rem 0 0',
+              margin: '24px 0 0',
             }}>
               <span>Principal Designer at Capital One</span>
               <span aria-hidden="true" className="hero-sep">·</span>
@@ -335,6 +354,13 @@ export default function Home() {
           <DoodledCat side="right" src="/cat-right.png" />
           </div>
         </div>
+
+        <a href="#work" className="scroll-cue" aria-label="Scroll to selected work">
+          Scroll
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 3v10M3.5 8.5L8 13l4.5-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
       </section>
 
       {/* Case study grid */}
